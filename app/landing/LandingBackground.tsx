@@ -1,7 +1,12 @@
-import type { CSSProperties } from "react";
+"use client";
+
+import { useEffect, useState, type CSSProperties } from "react";
 
 const FRAME_WIDTH = 1512;
 const FRAME_HEIGHT = 982;
+const FOCAL_X = FRAME_WIDTH / 2;
+
+type HorizontalBand = "left" | "center" | "right";
 
 type SceneImage = {
   id: string;
@@ -10,8 +15,10 @@ type SceneImage = {
   top: number;
   width: number;
   height: number;
+  band: HorizontalBand;
   opacity?: number;
   zIndex?: number;
+  wideFactor?: number;
   imageStyle?: CSSProperties;
 };
 
@@ -23,8 +30,10 @@ const sceneImages: readonly SceneImage[] = [
     top: 331.77,
     width: 441.1459045410156,
     height: 686.0755615234375,
+    band: "left",
     opacity: 1,
     zIndex: 10,
+    wideFactor: 1,
   },
   {
     id: "lots-of-spray-2",
@@ -33,8 +42,10 @@ const sceneImages: readonly SceneImage[] = [
     top: 746.64,
     width: 572.2451171875,
     height: 284.6068420410156,
+    band: "left",
     opacity: 1,
     zIndex: 11,
+    wideFactor: 1,
   },
   {
     id: "waterfall-glow",
@@ -43,7 +54,9 @@ const sceneImages: readonly SceneImage[] = [
     top: 220.84,
     width: 636.0620727539062,
     height: 806.9891967773438,
+    band: "left",
     zIndex: 3,
+    wideFactor: 1,
     imageStyle: {
       mixBlendMode: "screen",
       transform: "scale(1.1)",
@@ -57,7 +70,9 @@ const sceneImages: readonly SceneImage[] = [
     top: 150.39,
     width: 250.13763427734375,
     height: 862.422119140625,
+    band: "left",
     zIndex: 6,
+    wideFactor: 1,
   },
   {
     id: "waterfall",
@@ -66,7 +81,9 @@ const sceneImages: readonly SceneImage[] = [
     top: 208.01,
     width: 636.0620727539062,
     height: 806.9891967773438,
+    band: "left",
     zIndex: 4,
+    wideFactor: 1,
   },
   {
     id: "water-details",
@@ -75,7 +92,9 @@ const sceneImages: readonly SceneImage[] = [
     top: 208.01,
     width: 636.0620727539062,
     height: 806.9891967773438,
+    band: "left",
     zIndex: 5,
+    wideFactor: 1,
   },
   {
     id: "back-valley",
@@ -84,6 +103,7 @@ const sceneImages: readonly SceneImage[] = [
     top: 542.05,
     width: 1253.6494140625,
     height: 445.0940856933594,
+    band: "left",
     zIndex: 0,
   },
   {
@@ -93,6 +113,7 @@ const sceneImages: readonly SceneImage[] = [
     top: 480.76,
     width: 663.3751220703125,
     height: 513.9644165039062,
+    band: "right",
     zIndex: 8,
   },
   {
@@ -102,7 +123,9 @@ const sceneImages: readonly SceneImage[] = [
     top: 484.15,
     width: 663.3751220703125,
     height: 513.9644165039062,
+    band: "right",
     zIndex: 7,
+    wideFactor: 1,
   },
   {
     id: "left-valley",
@@ -111,6 +134,7 @@ const sceneImages: readonly SceneImage[] = [
     top: 451.19,
     width: 1533.31640625,
     height: 544.38671875,
+    band: "left",
     zIndex: 2,
   },
   {
@@ -120,7 +144,9 @@ const sceneImages: readonly SceneImage[] = [
     top: 465.41,
     width: 381.26251220703125,
     height: 70.4864501953125,
+    band: "right",
     zIndex: 10,
+    wideFactor: 1,
   },
   {
     id: "trees",
@@ -129,6 +155,7 @@ const sceneImages: readonly SceneImage[] = [
     top: 663.33,
     width: 1016.2859497070312,
     height: 430.9453125,
+    band: "center",
     zIndex: 1,
   },
   {
@@ -138,35 +165,101 @@ const sceneImages: readonly SceneImage[] = [
     top: 649.55,
     width: 1051.8052978515625,
     height: 476.94769287109375,
+    band: "right",
     zIndex: 14,
+    wideFactor: 1,
   },
 ] as const;
 
+type Viewport = {
+  width: number;
+  height: number;
+};
+
 const px = (value: number) => `${value}px`;
 
+function getViewport(): Viewport {
+  return {
+    width: window.innerWidth,
+    height: window.innerHeight,
+  };
+}
+
+function getWideShift(image: SceneImage, extraWidth: number) {
+  if (extraWidth <= 0) {
+    return 0;
+  }
+
+  const factor = image.wideFactor ?? 1;
+
+  if (image.band === "left") {
+    return -(extraWidth / 2) * factor;
+  }
+
+  if (image.band === "right") {
+    return (extraWidth / 2) * factor;
+  }
+
+  return 0;
+}
+
 export default function LandingBackground() {
+  const [viewport, setViewport] = useState<Viewport | null>(null);
+
+  useEffect(() => {
+    const updateViewport = () => {
+      setViewport(getViewport());
+    };
+
+    updateViewport();
+    window.addEventListener("resize", updateViewport);
+
+    return () => {
+      window.removeEventListener("resize", updateViewport);
+    };
+  }, []);
+
+  const scale = viewport ? viewport.height / FRAME_HEIGHT : null;
+  const sceneHeight = viewport ? viewport.height : null;
+  const sceneWidth = scale ? FRAME_WIDTH * scale : null;
+  const extraWidth =
+    viewport && sceneWidth && viewport.width > sceneWidth
+      ? viewport.width - sceneWidth
+      : 0;
+  const sceneLeft =
+    viewport && scale
+      ? viewport.width / 2 - FOCAL_X * scale
+      : `calc(50vw - (100dvh * ${FOCAL_X} / ${FRAME_HEIGHT}))`;
+
   return (
     <div
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
     >
-      <div className="absolute inset-0 grid place-items-center">
-        <div
-          className="relative"
-          style={{
-            width: `min(100vw, calc(${FRAME_WIDTH} / ${FRAME_HEIGHT} * 100vh))`,
-            aspectRatio: `${FRAME_WIDTH} / ${FRAME_HEIGHT}`,
-          }}
-        >
-          {sceneImages.map((image) => (
+      <div
+        className="absolute left-0 top-0"
+        style={{
+          left: typeof sceneLeft === "number" ? px(sceneLeft) : sceneLeft,
+          width:
+            sceneWidth !== null
+              ? px(sceneWidth)
+              : `calc(100dvh * ${FRAME_WIDTH} / ${FRAME_HEIGHT})`,
+          height: sceneHeight !== null ? px(sceneHeight) : "100dvh",
+        }}
+      >
+        {sceneImages.map((image) => {
+          const imageScale = scale ?? 1;
+          const wideShift = getWideShift(image, extraWidth);
+
+          return (
             <div
               key={image.id}
               className="absolute"
               style={{
-                left: px(image.left),
-                top: px(image.top),
-                width: px(image.width),
-                height: px(image.height),
+                left: px(image.left * imageScale + wideShift),
+                top: px(image.top * imageScale),
+                width: px(image.width * imageScale),
+                height: px(image.height * imageScale),
                 opacity: image.opacity ?? 1,
                 zIndex: image.zIndex ?? 0,
               }}
@@ -179,8 +272,8 @@ export default function LandingBackground() {
                 style={image.imageStyle}
               />
             </div>
-          ))}
-        </div>
+          );
+        })}
       </div>
     </div>
   );
