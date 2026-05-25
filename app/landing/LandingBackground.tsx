@@ -5,6 +5,8 @@ import { useEffect, useState, type CSSProperties } from "react";
 const FRAME_WIDTH = 1512;
 const FRAME_HEIGHT = 982;
 const FOCAL_X = FRAME_WIDTH / 2;
+const WIDE_FRAME_WIDTH = 3840;
+const WIDE_FOCAL_X = WIDE_FRAME_WIDTH / 2;
 
 type HorizontalBand = "left" | "center" | "right";
 
@@ -15,17 +17,17 @@ type SceneImage = {
   top: number;
   width: number;
   height: number;
-  band: HorizontalBand;
+  band?: HorizontalBand;
   opacity?: number;
   zIndex?: number;
   wideFactor?: number;
   imageStyle?: CSSProperties;
 };
 
-const sceneImages: readonly SceneImage[] = [
+const coreSceneImages: readonly SceneImage[] = [
   {
     id: "lots-of-spray",
-    src: "/landing-page/background/lots-of-spray.svg",
+    src: "/landing-page/background/core-scene/lots-of-spray.svg",
     left: 7.01,
     top: 331.77,
     width: 441.1459045410156,
@@ -37,7 +39,7 @@ const sceneImages: readonly SceneImage[] = [
   },
   {
     id: "lots-of-spray-2",
-    src: "/landing-page/background/lots-of-spray-2.svg",
+    src: "/landing-page/background/core-scene/lots-of-spray-2.svg",
     left: -11.41,
     top: 746.64,
     width: 572.2451171875,
@@ -49,7 +51,7 @@ const sceneImages: readonly SceneImage[] = [
   },
   {
     id: "waterfall-glow",
-    src: "/landing-page/background/waterfall-glow.png",
+    src: "/landing-page/background/core-scene/waterfall-glow.png",
     left: -178.69,
     top: 220.84,
     width: 636.0620727539062,
@@ -65,7 +67,7 @@ const sceneImages: readonly SceneImage[] = [
   },
   {
     id: "side-fall",
-    src: "/landing-page/background/side-fall.png",
+    src: "/landing-page/background/core-scene/side-fall.png",
     left: -108.83,
     top: 150.39,
     width: 250.13763427734375,
@@ -76,7 +78,7 @@ const sceneImages: readonly SceneImage[] = [
   },
   {
     id: "waterfall",
-    src: "/landing-page/background/waterfall.png",
+    src: "/landing-page/background/core-scene/waterfall.png",
     left: -192.69,
     top: 208.01,
     width: 636.0620727539062,
@@ -87,7 +89,7 @@ const sceneImages: readonly SceneImage[] = [
   },
   {
     id: "water-details",
-    src: "/landing-page/background/water-details.svg",
+    src: "/landing-page/background/core-scene/water-details.svg",
     left: -192.69,
     top: 208.01,
     width: 636.0620727539062,
@@ -97,18 +99,8 @@ const sceneImages: readonly SceneImage[] = [
     wideFactor: 1,
   },
   {
-    id: "back-valley",
-    src: "/landing-page/background/back-valley.svg",
-    left: 360.53,
-    top: 542.05,
-    width: 1253.6494140625,
-    height: 445.0940856933594,
-    band: "left",
-    zIndex: 0,
-  },
-  {
     id: "shadow-valley",
-    src: "/landing-page/background/shadow-valley.svg",
+    src: "/landing-page/background/core-scene/shadow-valley.svg",
     left: 810.56,
     top: 480.76,
     width: 663.3751220703125,
@@ -117,8 +109,19 @@ const sceneImages: readonly SceneImage[] = [
     zIndex: 8,
   },
   {
+    id: "left-mountain",
+    src: "/landing-page/background/core-scene/left%20mountain.svg",
+    left: 309.75,
+    top: 406.07,
+    width: 416.107177734375,
+    height: 691.1132202148438,
+    band: "left",
+    zIndex: 2,
+    wideFactor: 1,
+  },
+  {
     id: "valley",
-    src: "/landing-page/background/valley.svg",
+    src: "/landing-page/background/core-scene/valley.svg",
     left: 878.28,
     top: 484.15,
     width: 663.3751220703125,
@@ -128,18 +131,8 @@ const sceneImages: readonly SceneImage[] = [
     wideFactor: 1,
   },
   {
-    id: "left-valley",
-    src: "/landing-page/background/left-valley.svg",
-    left: 190.16,
-    top: 451.19,
-    width: 1533.31640625,
-    height: 544.38671875,
-    band: "left",
-    zIndex: 2,
-  },
-  {
     id: "plateau-top",
-    src: "/landing-page/background/plateau-top.svg",
+    src: "/landing-page/background/core-scene/plateau-top.svg",
     left: 1152.29,
     top: 465.41,
     width: 381.26251220703125,
@@ -150,7 +143,7 @@ const sceneImages: readonly SceneImage[] = [
   },
   {
     id: "trees",
-    src: "/landing-page/background/trees.svg",
+    src: "/landing-page/background/core-scene/trees.svg",
     left: 404.99,
     top: 663.33,
     width: 1016.2859497070312,
@@ -159,8 +152,19 @@ const sceneImages: readonly SceneImage[] = [
     zIndex: 1,
   },
   {
+    id: "trees-2",
+    src: "/landing-page/background/core-scene/trees-2.svg",
+    left: 259.4,
+    top: 753.08,
+    width: 816.0335693359375,
+    height: 324.30841064453125,
+    band: "left",
+    zIndex: 3,
+    wideFactor: 1,
+  },
+  {
     id: "front-trees",
-    src: "/landing-page/background/front-trees.png",
+    src: "/landing-page/background/core-scene/front-trees.png",
     left: 764.08,
     top: 649.55,
     width: 1051.8052978515625,
@@ -170,6 +174,8 @@ const sceneImages: readonly SceneImage[] = [
     wideFactor: 1,
   },
 ] as const;
+
+const wideSceneImages: readonly SceneImage[] = [] as const;
 
 type Viewport = {
   width: number;
@@ -220,34 +226,77 @@ export default function LandingBackground() {
   }, []);
 
   const scale = viewport ? viewport.height / FRAME_HEIGHT : null;
-  const sceneHeight = viewport ? viewport.height : null;
-  const sceneWidth = scale ? FRAME_WIDTH * scale : null;
+  const coreSceneWidth = scale ? FRAME_WIDTH * scale : null;
   const extraWidth =
-    viewport && sceneWidth && viewport.width > sceneWidth
-      ? viewport.width - sceneWidth
+    viewport && coreSceneWidth && viewport.width > coreSceneWidth
+      ? viewport.width - coreSceneWidth
       : 0;
-  const sceneLeft =
+  const coreSceneLeft =
     viewport && scale
       ? viewport.width / 2 - FOCAL_X * scale
       : `calc(50vw - (100dvh * ${FOCAL_X} / ${FRAME_HEIGHT}))`;
+  const wideSceneLeft =
+    viewport && scale
+      ? viewport.width / 2 - WIDE_FOCAL_X * scale
+      : `calc(50vw - (100dvh * ${WIDE_FOCAL_X} / ${FRAME_HEIGHT}))`;
 
   return (
     <div
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
     >
+      {wideSceneImages.length > 0 ? (
+        <div
+          className="absolute left-0 top-0"
+          style={{
+            left: typeof wideSceneLeft === "number" ? px(wideSceneLeft) : wideSceneLeft,
+            width:
+              scale !== null
+                ? px(WIDE_FRAME_WIDTH * scale)
+                : `calc(100dvh * ${WIDE_FRAME_WIDTH} / ${FRAME_HEIGHT})`,
+            height: viewport !== null ? px(viewport.height) : "100dvh",
+          }}
+        >
+          {wideSceneImages.map((image) => {
+            const imageScale = scale ?? 1;
+
+            return (
+              <div
+                key={image.id}
+                className="absolute"
+                style={{
+                  left: px(image.left * imageScale),
+                  top: px(image.top * imageScale),
+                  width: px(image.width * imageScale),
+                  height: px(image.height * imageScale),
+                  opacity: image.opacity ?? 1,
+                  zIndex: image.zIndex ?? 0,
+                }}
+              >
+                <img
+                  src={image.src}
+                  alt=""
+                  draggable="false"
+                  className="h-full w-full max-w-none select-none"
+                  style={image.imageStyle}
+                />
+              </div>
+            );
+          })}
+        </div>
+      ) : null}
       <div
         className="absolute left-0 top-0"
         style={{
-          left: typeof sceneLeft === "number" ? px(sceneLeft) : sceneLeft,
+          left: typeof coreSceneLeft === "number" ? px(coreSceneLeft) : coreSceneLeft,
           width:
-            sceneWidth !== null
-              ? px(sceneWidth)
+            scale !== null
+              ? px(FRAME_WIDTH * scale)
               : `calc(100dvh * ${FRAME_WIDTH} / ${FRAME_HEIGHT})`,
-          height: sceneHeight !== null ? px(sceneHeight) : "100dvh",
+          height: viewport !== null ? px(viewport.height) : "100dvh",
         }}
       >
-        {sceneImages.map((image) => {
+        {coreSceneImages.map((image) => {
           const imageScale = scale ?? 1;
           const wideShift = getWideShift(image, extraWidth);
 
