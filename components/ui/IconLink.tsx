@@ -20,10 +20,11 @@ export default function IconLink({ icon, href, label, className }: IconLinkProps
       aria-label={label}
       title={label}
       className={[
+        'sparkle-icon',
+        'group',
         'inline-flex items-center justify-center',
-        'h-10 min-w-10 rounded-lg px-2',
-        'text-current transition-colors',
-        'hover:bg-black/5 dark:hover:bg-white/10',
+        'h-full min-w-10 rounded-lg',
+        'text-current',
         'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current',
         className ?? '',
       ].join(' ')}
