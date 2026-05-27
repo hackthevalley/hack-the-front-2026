@@ -1,0 +1,47 @@
+@keyframes sparkle-a {
+  0%, 100% { opacity: 0; transform: scale(0) translate(0, 0); }
+  50%       { opacity: 1; transform: scale(1) translate(-3px, -6px); }
+}
+
+@keyframes sparkle-b {
+  0%, 100% { opacity: 0; transform: scale(0) translate(0, 0); }
+  50%       { opacity: 1; transform: scale(0.8) translate(5px, -4px); }
+}
+
+.sparkle-icon {
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.sparkle-icon::before,
+.sparkle-icon::after {
+  content: '✦';
+  position: absolute;
+  color: #e9d5ff;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sparkle-icon::before {
+  font-size: 8px;
+  top: -4px;
+  left: -2px;
+}
+
+.sparkle-icon::after {
+  font-size: 6px;
+  bottom: -2px;
+  right: -4px;
+}
+
+.sparkle-icon:hover {
+  transform: scale(1.1);
+}
+
+.sparkle-icon:hover::before {
+  animation: sparkle-a 0.7s ease forwards;
+}
+
+.sparkle-icon:hover::after {
+  animation: sparkle-b 0.8s ease 0.1s forwards;
+}
