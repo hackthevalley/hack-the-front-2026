@@ -8,6 +8,7 @@ import {
   wideFrontCenterSceneImages,
   wideFrontRightSceneImages,
   wideMidSceneImages,
+  wideSkySceneImages,
   wideWaterMidSceneImages,
   wideWaterTopSceneImages,
 } from "./data";
@@ -18,7 +19,11 @@ import {
   getWideShift,
   px,
 } from "./geometry";
-import { CORE_WIDE_SWAP_IDS, CORE_WIDE_WATER_SWAP_IDS } from "./rules";
+import {
+  CORE_WIDE_SKY_SWAP_IDS,
+  CORE_WIDE_SWAP_IDS,
+  CORE_WIDE_WATER_SWAP_IDS,
+} from "./rules";
 import type { SceneAnchor, SceneImage, Viewport } from "./types";
 
 const ULTRAWIDE_BACKDROP_BACKGROUND =
@@ -54,21 +59,23 @@ export default function LandingBackground() {
     showUltrawideBackdrop,
     ultrawideBackdropScaleX,
   } = getSceneLayout(viewport);
-  const renderedCoreSceneImages = coreSceneImages.map((image) =>
-    CORE_WIDE_SWAP_IDS.has(image.id) || CORE_WIDE_WATER_SWAP_IDS.has(image.id)
-      ? {
-          ...image,
-          opacity:
-            CORE_WIDE_SWAP_IDS.has(image.id)
-              ? showWideFrontScene
-                ? 0
-                : (image.opacity ?? 1)
-              : showWideWaterScene
-                ? 0
-                : (image.opacity ?? 1),
-        }
-      : image,
-  );
+  const renderedCoreSceneImages = coreSceneImages.map((image) => {
+    const opacity = image.opacity ?? 1;
+
+    if (CORE_WIDE_SKY_SWAP_IDS.has(image.id) && showWideFrontScene) {
+      return { ...image, opacity: 0 };
+    }
+
+    if (CORE_WIDE_SWAP_IDS.has(image.id) && showWideFrontScene) {
+      return { ...image, opacity: 0 };
+    }
+
+    if (CORE_WIDE_WATER_SWAP_IDS.has(image.id) && showWideWaterScene) {
+      return { ...image, opacity: 0 };
+    }
+
+    return { ...image, opacity };
+  });
   const renderedCoreUnderWaterSceneImages = renderedCoreSceneImages.filter(
     (image) => (image.zIndex ?? 0) < CORE_WATER_STACK_Z_INDEX,
   );
@@ -137,6 +144,18 @@ export default function LandingBackground() {
 
   const renderSceneStacks = () => (
     <>
+      {wideSkySceneImages.length > 0 && showWideFrontScene
+        ? renderSceneLayer(
+            wideSkySceneImages,
+            wideSceneLeft,
+            wideSceneRenderWidth,
+            wideScale ?? 1,
+            false,
+            0,
+            undefined,
+            "center",
+          )
+        : null}
       {wideBackSceneImages.length > 0
         ? renderSceneLayer(
             wideBackSceneImages,
