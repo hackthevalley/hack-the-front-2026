@@ -1,4 +1,4 @@
-import LandingBackground from "./landing/LandingBackground";
+import LandingBackground from "./landing/background/LandingBackground";
 
 export default function Home() {
   return (
