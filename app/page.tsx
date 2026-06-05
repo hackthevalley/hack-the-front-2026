@@ -1,4 +1,5 @@
 import LandingBackground from "./landing/background/LandingBackground";
+import NewsletterSignUp from "@/components/ui/NewsletterSignUp";
 
 export default function Home() {
   return (
@@ -10,6 +11,12 @@ export default function Home() {
       }}
     >
       <LandingBackground />
+
+      <section className="relative w-full min-h-screen">
+        <div className="absolute left-1/2 top-[46.9%] -translate-x-1/2">
+          <NewsletterSignUp />
+        </div>
+      </section>
     </main>
   );
 }
