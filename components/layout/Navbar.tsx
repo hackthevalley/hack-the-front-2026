@@ -47,7 +47,7 @@ export default function Navbar({ variant = "default" }: NavbarProps) {
       }
     >
       {isOverlay && (
-        <div className="fixed top-0 right-[50px] z-[100]">
+        <div className="fixed top-0 right-[50px] z-100">
           <MlhTrustBadge />
         </div>
       )}
