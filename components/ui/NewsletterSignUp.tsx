@@ -90,11 +90,9 @@ export default function NewsletterSignUp({
   onSubmitEmail,
 }: NewsletterSignUpProps) {
   const [email, setEmail] = React.useState(defaultEmail);
-  const [focused, setFocused] = React.useState(false);
   const [status, setStatus] = React.useState<SignupStatus>("idle");
 
   const statusUi = STATUS_UI[status];
-  const showOverlayPlaceholder = !focused && email.length === 0;
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -140,84 +138,64 @@ export default function NewsletterSignUp({
       <form onSubmit={handleSubmit} className="w-full">
         <div
           className="
-            relative box-border flex items-center
+            relative box-border flex items-center gap-[clamp(8px,0.794vw,12px)]
             w-[clamp(320px,31.085vw,470px)]
             h-[clamp(42px,3.704vw,56px)]
             rounded-[999px]
+            border border-white/25
             bg-[rgba(255,255,255,0.37)]
-            px-[clamp(10px,0.86vw,13px)]
-            pr-[clamp(5px,0.397vw,6px)]
-            py-[clamp(10px,0.86vw,13px)]
+            pl-[clamp(13px,1.058vw,16px)]
+            pr-[clamp(6px,0.397vw,6px)]
           "
           style={{ boxShadow: statusUi.shadow }}
         >
-          <div className="flex h-full w-full items-center justify-between">
-            <div className="flex min-w-0 flex-1 items-center gap-[clamp(5px,0.463vw,7px)]">
-              <img
-                src={EMAIL_ICON}
-                alt=""
-                aria-hidden="true"
-                className="h-[clamp(15px,1.323vw,20px)] w-[clamp(15px,1.323vw,20px)] shrink-0"
-              />
+          <img
+            src={EMAIL_ICON}
+            alt=""
+            aria-hidden="true"
+            className="h-[clamp(16px,1.323vw,20px)] w-[clamp(16px,1.323vw,20px)] shrink-0"
+          />
 
-              <div className="relative min-w-0 flex-1 h-[clamp(12px,0.926vw,14px)]">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={handleChange}
-                  onFocus={() => setFocused(true)}
-                  onBlur={() => setFocused(false)}
-                  placeholder={focused ? "user@gmail.com" : ""}
-                  aria-label="Email address"
-                  aria-invalid={status === "error" || status === "duplicate"}
-                  aria-describedby="newsletter-signup-message"
-                  disabled={status === "loading"}
-                  className="
-                    absolute inset-0 w-full min-w-0 bg-transparent outline-none
-                    text-[clamp(10px,0.794vw,12px)] leading-[clamp(12px,0.926vw,14px)] text-white
-                    placeholder:text-white
-                    disabled:cursor-not-allowed
-                  "
-                />
+          <input
+            type="email"
+            value={email}
+            onChange={handleChange}
+            placeholder="user@gmail.com"
+            aria-label="Email address"
+            aria-invalid={status === "error" || status === "duplicate"}
+            aria-describedby="newsletter-signup-message"
+            disabled={status === "loading"}
+            className="
+              min-w-0 flex-1 bg-transparent font-figtree outline-none
+              text-[clamp(14px,1.058vw,16px)] leading-none text-white
+              placeholder:text-white/80
+              disabled:cursor-not-allowed
+            "
+          />
 
-                {showOverlayPlaceholder && (
-                  <span
-                    className="
-                      pointer-events-none absolute inset-0 flex items-center
-                      overflow-hidden whitespace-nowrap text-ellipsis
-                      text-[clamp(10px,0.794vw,12px)] leading-[clamp(12px,0.926vw,14px)] text-white
-                    "
-                  >
-                    Sign up for the latest news!
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              aria-label="Submit newsletter signup"
-              disabled={status === "loading"}
-              className="
-                ml-[clamp(10px,0.86vw,13px)] flex shrink-0 items-center justify-center
-                h-[clamp(34px,2.91vw,44px)] w-[clamp(34px,2.91vw,44px)]
-                rounded-full
-                disabled:cursor-not-allowed disabled:opacity-70
-              "
-              style={getSendButtonStyle(status, email)}
-            >
-              <img
-                src={statusUi.icon}
-                alt=""
-                aria-hidden="true"
-                className={
-                  status === "idle" || status === "loading"
-                    ? "h-[clamp(18px,1.587vw,24px)] w-[clamp(18px,1.587vw,24px)] shrink-0"
-                    : "h-[clamp(15px,1.323vw,20px)] w-[clamp(15px,1.323vw,20px)] shrink-0"
-                }
-              />
-            </button>
-          </div>
+          <button
+            type="submit"
+            aria-label="Submit newsletter signup"
+            disabled={status === "loading"}
+            className="
+              flex shrink-0 items-center justify-center
+              h-[clamp(34px,2.91vw,44px)] w-[clamp(34px,2.91vw,44px)]
+              rounded-full
+              disabled:cursor-not-allowed disabled:opacity-70
+            "
+            style={getSendButtonStyle(status, email)}
+          >
+            <img
+              src={statusUi.icon}
+              alt=""
+              aria-hidden="true"
+              className={
+                status === "idle" || status === "loading"
+                  ? "h-[clamp(18px,1.587vw,24px)] w-[clamp(18px,1.587vw,24px)] shrink-0"
+                  : "h-[clamp(15px,1.323vw,20px)] w-[clamp(15px,1.323vw,20px)] shrink-0"
+              }
+            />
+          </button>
         </div>
       </form>
 
@@ -225,7 +203,7 @@ export default function NewsletterSignUp({
         id="newsletter-signup-message"
         className={
           statusUi.text
-            ? "mt-[clamp(10px,1vw,16px)] text-[clamp(12px,1.06vw,16px)]"
+            ? "mt-[clamp(10px,1vw,16px)] font-figtree text-[clamp(12px,1.06vw,16px)]"
             : "sr-only"
         }
         style={statusUi.text ? { color: statusUi.color } : undefined}

@@ -5,6 +5,8 @@ type MaskIconProps = {
   width: number;
   /** Rendered height in px. */
   height: number;
+  /** CSS mask-position — corrects assets with uneven padding inside the SVG. */
+  maskPosition?: string;
   /** Extra classes — notably `text-*` colors, which become the icon's color. */
   className?: string;
 };
@@ -18,12 +20,20 @@ type MaskIconProps = {
  *
  * Requires a single-color vector SVG on a transparent background.
  */
-export default function MaskIcon({ src, width, height, className }: MaskIconProps) {
-  const mask = `url(${src}) center / contain no-repeat`;
+export default function MaskIcon({
+  src,
+  width,
+  height,
+  maskPosition = "center",
+  className,
+}: MaskIconProps) {
+  const maskImage = `url(${src})`;
+  const mask = `${maskImage} ${maskPosition} / contain no-repeat`;
+
   return (
     <span
       aria-hidden="true"
-      className={['inline-block shrink-0 bg-current', className ?? ''].join(' ')}
+      className={["block shrink-0 bg-current", className ?? ""].join(" ")}
       style={{
         width,
         height,

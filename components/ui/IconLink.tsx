@@ -22,8 +22,8 @@ export default function IconLink({ icon, href, label, className }: IconLinkProps
       className={[
         'sparkle-icon',
         'group',
-        'inline-flex items-center justify-center',
-        'h-full min-w-10 rounded-lg',
+        'inline-flex size-[47px] shrink-0 items-center justify-center',
+        'rounded-lg',
         'text-current',
         'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current',
         className ?? '',
