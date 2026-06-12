@@ -35,12 +35,12 @@ function pad(value: number, length = 2): string {
 function CountdownUnit({ value, label, widthClass }: CountdownUnitProps) {
   return (
     <div
-      className={`flex shrink-0 flex-col items-center gap-1 text-center ${widthClass}`}
+      className={`flex shrink-0 flex-col items-center gap-0.5 text-center sm:gap-1 ${widthClass}`}
     >
-      <span className="w-full font-vcr text-[clamp(32px,4.233vw,64px)] leading-none tracking-[-0.04em] text-white">
+      <span className="w-full font-vcr text-[clamp(1.5rem,4.233vw,4rem)] leading-none tracking-[-0.04em] text-white">
         {value}
       </span>
-      <span className="w-full font-figtree text-[clamp(10px,1.058vw,16px)] font-medium leading-normal tracking-[-0.04em] text-[#E5E7EB]">
+      <span className="w-full font-figtree text-[clamp(0.625rem,1.058vw,1rem)] font-medium leading-normal tracking-[-0.04em] text-[#E5E7EB]">
         {label}
       </span>
     </div>
@@ -50,7 +50,7 @@ function CountdownUnit({ value, label, widthClass }: CountdownUnitProps) {
 function CountdownColon() {
   return (
     <span
-      className="shrink-0 pb-[clamp(14px,1.85vw,28px)] font-figtree text-[clamp(32px,4.233vw,64px)] font-medium leading-none tracking-[-0.04em] text-[#F3F4F6]"
+      className="shrink-0 pb-5 font-figtree text-[clamp(1.5rem,4.233vw,4rem)] font-medium leading-none tracking-[-0.04em] text-[#F3F4F6] sm:pb-[clamp(14px,1.85vw,28px)]"
       aria-hidden="true"
     >
       :
@@ -75,7 +75,7 @@ export default function CountdownTimer() {
 
   return (
     <div
-      className="flex items-end justify-center gap-[clamp(10px,1.323vw,20px)]"
+      className="mx-auto flex w-full max-w-full items-end justify-center gap-1.5 sm:gap-[clamp(10px,1.323vw,20px)]"
       role="timer"
       aria-live="polite"
       aria-label="Countdown to Hack the Valley 11"
@@ -83,25 +83,25 @@ export default function CountdownTimer() {
       <CountdownUnit
         value={pad(display.days, 3)}
         label="DAY(S)"
-        widthClass="w-[clamp(60px,7.87vw,119px)]"
+        widthClass="w-[clamp(2.75rem,7.87vw,7.4375rem)]"
       />
       <CountdownColon />
       <CountdownUnit
         value={pad(display.hours)}
         label="HOUR(S)"
-        widthClass="w-[clamp(48px,5.291vw,80px)]"
+        widthClass="w-[clamp(2.25rem,5.291vw,5rem)]"
       />
       <CountdownColon />
       <CountdownUnit
         value={pad(display.minutes)}
         label="MINUTE(S)"
-        widthClass="w-[clamp(48px,5.291vw,80px)]"
+        widthClass="w-[clamp(2.25rem,5.291vw,5rem)]"
       />
       <CountdownColon />
       <CountdownUnit
         value={pad(display.seconds)}
         label="SECOND(S)"
-        widthClass="w-[clamp(50px,5.49vw,83px)]"
+        widthClass="w-[clamp(2.375rem,5.49vw,5.1875rem)]"
       />
     </div>
   );

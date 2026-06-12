@@ -4,8 +4,6 @@ import MlhTrustBadge from "@/components/landing/MlhTrustBadge";
 import IconLink from "@/components/ui/IconLink";
 import MaskIcon from "@/components/ui/MaskIcon";
 
-const SOCIAL_ICON_SIZE = 30;
-
 const SOCIAL_LINKS = [
   {
     key: "instagram",
@@ -26,7 +24,6 @@ const SOCIAL_LINKS = [
     label: "Email us",
     href: "mailto:hello@hackthevalley.io",
     src: "/icons/email.svg",
-    // Original asset has drop-shadow padding below the glyph — nudge mask down.
     maskPosition: "center calc(50% + 5px)",
   },
 ] as const;
@@ -40,42 +37,39 @@ export default function Navbar({ variant = "default" }: NavbarProps) {
 
   return (
     <header
-      className={
+      className={`relative w-full self-stretch ${
         isOverlay
-          ? "w-full"
-          : "w-full border-b border-black/8 dark:border-white/10"
-      }
+          ? ""
+          : "border-b border-black/8 dark:border-white/10"
+      }`}
     >
-      {isOverlay && (
-        <div className="fixed top-0 right-[50px] z-100">
-          <MlhTrustBadge />
-        </div>
-      )}
-
       <nav
-        className={`mx-auto flex w-full max-w-[1512px] items-center justify-between ${
+        className={`flex w-full items-center justify-between px-4 ${
           isOverlay
-            ? "py-[clamp(24px,3.307vw,50px)] pl-[clamp(24px,7.937vw,120px)] pr-[max(clamp(24px,7.937vw,120px),calc(50px+clamp(60px,6.614vw,100px)+16px))] text-white"
-            : "h-16 px-[clamp(24px,7.937vw,120px)] text-zinc-900 dark:text-zinc-50"
+            ? "py-4 text-white sm:py-[clamp(24px,3.307vw,50px)] sm:px-[clamp(24px,7.937vw,120px)]"
+            : "h-14 text-zinc-900 sm:h-16 sm:px-[clamp(24px,7.937vw,120px)] dark:text-zinc-50"
         }`}
       >
         <Link
           href="/"
           aria-label="Hack the Valley — home"
-          className="sparkle-icon flex h-[47px] w-[45px] shrink-0 items-center justify-center"
+          className="sparkle-icon flex h-9 w-[34px] shrink-0 items-center justify-center sm:h-[47px] sm:w-[45px]"
         >
           <Image
             src="/icons/htv-logo.svg"
             alt=""
             width={45}
             height={47}
-            className="block h-[47px] w-[45px] object-contain transition-opacity duration-150 hover:opacity-80"
+            priority
+            className="block h-9 w-[34px] object-contain transition-opacity duration-150 hover:opacity-80 sm:h-[47px] sm:w-[45px]"
           />
         </Link>
 
         <div
-          className={`flex h-[47px] items-center gap-[clamp(16px,1.587vw,22px)] ${
-            isOverlay ? "text-white" : "text-zinc-500 dark:text-zinc-400"
+          className={`flex h-9 shrink-0 items-center gap-2 sm:h-[47px] sm:gap-[clamp(16px,1.587vw,22px)] ${
+            isOverlay
+              ? "mr-[calc(3rem+0.75rem)] text-white sm:mr-[calc(clamp(60px,6.614vw,100px)+1rem)]"
+              : "text-zinc-500 dark:text-zinc-400"
           }`}
         >
           {SOCIAL_LINKS.map(({ key, label, href, src, maskPosition }) => (
@@ -84,17 +78,17 @@ export default function Navbar({ variant = "default" }: NavbarProps) {
               href={href}
               label={label}
               icon={
-                <span className="flex size-[30px] items-center justify-center">
+                <span className="flex size-6 items-center justify-center sm:size-[30px]">
                   <MaskIcon
                     src={src}
-                    width={SOCIAL_ICON_SIZE}
-                    height={SOCIAL_ICON_SIZE}
+                    width={30}
+                    height={30}
                     maskPosition={maskPosition}
-                    className={
+                    className={`origin-center scale-[0.8] sm:scale-100 ${
                       isOverlay
                         ? "text-white transition-opacity duration-150 group-hover:opacity-80"
                         : "text-current transition-colors duration-150 group-hover:text-zinc-300"
-                    }
+                    }`}
                   />
                 </span>
               }
@@ -102,6 +96,10 @@ export default function Navbar({ variant = "default" }: NavbarProps) {
           ))}
         </div>
       </nav>
+
+      {isOverlay && (
+        <MlhTrustBadge className="absolute top-0 right-4 sm:right-[clamp(24px,7.937vw,120px)]" />
+      )}
     </header>
   );
 }
