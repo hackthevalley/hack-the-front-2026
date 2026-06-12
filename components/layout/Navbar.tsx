@@ -38,9 +38,7 @@ export default function Navbar({ variant = "default" }: NavbarProps) {
   return (
     <header
       className={`relative w-full self-stretch ${
-        isOverlay
-          ? ""
-          : "border-b border-black/8 dark:border-white/10"
+        isOverlay ? "" : "border-b border-black/8 dark:border-white/10"
       }`}
     >
       <nav
@@ -68,7 +66,7 @@ export default function Navbar({ variant = "default" }: NavbarProps) {
         <div
           className={`flex h-9 shrink-0 items-center gap-2 sm:h-[47px] sm:gap-[clamp(16px,1.587vw,22px)] ${
             isOverlay
-              ? "mr-[calc(3rem+0.75rem)] text-white sm:mr-[calc(clamp(60px,6.614vw,100px)+1rem)]"
+              ? "mr-15 text-white sm:mr-[calc(clamp(60px,6.614vw,100px)+1rem)]"
               : "text-zinc-500 dark:text-zinc-400"
           }`}
         >
