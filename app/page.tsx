@@ -2,6 +2,7 @@ import Navbar from "@/components/layout/Navbar";
 import CountdownTimer from "@/components/landing/CountdownTimer";
 import LandingBackground from "./landing/background/LandingBackground";
 import FooterTextLink from "@/components/ui/FooterTextLink";
+import TextTextureMask from "@/components/ui/TextTextureMask";
 
 const MLH_CODE_OF_CONDUCT_HREF =
   "https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md";
@@ -21,14 +22,20 @@ export default function Home() {
         <Navbar variant="overlay" />
 
         <section className="mx-auto flex w-full max-w-[1512px] flex-1 flex-col items-center justify-center px-4 py-8 sm:px-[clamp(24px,7.937vw,120px)] sm:py-0">
-          <div className="flex w-full max-w-[800px] flex-col items-center text-center font-figtree text-white">
-            <h1 className="w-full text-balance text-[clamp(2rem,5.291vw,5rem)] font-bold leading-[1.02] tracking-[-0.02em]">
+          <div className="flex w-full max-w-[800px] flex-col items-center text-center font-figtree">
+            <TextTextureMask
+              as="h1"
+              className="w-full text-balance text-[clamp(2rem,5.291vw,5rem)] font-bold leading-[1.12] tracking-[-0.02em] pb-[0.06em]"
+            >
               Hack the Valley 11
-            </h1>
+            </TextTextureMask>
 
-            <p className="mt-4 w-full text-balance text-[clamp(0.875rem,1.323vw,1.25rem)] font-medium leading-normal sm:mt-[clamp(16px,1.587vw,24px)]">
+            <TextTextureMask
+              as="p"
+              className="mt-4 w-full text-balance text-[clamp(0.875rem,1.323vw,1.25rem)] font-medium leading-normal sm:mt-[clamp(16px,1.587vw,24px)]"
+            >
               October 16-18, 2026 • In-person event
-            </p>
+            </TextTextureMask>
 
             <a
               href="https://forms.gle/ubFkgUa8S38XRcKo8"

@@ -37,7 +37,7 @@ function CountdownUnit({ value, label, widthClass }: CountdownUnitProps) {
     <div
       className={`flex shrink-0 flex-col items-center gap-0.5 text-center sm:gap-1 ${widthClass}`}
     >
-      <span className="w-full font-vcr text-[clamp(1.5rem,4.233vw,4rem)] leading-none tracking-[-0.04em] text-white">
+      <span className="w-full font-vcr text-[clamp(1.5rem,4.233vw,4rem)] leading-none tracking-[-0.04em] text-[#F3F4F6]">
         {value}
       </span>
       <span className="w-full font-figtree text-[clamp(0.625rem,1.058vw,1rem)] font-medium leading-normal tracking-[-0.04em] text-[#E5E7EB]">
