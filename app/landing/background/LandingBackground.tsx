@@ -26,9 +26,6 @@ import {
 } from "./rules";
 import type { SceneAnchor, SceneImage, Viewport } from "./types";
 
-const ULTRAWIDE_BACKDROP_BACKGROUND =
-  "linear-gradient(180deg, #040142 15.36%, #C541E0 59.31%, #DF63DC 71.52%, #FFD668 95.53%)";
-
 export default function LandingBackground() {
   const [viewport, setViewport] = useState<Viewport | null>(null);
 
@@ -56,8 +53,7 @@ export default function LandingBackground() {
     wideSceneRenderWidth,
     showWideFrontScene,
     showWideWaterScene,
-    showUltrawideBackdrop,
-    ultrawideBackdropScaleX,
+    sceneCoverScaleX,
   } = getSceneLayout(viewport);
   const renderedCoreSceneImages = coreSceneImages.map((image) => {
     const opacity = image.opacity ?? 1;
@@ -256,31 +252,16 @@ export default function LandingBackground() {
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
     >
-      {showUltrawideBackdrop && layoutViewportWidth !== null ? (
-        <div className="absolute inset-0 overflow-hidden">
-          <div
-            className="absolute left-1/2 top-0"
-            style={{
-              width: px(layoutViewportWidth),
-              height: viewport !== null ? px(viewport.height) : "100dvh",
-              opacity: 0.78,
-              filter: "blur(48px) saturate(1.05)",
-              transform: `translateX(-50%) scaleX(${ultrawideBackdropScaleX}) scaleY(1.04)`,
-              transformOrigin: "center center",
-              background: ULTRAWIDE_BACKDROP_BACKGROUND,
-            }}
-          />
-        </div>
-      ) : null}
       <div
-        className="absolute left-1/2 top-0 overflow-hidden"
+        className="absolute left-1/2 top-0"
         style={{
           width:
             layoutViewportWidth !== null
               ? px(layoutViewportWidth)
               : "100vw",
           height: viewport !== null ? px(viewport.height) : "100dvh",
-          transform: "translateX(-50%)",
+          transform: `translateX(-50%) scaleX(${sceneCoverScaleX})`,
+          transformOrigin: "center top",
         }}
       >
         {renderSceneStacks()}

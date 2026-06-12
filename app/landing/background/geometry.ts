@@ -25,8 +25,8 @@ export type SceneLayout = {
   wideSceneRenderWidth: number | string;
   showWideFrontScene: boolean;
   showWideWaterScene: boolean;
-  showUltrawideBackdrop: boolean;
-  ultrawideBackdropScaleX: number;
+  /** Horizontal scale so the composed scene fills viewports wider than the art. */
+  sceneCoverScaleX: number;
 };
 
 export const px = (value: number) => `${value}px`;
@@ -122,18 +122,7 @@ function getSceneLeft(
     : `calc(50vw - (100dvh * ${focalX} / ${frameHeight}))`;
 }
 
-function getShowUltrawideBackdrop(
-  viewport: Viewport | null,
-  layoutViewportWidth: number | null,
-) {
-  return (
-    viewport !== null &&
-    layoutViewportWidth !== null &&
-    viewport.width - layoutViewportWidth > 1
-  );
-}
-
-function getUltrawideBackdropScaleX(
+function getSceneCoverScaleX(
   viewport: Viewport | null,
   layoutViewportWidth: number | null,
 ) {
@@ -179,13 +168,6 @@ export function getSceneLayout(viewport: Viewport | null): SceneLayout {
     ),
     showWideFrontScene: viewportAspectRatio >= WIDE_FRONT_SWAP_RATIO,
     showWideWaterScene: viewportAspectRatio >= WIDE_WATER_SWAP_RATIO,
-    showUltrawideBackdrop: getShowUltrawideBackdrop(
-      viewport,
-      layoutViewportWidth,
-    ),
-    ultrawideBackdropScaleX: getUltrawideBackdropScaleX(
-      viewport,
-      layoutViewportWidth,
-    ),
+    sceneCoverScaleX: getSceneCoverScaleX(viewport, layoutViewportWidth),
   };
 }
