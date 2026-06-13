@@ -15,7 +15,6 @@ import {
 import {
   getSceneLayerLeft,
   getSceneLayout,
-  getViewport,
   getWideShift,
   px,
 } from "./geometry";
@@ -32,16 +31,36 @@ const DEFAULT_VIEWPORT: Viewport = {
   height: FRAME_HEIGHT,
 };
 
+let viewportSnapshot: Viewport = DEFAULT_VIEWPORT;
+
+function syncViewportSnapshot(notify?: () => void) {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+
+  if (
+    viewportSnapshot.width === width &&
+    viewportSnapshot.height === height
+  ) {
+    return;
+  }
+
+  viewportSnapshot = { width, height };
+  notify?.();
+}
+
 function subscribeToViewport(onStoreChange: () => void) {
-  window.addEventListener("resize", onStoreChange);
+  const onResize = () => syncViewportSnapshot(onStoreChange);
+
+  syncViewportSnapshot(onStoreChange);
+  window.addEventListener("resize", onResize);
 
   return () => {
-    window.removeEventListener("resize", onStoreChange);
+    window.removeEventListener("resize", onResize);
   };
 }
 
 function getViewportSnapshot() {
-  return getViewport();
+  return viewportSnapshot;
 }
 
 function getViewportServerSnapshot() {
