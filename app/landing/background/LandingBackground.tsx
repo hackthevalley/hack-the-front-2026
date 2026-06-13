@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties } from "react";
-import { CORE_WATER_STACK_Z_INDEX } from "./constants";
+import { useSyncExternalStore, type CSSProperties } from "react";
+import { CORE_WATER_STACK_Z_INDEX, FRAME_HEIGHT, FRAME_WIDTH } from "./constants";
 import {
   coreSceneImages,
   wideBackSceneImages,
@@ -19,6 +19,7 @@ import {
   getWideShift,
   px,
 } from "./geometry";
+import { getBackgroundImageLoading } from "./imageLoading";
 import {
   CORE_WIDE_SKY_SWAP_IDS,
   CORE_WIDE_SWAP_IDS,
@@ -26,21 +27,33 @@ import {
 } from "./rules";
 import type { SceneAnchor, SceneImage, Viewport } from "./types";
 
+const DEFAULT_VIEWPORT: Viewport = {
+  width: FRAME_WIDTH,
+  height: FRAME_HEIGHT,
+};
+
+function subscribeToViewport(onStoreChange: () => void) {
+  window.addEventListener("resize", onStoreChange);
+
+  return () => {
+    window.removeEventListener("resize", onStoreChange);
+  };
+}
+
+function getViewportSnapshot() {
+  return getViewport();
+}
+
+function getViewportServerSnapshot() {
+  return DEFAULT_VIEWPORT;
+}
+
 export default function LandingBackground() {
-  const [viewport, setViewport] = useState<Viewport | null>(null);
-
-  useEffect(() => {
-    const updateViewport = () => {
-      setViewport(getViewport());
-    };
-
-    updateViewport();
-    window.addEventListener("resize", updateViewport);
-
-    return () => {
-      window.removeEventListener("resize", updateViewport);
-    };
-  }, []);
+  const viewport = useSyncExternalStore(
+    subscribeToViewport,
+    getViewportSnapshot,
+    getViewportServerSnapshot,
+  );
 
   const {
     scale,
@@ -55,6 +68,8 @@ export default function LandingBackground() {
     showWideWaterScene,
     sceneCoverScaleX,
   } = getSceneLayout(viewport);
+  const showWideBackScene =
+    extraWidth > 0 || showWideFrontScene || showWideWaterScene;
   const renderedCoreSceneImages = coreSceneImages.map((image) => {
     const opacity = image.opacity ?? 1;
 
@@ -88,7 +103,7 @@ export default function LandingBackground() {
     layerZIndex?: number,
     layerStyle?: CSSProperties,
     anchor: SceneAnchor = "center",
-    layerViewportWidth: number | null = layoutViewportWidth ?? viewport?.width ?? null,
+    layerViewportWidth: number | null = layoutViewportWidth ?? viewport.width,
   ) => (
     <div
       className="absolute left-0 top-0"
@@ -104,13 +119,14 @@ export default function LandingBackground() {
           return typeof anchoredLeft === "number" ? px(anchoredLeft) : anchoredLeft;
         })(),
         width: typeof sceneWidth === "number" ? px(sceneWidth) : sceneWidth,
-        height: viewport !== null ? px(viewport.height) : "100dvh",
+        height: px(viewport.height),
         zIndex: layerZIndex,
         ...layerStyle,
       }}
     >
       {images.map((image) => {
         const wideShift = pullApart ? getWideShift(image, extraWidth) : 0;
+        const { loading, fetchPriority } = getBackgroundImageLoading(image.id);
 
         return (
           <div
@@ -128,7 +144,10 @@ export default function LandingBackground() {
             <img
               src={image.src}
               alt=""
-              draggable="false"
+              draggable={false}
+              loading={loading}
+              fetchPriority={fetchPriority}
+              decoding="async"
               className="h-full w-full max-w-none select-none"
               style={image.imageStyle}
             />
@@ -152,7 +171,7 @@ export default function LandingBackground() {
             "center",
           )
         : null}
-      {wideBackSceneImages.length > 0
+      {wideBackSceneImages.length > 0 && showWideBackScene
         ? renderSceneLayer(
             wideBackSceneImages,
             wideSceneLeft,
@@ -259,7 +278,7 @@ export default function LandingBackground() {
             layoutViewportWidth !== null
               ? px(layoutViewportWidth)
               : "100vw",
-          height: viewport !== null ? px(viewport.height) : "100dvh",
+          height: px(viewport.height),
           transform: `translateX(-50%) scaleX(${sceneCoverScaleX})`,
           transformOrigin: "center top",
         }}

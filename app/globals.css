@@ -8,8 +8,7 @@
 
 @font-face {
   font-family: 'VCR OSD Mono';
-  src: url('/fonts/VCROSDMono.woff2') format('woff2'),
-       url('/fonts/VCROSDMono.ttf') format('truetype');
+  src: url('/fonts/VCROSDMono.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -18,8 +17,6 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
   --font-figtree: var(--font-figtree-family);
   --font-vcr: 'VCR OSD Mono', monospace;
 }

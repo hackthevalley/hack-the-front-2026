@@ -1,8 +1,22 @@
+import dynamic from "next/dynamic";
 import Navbar from "@/components/layout/Navbar";
-import CountdownTimer from "@/components/landing/CountdownTimer";
 import LandingBackground from "./landing/background/LandingBackground";
 import FooterTextLink from "@/components/ui/FooterTextLink";
 import TextTextureMask from "@/components/ui/TextTextureMask";
+
+const CountdownTimer = dynamic(
+  () => import("@/components/landing/CountdownTimer"),
+  {
+    loading: () => (
+      <div
+        className="mx-auto flex w-full max-w-full items-end justify-center gap-1.5 sm:gap-[clamp(10px,1.323vw,20px)]"
+        aria-hidden="true"
+      >
+        <div className="h-[clamp(1.5rem,4.233vw,4rem)] w-[clamp(320px,31.085vw,470px)]" />
+      </div>
+    ),
+  },
+);
 
 const MLH_CODE_OF_CONDUCT_HREF =
   "https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md";

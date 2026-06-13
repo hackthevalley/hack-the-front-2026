@@ -37,7 +37,7 @@ export const coreSceneImages: readonly SceneImage[] = [
   },
   {
     id: "waterfall-glow",
-    src: "/landing/background/core-scene/waterfall-glow.png",
+    src: "/landing/background/core-scene/waterfall-glow.webp",
     left: -178.69,
     top: 220.84,
     width: 636.0620727539062,
@@ -53,7 +53,7 @@ export const coreSceneImages: readonly SceneImage[] = [
   },
   {
     id: "side-fall",
-    src: "/landing/background/core-scene/side-fall.png",
+    src: "/landing/background/core-scene/side-fall.webp",
     left: -108.83,
     top: 150.39,
     width: 250.13763427734375,
@@ -64,7 +64,7 @@ export const coreSceneImages: readonly SceneImage[] = [
   },
   {
     id: "waterfall",
-    src: "/landing/background/core-scene/waterfall.png",
+    src: "/landing/background/core-scene/waterfall.webp",
     left: -192.69,
     top: 208.01,
     width: 636.0620727539062,
@@ -129,7 +129,7 @@ export const coreSceneImages: readonly SceneImage[] = [
   },
   {
     id: "trees-5",
-    src: "/landing/background/core-scene/trees-5.png",
+    src: "/landing/background/core-scene/trees-5.webp",
     left: 259.4,
     top: 753.08,
     width: 816.0335693359375,
@@ -140,7 +140,7 @@ export const coreSceneImages: readonly SceneImage[] = [
   },
   {
     id: "front-trees",
-    src: "/landing/background/core-scene/front-trees.png",
+    src: "/landing/background/core-scene/front-trees.webp",
     left: 764.08,
     top: 649.55,
     width: 1051.8052978515625,
@@ -353,7 +353,7 @@ export const wideBackSceneImages: readonly SceneImage[] = [
   },
   {
     id: "trees",
-    src: "/landing/background/wide-scene/trees.png",
+    src: "/landing/background/wide-scene/trees.webp",
     left: 1348.11,
     top: 775.13,
     width: 1079.67,
@@ -380,7 +380,7 @@ export const wideBackSceneImages: readonly SceneImage[] = [
   },
   {
     id: "wide-waterfall-glow-2",
-    src: "/landing/background/wide-scene/wide-waterfall-glow-2.png",
+    src: "/landing/background/wide-scene/wide-waterfall-glow-2.webp",
     left: 3017.78,
     top: 576.66,
     width: 442.36578369140625,
@@ -394,7 +394,7 @@ export const wideBackSceneImages: readonly SceneImage[] = [
   },
   {
     id: "wide-water-fall-2",
-    src: "/landing/background/wide-scene/wide-waterfall-2.png",
+    src: "/landing/background/wide-scene/wide-waterfall-2.webp",
     left: 3017.78,
     top: 572.61,
     width: 442.36578369140625,
@@ -425,7 +425,7 @@ export const wideBackSceneImages: readonly SceneImage[] = [
 export const wideMidSceneImages: readonly SceneImage[] = [
   {
     id: "trees-2",
-    src: "/landing/background/wide-scene/trees-2.png",
+    src: "/landing/background/wide-scene/trees-2.webp",
     left: 506,
     top: 775.13,
     width: 1079.6673583984375,
@@ -446,7 +446,7 @@ export const wideWaterMidSceneImages: readonly SceneImage[] = [
   },
   {
     id: "wide-waterfall-glow",
-    src: "/landing/background/wide-scene/wide-waterfall-glow.png",
+    src: "/landing/background/wide-scene/wide-waterfall-glow.webp",
     left: -110.4,
     top: 249.67,
     width: 694.7107543945312,
@@ -460,7 +460,7 @@ export const wideWaterMidSceneImages: readonly SceneImage[] = [
   },
   {
     id: "wide-waterfall",
-    src: "/landing/background/wide-scene/wide-waterfall.png",
+    src: "/landing/background/wide-scene/wide-waterfall.webp",
     left: -125.69,
     top: 235.66,
     width: 694.7107543945312,
@@ -502,7 +502,7 @@ export const wideWaterTopSceneImages: readonly SceneImage[] = [
 export const wideFrontCenterSceneImages: readonly SceneImage[] = [
   {
     id: "wide-front-trees",
-    src: "/landing/background/wide-scene/wide-front-trees.png",
+    src: "/landing/background/wide-scene/wide-front-trees.webp",
     left: 1861.46,
     top: 866.38,
     width: 831.2988891601562,
@@ -511,7 +511,7 @@ export const wideFrontCenterSceneImages: readonly SceneImage[] = [
   },
   {
     id: "wide-front-trees-2",
-    src: "/landing/background/wide-scene/wide-front-trees-2.png",
+    src: "/landing/background/wide-scene/wide-front-trees-2.webp",
     left: 743.01,
     top: 835.33,
     width: 891.5460205078125,
@@ -523,7 +523,7 @@ export const wideFrontCenterSceneImages: readonly SceneImage[] = [
 export const wideFrontRightSceneImages: readonly SceneImage[] = [
   {
     id: "wide-front-trees-3",
-    src: "/landing/background/wide-scene/wide-front-trees-3.png",
+    src: "/landing/background/wide-scene/wide-front-trees-3.webp",
     left: 2732.67,
     top: 717.91,
     width: 1148.7879638671875,
