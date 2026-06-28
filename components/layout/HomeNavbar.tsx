@@ -48,8 +48,8 @@ const SOCIAL_LINKS = [
  */
 export default function HomeNavbar() {
   return (
-    <header className="mx-auto h-[123.2548828125px] w-[1512px] border-b border-black/8 dark:border-white/10">
-      <nav className="mx-auto flex h-[123.2548828125px] w-[1272px] items-center justify-between text-zinc-900 dark:text-zinc-50">
+    <header className="mx-auto h-[123.2548828125px] w-378 border-b border-black/8 dark:border-white/10">
+      <nav className="mx-auto flex h-[123.2548828125px] w-318 items-center justify-between text-zinc-900 dark:text-zinc-50">
         <Link
           href="/"
           aria-label="Hack the Valley — home"
