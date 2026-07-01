@@ -17,10 +17,8 @@ export default function HomeBackground() {
       }}
     >
       <div
-        className="relative mx-auto"
+        className="relative w-full"
         style={{
-          width: `max(100vw, calc(100dvh * ${HOME_BACKGROUND_DESIGN_WIDTH} / ${HOME_BACKGROUND_DESIGN_HEIGHT}))`,
-          minHeight: "100dvh",
           aspectRatio: `${HOME_BACKGROUND_DESIGN_WIDTH} / ${HOME_BACKGROUND_DESIGN_HEIGHT}`,
           background: HOME_BACKGROUND_GRADIENT,
         }}
@@ -37,12 +35,27 @@ export default function HomeBackground() {
               zIndex: layer.zIndex ?? 0,
             }}
           >
-            <img
-              src={layer.src}
-              alt=""
-              draggable="false"
-              className="h-full w-full max-w-none select-none"
-            />
+            {layer.visibleBounds ? (
+              <img
+                src={layer.src}
+                alt=""
+                draggable="false"
+                className="absolute max-w-none select-none"
+                style={{
+                  left: `${-(layer.visibleBounds.left / layer.visibleBounds.width) * 100}%`,
+                  top: `${-(layer.visibleBounds.top / layer.visibleBounds.height) * 100}%`,
+                  width: `${(layer.visibleBounds.imageWidth / layer.visibleBounds.width) * 100}%`,
+                  height: `${(layer.visibleBounds.imageHeight / layer.visibleBounds.height) * 100}%`,
+                }}
+              />
+            ) : (
+              <img
+                src={layer.src}
+                alt=""
+                draggable="false"
+                className="h-full w-full max-w-none select-none"
+              />
+            )}
           </div>
         ))}
       </div>
