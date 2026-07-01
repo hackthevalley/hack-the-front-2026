@@ -4,6 +4,17 @@ export const HOME_BACKGROUND_DESIGN_WIDTH = 1512;
 export const HOME_BACKGROUND_DESIGN_HEIGHT = 2713;
 
 export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
+  // About us section
+  {
+    id: "path",
+    src: "/home/background/path.png",
+    left: -12.35,
+    top: 810.24,
+    width: 1540.2879638671875,
+    height: 673.724853515625,
+    zIndex: 0,
+  },
+  // Bottom section
   {
     id: "about-ground",
     src: "/home/background/about-ground.png",
@@ -11,7 +22,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     top: 988.97,
     width: 1554.0987548828125,
     height: 1873.12841796875,
-    zIndex: 0,
+    zIndex: 1,
   },
   {
     id: "grasses",
@@ -20,7 +31,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     top: 903.42,
     width: 480.6872863769531,
     height: 489.1249084472656,
-    zIndex: 2,
+    zIndex: 3,
   },
   {
     id: "rocks",
@@ -30,7 +41,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     width: 254.2735,
     height: 93.5487,
     rotation: -174.16,
-    zIndex: 1,
+    zIndex: 2,
   },
   {
     id: "leaves1",
@@ -40,7 +51,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     width: 273.2554073660684,
     height: 274.46726041893373,
     rotation: -13.71,
-    zIndex: 3,
+    zIndex: 4,
   },
   {
     id: "leaves2",
@@ -50,7 +61,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     width: 273.2546544140124,
     height: 274.4673009682477,
     rotation: 26.28,
-    zIndex: 3,
+    zIndex: 4,
   },
   {
     id: "leaves3",
@@ -60,7 +71,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     width: 401.33185116950017,
     height: 444.8795199547644,
     rotation: -8.74,
-    zIndex: 3,
+    zIndex: 4,
   },
   {
     id: "leaves4",
@@ -70,7 +81,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     width: 273.254641678237,
     height: 274.4672881759536,
     rotation: -163.79,
-    zIndex: 3,
+    zIndex: 4,
   },
   {
     id: "leaves5",
@@ -80,7 +91,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     width: 357.5611,
     height: 498.0139,
     rotation: 139.24,
-    zIndex: 3,
+    zIndex: 4,
   },
   {
     id: "leaves6",
@@ -89,7 +100,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     top: 1435.8555,
     width: 407.4272,
     height: 366.8428,
-    zIndex: 4,
+    zIndex: 5,
   },
   {
     id: "leaves7",
@@ -98,7 +109,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     top: 1585.5488,
     width: 374.6788,
     height: 354.0703,
-    zIndex: 4,
+    zIndex: 5,
   },
   {
     id: "grass",
@@ -107,7 +118,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     top: 2086.4868,
     width: 513.5061,
     height: 1129.2039,
-    zIndex: 4,
+    zIndex: 5,
   },
   {
     id: "mushroom",
@@ -117,7 +128,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     width: 343.2865,
     height: 457.3428,
     rotation: 162.97,
-    zIndex: 5,
+    zIndex: 6,
   },
   {
     id: "sparkle1",
@@ -126,7 +137,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     top: 2361.9434,
     width: 45.6722,
     height: 28.9189,
-    zIndex: 6,
+    zIndex: 7,
     visibleBounds: {
       imageWidth: 84,
       imageHeight: 67,
@@ -141,9 +152,9 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     src: "/home/background/sparkle2.png",
     left: 254.4693,
     top: 2328.0195,
-    width: 121.1636,
+    width: 131.1636,
     height: 121.8082,
-    zIndex: 6,
+    zIndex: 7,
     visibleBounds: {
       imageWidth: 142,
       imageHeight: 127,
@@ -158,9 +169,9 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     src: "/home/background/sparkle3.png",
     left: 822.3953,
     top: 1739.8784,
-    width: 76.6768,
+    width: 85.6768,
     height: 87.0121,
-    zIndex: 6,
+    zIndex: 7,
     visibleBounds: {
       imageWidth: 109,
       imageHeight: 111,
@@ -177,7 +188,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     top: 1587.8086,
     width: 4,
     height: 4,
-    zIndex: 6,
+    zIndex: 7,
     visibleBounds: {
       imageWidth: 39,
       imageHeight: 39,
@@ -194,7 +205,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     top: 1422.4028,
     width: 4,
     height: 4,
-    zIndex: 6,
+    zIndex: 7,
     visibleBounds: {
       imageWidth: 39,
       imageHeight: 39,
@@ -205,13 +216,40 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     },
   },
   {
+    id: "STAT",
+    src: "/home/background/STAT.png",
+    left: 455.2863,
+    top: 1978.4961,
+    width: 290.8379,
+    height: 150,
+    zIndex: 8,
+  },
+  {
+    id: "STAT2",
+    src: "/home/background/STAT2.png",
+    left: 361.1393,
+    top: 1585.5488,
+    width: 230,
+    height: 140,
+    zIndex: 8,
+  },
+  {
+    id: "STAT3",
+    src: "/home/background/STAT3.png",
+    left: 959.84,
+    top: 1751.75,
+    width: 201.63735961914062,
+    height: 155,
+    zIndex: 8,
+  },
+  {
     id: "first-stump",
     src: "/home/background/first-stump.png",
     left: 240.5283,
     top: 1641.627,
     width: 595.5572,
     height: 374.026,
-    zIndex: 2,
+    zIndex: 3,
     visibleBounds: {
       imageWidth: 796,
       imageHeight: 475,
@@ -228,7 +266,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     top: 1808.6274,
     width: 462.9641,
     height: 348.2333,
-    zIndex: 2,
+    zIndex: 3,
     visibleBounds: {
       imageWidth: 573,
       imageHeight: 405,
@@ -245,7 +283,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     top: 2021.2324,
     width: 554.6922,
     height: 382.9829,
-    zIndex: 2,
+    zIndex: 3,
     visibleBounds: {
       imageWidth: 626,
       imageHeight: 450,

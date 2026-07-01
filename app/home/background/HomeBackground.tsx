@@ -13,12 +13,14 @@ export default function HomeBackground() {
       aria-hidden="true"
       className="relative w-full overflow-hidden"
       style={{
+        minHeight: "100dvh",
         background: HOME_BACKGROUND_GRADIENT,
       }}
     >
       <div
-        className="relative w-full"
+        className="relative left-1/2 -translate-x-1/2"
         style={{
+          width: `max(100vw, calc(100dvh * ${HOME_BACKGROUND_DESIGN_WIDTH} / ${HOME_BACKGROUND_DESIGN_HEIGHT}))`,
           aspectRatio: `${HOME_BACKGROUND_DESIGN_WIDTH} / ${HOME_BACKGROUND_DESIGN_HEIGHT}`,
           background: HOME_BACKGROUND_GRADIENT,
         }}
