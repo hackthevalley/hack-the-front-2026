@@ -32,6 +32,8 @@ export default function HomeBackground() {
               top: `${(layer.top / HOME_BACKGROUND_DESIGN_HEIGHT) * 100}%`,
               width: `${(layer.width / HOME_BACKGROUND_DESIGN_WIDTH) * 100}%`,
               height: `${(layer.height / HOME_BACKGROUND_DESIGN_HEIGHT) * 100}%`,
+              transform: layer.rotation ? `rotate(${layer.rotation}deg)` : undefined,
+              transformOrigin: "center center",
               zIndex: layer.zIndex ?? 0,
             }}
           >
@@ -53,7 +55,11 @@ export default function HomeBackground() {
                 src={layer.src}
                 alt=""
                 draggable="false"
-                className="h-full w-full max-w-none select-none"
+                className={
+                  layer.preserveAspectRatio
+                    ? "h-full w-full max-w-none select-none object-contain"
+                    : "h-full w-full max-w-none select-none"
+                }
               />
             )}
           </div>

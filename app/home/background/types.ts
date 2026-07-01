@@ -15,5 +15,7 @@ export type HomeBackgroundLayer = {
   width: number;
   height: number;
   zIndex?: number;
+  preserveAspectRatio?: boolean;
+  rotation?: number;
   visibleBounds?: HomeBackgroundVisibleBounds;
 };
