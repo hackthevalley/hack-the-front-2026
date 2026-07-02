@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { isValidEmail } from "./validation";
 
 type SignupStatus = "idle" | "error" | "success" | "duplicate" | "loading";
 type SubmitResult = "success" | "duplicate" | "error";
@@ -53,10 +54,6 @@ const STATUS_UI: Record<SignupStatus, StatusUi> = {
     shadow: "0px 0px 10.7px 0px #EF4444, inset 0px 2px 3.7px 0px #FFFFFF",
   },
 };
-
-function isValidEmail(value: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
-}
 
 function getSendButtonStyle(
   status: SignupStatus,
