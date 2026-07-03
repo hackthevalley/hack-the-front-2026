@@ -1,3 +1,4 @@
+import HomeNavbar from "@/components/layout/HomeNavbar";
 import {
   HOME_BACKGROUND_DESIGN_HEIGHT,
   HOME_BACKGROUND_DESIGN_WIDTH,
@@ -5,7 +6,7 @@ import {
 } from "./layers";
 
 const HOME_BACKGROUND_GRADIENT =
-  "linear-gradient(180deg, #040142 15.36%, #C541E0 59.31%, #DF63DC 71.52%, #FFD668 95.53%)";
+  "linear-gradient(181deg, #040142 9.13%, #DF63DC 25%)";
 
 export default function HomeBackground() {
   return (
@@ -34,7 +35,9 @@ export default function HomeBackground() {
               top: `${(layer.top / HOME_BACKGROUND_DESIGN_HEIGHT) * 100}%`,
               width: `${(layer.width / HOME_BACKGROUND_DESIGN_WIDTH) * 100}%`,
               height: `${(layer.height / HOME_BACKGROUND_DESIGN_HEIGHT) * 100}%`,
-              transform: layer.rotation ? `rotate(${layer.rotation}deg)` : undefined,
+              transform: layer.rotation
+                ? `rotate(${layer.rotation}deg)`
+                : undefined,
               transformOrigin: "center center",
               zIndex: layer.zIndex ?? 0,
             }}
