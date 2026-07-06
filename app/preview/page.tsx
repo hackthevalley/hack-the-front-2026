@@ -1,4 +1,5 @@
 import Navbar from "@/components/layout/Navbar";
+import Button from "@/components/ui/Button";
 import TextField from "@/components/ui/TextField";
 
 /**
@@ -9,6 +10,14 @@ export default function Preview() {
   return (
     <div className="flex flex-1 flex-col bg-black">
       <Navbar />
+      <main className="flex flex-col gap-6 p-8">
+        <p className="text-sm text-zinc-500">
+          Navbar preview — edit components/layout/Navbar.tsx and save to see
+          changes.
+        </p>
+
+        <Button text="Apply Now" buttonType="primary" />
+        <Button text="Login" buttonType="disabled" />
       <main className="flex flex-col gap-8 p-8">
         <div className="max-w-xl">
           <TextField name="Email" type="email" placeholder="Enter Email" required />
