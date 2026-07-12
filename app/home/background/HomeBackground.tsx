@@ -1,4 +1,4 @@
-import HomeNavbar from "@/components/layout/HomeNavbar";
+import type { ReactNode } from "react";
 import {
   HOME_BACKGROUND_DESIGN_HEIGHT,
   HOME_BACKGROUND_DESIGN_WIDTH,
@@ -8,10 +8,13 @@ import {
 const HOME_BACKGROUND_GRADIENT =
   "linear-gradient(181deg, #040142 9.13%, #DF63DC 25%)";
 
-export default function HomeBackground() {
+type HomeBackgroundProps = {
+  children?: ReactNode;
+};
+
+export default function HomeBackground({ children }: HomeBackgroundProps) {
   return (
     <div
-      aria-hidden="true"
       className="relative w-full overflow-hidden"
       style={{
         minHeight: "100dvh",
@@ -69,6 +72,7 @@ export default function HomeBackground() {
             )}
           </div>
         ))}
+        {children}
       </div>
     </div>
   );
