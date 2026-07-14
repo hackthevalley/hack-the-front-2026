@@ -1,6 +1,4 @@
 import type { ReactNode } from "react";
-import HomeNavbar from "@/components/layout/HomeNavbar";
-import Button from "@/components/ui/Button";
 import {
   HOME_BACKGROUND_DESIGN_HEIGHT,
   HOME_BACKGROUND_DESIGN_WIDTH,
