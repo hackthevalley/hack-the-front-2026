@@ -90,23 +90,49 @@ function StatBlock({ left, top, width, height, value, lines }: StatProps) {
 export default function HomeTextOverlays() {
   return (
     <>
+      {/*
+        Matches Figma TEXT_PATH 777:4384 — VCR text on the upper-left
+        quadrant of an ellipse so it sits on the hill and curves right.
+      */}
       <DesignBox
-        left={162}
-        top={662}
-        width={410}
-        height={137}
-        className="flex items-center justify-center"
+        left={112.5}
+        top={670}
+        width={1624.44}
+        height={529.77}
+        className="overflow-visible"
+        style={{
+          transform: "rotate(3deg)",
+          // Pivot near the glyphs so clockwise rotation doesn't lift them
+          transformOrigin: "22% 12%",
+        }}
       >
-        <p
-          className="m-0 whitespace-nowrap font-vcr leading-none text-white"
-          style={{
-            fontSize: "18cqh",
-            textShadow: PIXEL_GLOW,
-            transform: "rotate(-11deg)",
-          }}
+        <svg
+          viewBox="0 0 1624.438 529.772"
+          className="h-full w-full overflow-visible"
+          role="img"
+          aria-label="Hosted @ UofT Scarborough"
         >
-          Hosted @ UofT Scarborough
-        </p>
+          <defs>
+            <path
+              id="hosted-hill-path"
+              d="M 0 264.886 C 0 118.593 363.643 0 812.219 0 C 1260.796 0 1624.438 118.593 1624.438 264.886"
+              fill="none"
+            />
+          </defs>
+          <text
+            fill="#ffffff"
+            fontSize={24}
+            fontFamily="VCR OSD Mono, monospace"
+            style={{
+              filter:
+                "drop-shadow(0 0 14px rgba(255, 230, 204, 0.95)) drop-shadow(0 0 29px rgba(255, 230, 204, 0.6))",
+            }}
+          >
+            <textPath href="#hosted-hill-path" startOffset="25%">
+              Hosted @ UofT Scarborough
+            </textPath>
+          </text>
+        </svg>
       </DesignBox>
 
       <DesignBox
