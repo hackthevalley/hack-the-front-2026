@@ -68,13 +68,13 @@ function StatBlock({ left, top, width, height, value, lines }: StatProps) {
     >
       <p
         className="m-0 font-vcr leading-none"
-        style={{ fontSize: "38cqh", textShadow: PIXEL_GLOW }}
+        style={{ fontSize: "48cqh", textShadow: PIXEL_GLOW }}
       >
         {value}
       </p>
       <p
-        className="m-0 mt-[4cqh] font-figtree font-medium uppercase leading-[1.15] tracking-[0.08em]"
-        style={{ fontSize: "10.5cqh", textShadow: SOFT_GLOW }}
+        className="m-0 mt-[3cqh] font-figtree font-medium uppercase leading-[1.15] tracking-[0.08em]"
+        style={{ fontSize: "12cqh", textShadow: SOFT_GLOW }}
       >
         {lines[0]}
         <br />
