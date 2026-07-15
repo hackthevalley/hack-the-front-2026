@@ -29,11 +29,38 @@ type TextFieldProps = {
   errorMessages?: ErrorMessages;
   value?: string;
   onChange?: (value: string) => void;
+  /** Fires whenever this field's error status changes, so a parent can track
+   * section-wide validity (e.g. to disable a "Next" button) without polling. */
+  onValidityChange?: (hasError: boolean) => void;
   className?: string;
+  /** Visual theme. "default" is the existing gradient-label look; "application" is the plain
+   * label-above-box look used by the application wizard. */
+  theme?: "default" | "application";
 };
 
 const LABEL_GRADIENT =
   "linear-gradient(95.06deg, #F6C7FC -13.3%, #7839DC 113.68%)";
+
+/** Horizontal two-color border gradient for the "application" theme. */
+const APPLICATION_BORDER_GRADIENT =
+  "linear-gradient(90deg, #c5c9e4 0%, #8288a1 100%)";
+
+/** Matches the panel background the "application" theme field sits on
+ * (see backgroundBook.tsx), so it can mask the gradient behind the field's
+ * interior — border-radius + a gradient `background` clipped to border-box
+ * renders correctly, unlike `border-image`, which ignores border-radius and
+ * produces a hard rectangular seam at rounded corners. */
+const APPLICATION_FIELD_BACKGROUND = "#312A82";
+
+const APPLICATION_BORDER_GRADIENT_BACKGROUND = `linear-gradient(${APPLICATION_FIELD_BACKGROUND}, ${APPLICATION_FIELD_BACKGROUND}) padding-box, ${APPLICATION_BORDER_GRADIENT} border-box`;
+
+/** Focused-state border: same horizontal gradient shape, reversed direction,
+ * swapped to a slightly-darker-white -> white pair instead of the brand
+ * colors — replaces the pink glow used on the "default" theme. */
+const APPLICATION_FOCUS_BORDER_GRADIENT =
+  "linear-gradient(270deg, rgba(255,255,255,0.6) 0%, #FFFFFF 100%)";
+
+const APPLICATION_FOCUS_BORDER_GRADIENT_BACKGROUND = `linear-gradient(${APPLICATION_FIELD_BACKGROUND}, ${APPLICATION_FIELD_BACKGROUND}) padding-box, ${APPLICATION_FOCUS_BORDER_GRADIENT} border-box`;
 
 function TextField(
   {
@@ -45,7 +72,9 @@ function TextField(
     errorMessages = {},
     value: controlledValue,
     onChange,
+    onValidityChange,
     className = "",
+    theme = "default",
   }: TextFieldProps,
   ref: React.Ref<TextFieldHandle>,
 ) {
@@ -80,6 +109,7 @@ function TextField(
   function validate(): boolean {
     const message = computeError(value);
     setError(message);
+    onValidityChange?.(message !== null);
     return message === null;
   }
 
@@ -91,38 +121,68 @@ function TextField(
     onChange?.(next);
 
     // Clear the error once the field becomes valid again.
-    if (error && !computeError(next)) setError(null);
+    if (error && !computeError(next)) {
+      setError(null);
+      onValidityChange?.(false);
+    }
   }
 
   const inputType = isPassword ? (showPassword ? "text" : "password") : type;
 
-  // Mask glyphs (•) render smaller than letters, so enlarge + space them out
-  // while masked to match the visual weight of the normal text.
   // Keep the minimum at 16px: anything smaller makes iOS Safari zoom the page
   // when the field is focused on mobile.
-  const isMasked = isPassword && !showPassword;
-  const inputSizeClass = isMasked
-    ? "text-[clamp(18px,1.6vw,28px)] tracking-[0.05em]"
-    : "text-[clamp(16px,1.2vw,21px)]";
+  const inputSizeClass = "text-[clamp(16px,1.2vw,21px)]";
+
+  const isApplicationTheme = theme === "application";
 
   return (
     <div className={`w-full font-figtree ${className}`}>
+      {isApplicationTheme && (
+        <span className="mb-1.5 block text-[clamp(13px,1vw,16px)] font-normal text-white/80">
+          {name}
+        </span>
+      )}
       <label
         htmlFor={fieldId}
-        className="
-          relative flex items-center gap-3
-          rounded-[clamp(16px,1.6vw,24px)] border-2 border-white
+        className={`
+          group relative flex items-center
           bg-transparent
-          px-[clamp(16px,1.6vw,28px)] py-[clamp(12px,1.2vw,20px)]
-        "
+          transition-[border-color,box-shadow] duration-300 ease-out
+          ${
+            isApplicationTheme
+              ? "h-[47px] gap-2.5 rounded-[10px] border-0 px-5 py-2.5 shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
+              : "gap-3 rounded-[clamp(16px,1.6vw,24px)] border-2 border-white px-[clamp(16px,1.6vw,28px)] py-[clamp(12px,1.2vw,20px)] focus-within:border-[#F6C7FC] focus-within:shadow-[0_0_12px_2px_rgba(246,199,252,0.55)]"
+          }
+        `}
       >
-        <div className="min-w-0 flex-1">
-          <span
-            className="block font-normal text-[clamp(14px,1.2vw,20px)] leading-tight bg-clip-text text-transparent"
-            style={{ backgroundImage: LABEL_GRADIENT }}
-          >
-            {name}
-          </span>
+        {isApplicationTheme && (
+          <>
+            {/* Base + focus border gradients are stacked layers that crossfade via
+             * opacity, since `background` can't be transitioned between two
+             * different gradients. */}
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 rounded-[10px] border-2 border-transparent"
+              style={{ background: APPLICATION_BORDER_GRADIENT_BACKGROUND }}
+            />
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 rounded-[10px] border-2 border-transparent opacity-0 transition-opacity duration-300 ease-out group-focus-within:opacity-100"
+              style={{
+                background: APPLICATION_FOCUS_BORDER_GRADIENT_BACKGROUND,
+              }}
+            />
+          </>
+        )}
+        <div className="relative z-10 min-w-0 flex-1">
+          {!isApplicationTheme && (
+            <span
+              className="block font-normal text-[clamp(14px,1.2vw,20px)] leading-tight bg-clip-text text-transparent"
+              style={{ backgroundImage: LABEL_GRADIENT }}
+            >
+              {name}
+            </span>
+          )}
 
           <input
             id={fieldId}
@@ -135,9 +195,10 @@ function TextField(
             aria-invalid={error !== null}
             aria-describedby={error ? errorId : undefined}
             className={`
-              mt-1 w-full bg-transparent outline-none font-figtree
+              w-full bg-transparent outline-none font-figtree
               font-normal leading-[clamp(30px,2.6vw,44px)] text-white
-              placeholder:text-[#EAEFFF] placeholder:tracking-normal
+              placeholder:tracking-normal
+              ${isApplicationTheme ? "mt-0 placeholder:text-white/40" : "mt-1 placeholder:text-[#EAEFFF]"}
               ${inputSizeClass}
             `}
           />
@@ -151,9 +212,12 @@ function TextField(
             aria-pressed={showPassword}
             // Negative margin keeps the icon in place while enlarging the tap
             // target to a comfortable size for touch.
-            className="shrink-0 -m-2 flex items-center justify-center p-2 text-white outline-none focus-visible:opacity-70"
+            className="relative z-10 shrink-0 -m-2 flex items-center justify-center p-2 text-white outline-none focus-visible:opacity-70"
           >
-            <EyeIcon open={showPassword} className="h-[clamp(16px,1.5vw,24px)] w-auto" />
+            <EyeIcon
+              open={showPassword}
+              className="h-[clamp(16px,1.5vw,24px)] w-auto"
+            />
           </button>
         )}
       </label>
@@ -163,9 +227,9 @@ function TextField(
         id={errorId}
         role="alert"
         aria-hidden={error === null}
-        className={`mt-[clamp(8px,0.8vw,12px)] pl-[clamp(16px,1.6vw,28px)] text-[clamp(12px,1.06vw,16px)] text-[#FFDADA] ${
-          error ? "" : "invisible"
-        }`}
+        className={`mt-[clamp(8px,0.8vw,12px)] text-[clamp(12px,1.06vw,16px)] text-[#FFDADA] ${
+          isApplicationTheme ? "pl-5" : "pl-[clamp(16px,1.6vw,28px)]"
+        } ${error ? "" : "invisible"}`}
       >
         {error ?? " "}
       </p>

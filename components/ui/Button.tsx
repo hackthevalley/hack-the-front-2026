@@ -8,10 +8,40 @@ const figtree = Figtree({ subsets: ["latin"], weight: ["600"] });
 type ButtonProps = {
   className?: string;
   text: string;
-  buttonType?: "primary" | "disabled";
+  buttonType?: "primary" | "disabled" | "direction";
+  /** Only used when buttonType is "direction". Controls chevron placement/style. */
+  direction?: "next" | "back";
   onClick?: () => void;
   width?: number | string;
+  /** Only used when buttonType is "direction" — the "disabled" buttonType covers
+   * the primary/disabled pair instead. Grays out the button and blocks onClick. */
+  disabled?: boolean;
 };
+
+function ChevronIcon({
+  direction,
+  className = "",
+}: {
+  direction: "left" | "right";
+  className?: string;
+}) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      className={className}
+    >
+      <path
+        d={direction === "left" ? "M15 6l-6 6 6 6" : "M9 6l6 6-6 6"}
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 type LayerConfig = {
   id: string;
@@ -130,10 +160,44 @@ const LAYERS: readonly LayerConfig[] = [
 export default function Button({
   text,
   buttonType = "primary",
+  direction = "next",
   onClick,
   className = "",
   width,
+  disabled = false,
 }: ButtonProps) {
+  if (buttonType === "direction") {
+    const isBack = direction === "back";
+
+    return (
+      <button
+        type="button"
+        onClick={disabled ? undefined : onClick}
+        disabled={disabled}
+        aria-disabled={disabled}
+        className={`inline-flex items-center gap-2 border-0 bg-transparent p-0 text-white transition-opacity ${
+          disabled
+            ? "cursor-not-allowed opacity-40"
+            : "cursor-pointer hover:opacity-70"
+        } ${className}`}
+      >
+        {isBack && <ChevronIcon direction="left" className="h-4 w-4" />}
+        <span className={`${figtree.className} text-[20px] font-semibold`}>
+          {text}
+        </span>
+        {!isBack && (
+          <span
+            className={`flex h-6 w-6 items-center justify-center rounded-full border ${
+              disabled ? "border-white/40" : "border-white"
+            }`}
+          >
+            <ChevronIcon direction="right" className="h-3 w-3" />
+          </span>
+        )}
+      </button>
+    );
+  }
+
   const isDisabled = buttonType === "disabled";
 
   const [ready, setReady] = useState(false);
