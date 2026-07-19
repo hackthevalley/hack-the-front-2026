@@ -1240,6 +1240,26 @@ export const faqThemesSceneLayers = [
     zIndex: 109,
     plane: "foreground",
   },
+  {
+    id: "paper",
+    figmaId: "asset:paper",
+    figmaName: "paper",
+    src: "/faq-themes/background/paper.png",
+    left: 799,
+    top: 236,
+    width: 470,
+    height: 607,
+    zIndex: 110,
+    plane: "rear",
+    visibleBounds: {
+      imageWidth: 943,
+      imageHeight: 1216,
+      left: 3,
+      top: 0,
+      width: 936,
+      height: 1211,
+    },
+  },
 ] as const satisfies readonly FaqThemesSceneLayer[];
 
 export const rearSceneLayers = faqThemesSceneLayers.filter(

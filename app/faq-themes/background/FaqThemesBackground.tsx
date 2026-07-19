@@ -15,13 +15,10 @@ function ScenePlane({ layers }: { layers: readonly FaqThemesSceneLayer[] }) {
   return (
     <>
       {layers.map((layer) => (
-        <img
+        <div
           key={layer.id}
-          src={layer.src}
-          alt=""
+          className="pointer-events-none absolute overflow-hidden"
           aria-hidden="true"
-          draggable="false"
-          className="pointer-events-none absolute max-w-none select-none"
           data-figma-id={layer.figmaId}
           data-figma-name={layer.figmaName}
           style={{
@@ -31,7 +28,29 @@ function ScenePlane({ layers }: { layers: readonly FaqThemesSceneLayer[] }) {
             height: layer.height,
             zIndex: layer.zIndex,
           }}
-        />
+        >
+          {layer.visibleBounds ? (
+            <img
+              src={layer.src}
+              alt=""
+              draggable="false"
+              className="absolute max-w-none select-none"
+              style={{
+                left: `${-(layer.visibleBounds.left / layer.visibleBounds.width) * 100}%`,
+                top: `${-(layer.visibleBounds.top / layer.visibleBounds.height) * 100}%`,
+                width: `${(layer.visibleBounds.imageWidth / layer.visibleBounds.width) * 100}%`,
+                height: `${(layer.visibleBounds.imageHeight / layer.visibleBounds.height) * 100}%`,
+              }}
+            />
+          ) : (
+            <img
+              src={layer.src}
+              alt=""
+              draggable="false"
+              className="h-full w-full max-w-none select-none"
+            />
+          )}
+        </div>
       ))}
     </>
   );

@@ -120,10 +120,6 @@ export default function FaqThemesTextOverlays() {
           width: 434,
           height: 560,
           padding: "40px 40px 34px",
-          background: "linear-gradient(145deg,#f9fbff,#ececf8)",
-          clipPath:
-            "polygon(2% 0, 96% 1%, 100% 5%, 98% 96%, 94% 100%, 4% 98%, 0 94%, 1% 4%)",
-          filter: "drop-shadow(0 13px 18px rgba(0,0,0,.38))",
         }}
       >
         <p className="m-0 text-xl font-bold uppercase leading-[45px] text-[#12184e]">
