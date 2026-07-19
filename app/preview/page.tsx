@@ -2,6 +2,8 @@ import HomeNavbar from "@/components/layout/Navbar";
 import Navbar from "@/components/layout/Navbar";
 import Button from "@/components/ui/Button";
 import TextField from "@/components/ui/TextField";
+import TeamBackground from "../team/background/TeamBackground";
+import TeamOverlays from "../team/TeamOverlays";
 
 /**
  * Throwaway component preview route — visit /preview to see components in
@@ -43,6 +45,14 @@ export default function Preview() {
             requireStrongPassword
           />
         </div>
+      </main>
+      <main>
+        <p className="p-8 text-sm text-zinc-500">
+          Team section preview — edit app/team/*.
+        </p>
+        <TeamBackground>
+          <TeamOverlays />
+        </TeamBackground>
       </main>
     </div>
   );
