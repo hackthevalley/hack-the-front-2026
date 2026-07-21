@@ -33,7 +33,7 @@ const AboutSection = React.forwardRef<SectionHandle, SectionProps<AboutData>>(
       <div className="flex flex-col gap-6">
         <SectionHeading>Profile Info</SectionHeading>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <TextField
             ref={firstNameRef}
             name="First Name"

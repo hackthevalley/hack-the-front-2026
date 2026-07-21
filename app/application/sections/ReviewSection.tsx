@@ -3,12 +3,20 @@
 import * as React from "react";
 import SectionHeading from "./SectionHeading";
 import type { SectionHandle, SectionProps } from "./types";
-import type { AboutData, CustomData, ExperienceData, ReviewData, SurveyData } from "./data";
+import type {
+  AboutData,
+  CustomData,
+  ExperienceData,
+  PortfolioData,
+  ReviewData,
+  SurveyData,
+} from "./data";
 
 export type ReviewFormData = {
   about: AboutData;
   custom: CustomData;
   experience: ExperienceData;
+  portfolio: PortfolioData;
   survey: SurveyData;
 };
 
@@ -22,8 +30,11 @@ const SUMMARY_ROWS: { label: string; get: (data: ReviewFormData) => string }[] =
   { label: "Phone", get: (d) => d.about.phone || "—" },
   { label: "T-Shirt Size", get: (d) => d.custom.tshirtSize || "—" },
   { label: "Dietary Restrictions", get: (d) => d.custom.dietaryRestrictions || "—" },
-  { label: "Experience Level", get: (d) => d.experience.experienceLevel || "—" },
-  { label: "Past Hackathons", get: (d) => d.experience.pastHackathons || "—" },
+  { label: "Hackathon Count", get: (d) => d.experience.hackathonCount || "—" },
+  { label: "Github", get: (d) => d.experience.github || "—" },
+  { label: "Linkedin", get: (d) => d.experience.linkedin || "—" },
+  { label: "Portfolio", get: (d) => d.portfolio.portfolio || "—" },
+  { label: "Resume", get: (d) => d.portfolio.resume?.name || "—" },
   { label: "How did you hear about us?", get: (d) => d.survey.howDidYouHear || "—" },
 ];
 

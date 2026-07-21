@@ -181,13 +181,21 @@ export default function Button({
             : "cursor-pointer hover:opacity-70"
         } ${className}`}
       >
-        {isBack && <ChevronIcon direction="left" className="h-4 w-4" />}
+        {isBack && (
+          <span
+            className={`flex h-6 w-6 items-center justify-center rounded-full border-2 ${
+              disabled ? "border-white/40" : "border-white"
+            }`}
+          >
+            <ChevronIcon direction="left" className="h-3 w-3" />
+          </span>
+        )}
         <span className={`${figtree.className} text-[20px] font-semibold`}>
           {text}
         </span>
         {!isBack && (
           <span
-            className={`flex h-6 w-6 items-center justify-center rounded-full border ${
+            className={`flex h-6 w-6 items-center justify-center rounded-full border-2 ${
               disabled ? "border-white/40" : "border-white"
             }`}
           >

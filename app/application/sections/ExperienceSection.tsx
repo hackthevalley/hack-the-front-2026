@@ -9,15 +9,17 @@ import type { ExperienceData } from "./data";
 
 const ExperienceSection = React.forwardRef<SectionHandle, SectionProps<ExperienceData>>(
   ({ value, onChange, onValidityChange }, ref) => {
-    const experienceLevelRef = React.useRef<TextFieldHandle>(null);
-    const pastHackathonsRef = React.useRef<TextFieldHandle>(null);
+    const hackathonCountRef = React.useRef<TextFieldHandle>(null);
+    const githubRef = React.useRef<TextFieldHandle>(null);
+    const linkedinRef = React.useRef<TextFieldHandle>(null);
     const setFieldError = useFieldErrors(onValidityChange);
 
     React.useImperativeHandle(ref, () => ({
       validate: () =>
         [
-          experienceLevelRef.current?.validate() ?? true,
-          pastHackathonsRef.current?.validate() ?? true,
+          hackathonCountRef.current?.validate() ?? true,
+          githubRef.current?.validate() ?? true,
+          linkedinRef.current?.validate() ?? true,
         ].every(Boolean),
     }));
 
@@ -27,27 +29,37 @@ const ExperienceSection = React.forwardRef<SectionHandle, SectionProps<Experienc
 
     return (
       <div className="flex flex-col gap-6">
-        <SectionHeading>Experience</SectionHeading>
+        <SectionHeading>Experience Info</SectionHeading>
 
         <TextField
-          ref={experienceLevelRef}
-          name="Experience Level"
-          placeholder="e.g. Beginner"
+          ref={hackathonCountRef}
+          name="Hackathon Count?"
+          placeholder="Hackathon Count"
           required
           theme="application"
-          value={value.experienceLevel}
-          onChange={(v) => set("experienceLevel", v)}
-          onValidityChange={(hasError) => setFieldError("experienceLevel", hasError)}
+          value={value.hackathonCount}
+          onChange={(v) => set("hackathonCount", v)}
+          onValidityChange={(hasError) => setFieldError("hackathonCount", hasError)}
         />
 
         <TextField
-          ref={pastHackathonsRef}
-          name="Past Hackathons"
-          placeholder="e.g. None yet"
+          ref={githubRef}
+          name="Github"
+          placeholder="Github"
           theme="application"
-          value={value.pastHackathons}
-          onChange={(v) => set("pastHackathons", v)}
-          onValidityChange={(hasError) => setFieldError("pastHackathons", hasError)}
+          value={value.github}
+          onChange={(v) => set("github", v)}
+          onValidityChange={(hasError) => setFieldError("github", hasError)}
+        />
+
+        <TextField
+          ref={linkedinRef}
+          name="Linkedin"
+          placeholder="Linkedin"
+          theme="application"
+          value={value.linkedin}
+          onChange={(v) => set("linkedin", v)}
+          onValidityChange={(hasError) => setFieldError("linkedin", hasError)}
         />
       </div>
     );

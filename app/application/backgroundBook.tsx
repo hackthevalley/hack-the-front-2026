@@ -23,7 +23,7 @@ export default function BackgroundBook({
 }: BackgroundBookProps) {
   return (
     <div
-      className={`relative flex h-[min(78vh,720px)] w-[min(90vw,1100px)] flex-col overflow-hidden rounded-[28px] border border-white/10 md:flex-row ${className}`}
+      className={`relative flex h-auto w-[min(90vw,1100px)] flex-col overflow-hidden rounded-[28px] border border-white/10 md:h-[min(78vh,720px)] md:flex-row ${className}`}
     >
       {onBack && (
         <Button
@@ -35,13 +35,13 @@ export default function BackgroundBook({
         />
       )}
 
-      <div className="flex flex-1 flex-col items-center justify-center gap-4 overflow-y-auto bg-[#312A82] px-8 py-10 text-center backdrop-blur-sm md:px-10 md:py-12">
+      <div className="flex-1 bg-[#312A82] px-8 py-10 backdrop-blur-sm md:overflow-y-auto md:px-10 md:py-12">
         {left}
       </div>
       <div className="hidden w-3 items-center justify-center md:flex">
         <div className="h-[80%] w-full bg-[#3949A6]" />
       </div>
-      <div className="flex-1 overflow-y-auto bg-[#312A82] px-8 py-10 backdrop-blur-sm md:px-10 md:py-12">
+      <div className="flex-1 bg-[#312A82] px-8 pt-10 pb-[40vh] backdrop-blur-sm md:overflow-y-auto md:px-10 md:py-12">
         {right}
       </div>
 

@@ -18,16 +18,20 @@ export default function ApplicationPage() {
   const [formData, setFormData] =
     React.useState<WizardFormData>(initialFormData);
   const [sectionHasErrors, setSectionHasErrors] = React.useState(false);
+  const [leftSectionHasErrors, setLeftSectionHasErrors] = React.useState(false);
   const sectionRef = React.useRef<SectionHandle>(null);
+  const leftSectionRef = React.useRef<SectionHandle>(null);
 
   const step = SECTIONS[stepIndex];
   const ActiveLeft = step.Left;
   const ActiveRight = step.Right;
+  const leftId = step.leftId;
   const isLastStep = stepIndex === SECTIONS.length - 1;
 
   function handleNext() {
-    const isValid = sectionRef.current?.validate() ?? true;
-    if (!isValid) return;
+    const isRightValid = sectionRef.current?.validate() ?? true;
+    const isLeftValid = leftId ? (leftSectionRef.current?.validate() ?? true) : true;
+    if (!isRightValid || !isLeftValid) return;
 
     // Hook point for persisting formData[step.id] to the backend once one exists.
 
@@ -64,9 +68,23 @@ export default function ApplicationPage() {
         <BackgroundBook
           onBack={stepIndex > 0 ? handleBack : undefined}
           onNext={handleNext}
-          nextDisabled={sectionHasErrors}
+          nextDisabled={sectionHasErrors || leftSectionHasErrors}
           nextLabel={isLastStep ? "Submit" : "Next"}
-          left={<ActiveLeft>{step.title}</ActiveLeft>}
+          left={
+            leftId ? (
+              <ActiveLeft
+                ref={leftSectionRef}
+                value={formData[leftId]}
+                onChange={(value: WizardFormData[typeof leftId]) =>
+                  setFormData((prev) => ({ ...prev, [leftId]: value }))
+                }
+                onValidityChange={setLeftSectionHasErrors}
+                formData={formData}
+              />
+            ) : (
+              <ActiveLeft>{step.title}</ActiveLeft>
+            )
+          }
           right={
             <ActiveRight
               ref={sectionRef}

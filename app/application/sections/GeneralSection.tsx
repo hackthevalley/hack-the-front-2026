@@ -7,17 +7,17 @@ import type { SectionHandle, SectionProps } from "./types";
 import { useFieldErrors } from "./useFieldErrors";
 import type { CustomData } from "./data";
 
-const CustomSection = React.forwardRef<SectionHandle, SectionProps<CustomData>>(
+const GeneralSection = React.forwardRef<SectionHandle, SectionProps<CustomData>>(
   ({ value, onChange, onValidityChange }, ref) => {
-    const tshirtRef = React.useRef<TextFieldHandle>(null);
     const dietaryRef = React.useRef<TextFieldHandle>(null);
+    const tshirtRef = React.useRef<TextFieldHandle>(null);
     const setFieldError = useFieldErrors(onValidityChange);
 
     React.useImperativeHandle(ref, () => ({
       validate: () =>
         [
-          tshirtRef.current?.validate() ?? true,
           dietaryRef.current?.validate() ?? true,
+          tshirtRef.current?.validate() ?? true,
         ].every(Boolean),
     }));
 
@@ -27,33 +27,32 @@ const CustomSection = React.forwardRef<SectionHandle, SectionProps<CustomData>>(
 
     return (
       <div className="flex flex-col gap-6">
-        <SectionHeading>Customize</SectionHeading>
-
-        <TextField
-          ref={tshirtRef}
-          name="T-Shirt Size"
-          placeholder="e.g. Medium"
-          required
-          theme="application"
-          value={value.tshirtSize}
-          onChange={(v) => set("tshirtSize", v)}
-          onValidityChange={(hasError) => setFieldError("tshirtSize", hasError)}
-        />
+        <SectionHeading>General Info</SectionHeading>
 
         <TextField
           ref={dietaryRef}
-          name="Dietary Restrictions"
-          placeholder="e.g. None"
+          name="Dietary Restriction"
+          placeholder="Type/Select An Answer"
           theme="application"
           value={value.dietaryRestrictions}
           onChange={(v) => set("dietaryRestrictions", v)}
           onValidityChange={(hasError) => setFieldError("dietaryRestrictions", hasError)}
+        />
+
+        <TextField
+          ref={tshirtRef}
+          name="T-Shirt Size"
+          placeholder="Type/Select An Answer"
+          theme="application"
+          value={value.tshirtSize}
+          onChange={(v) => set("tshirtSize", v)}
+          onValidityChange={(hasError) => setFieldError("tshirtSize", hasError)}
         />
       </div>
     );
   },
 );
 
-CustomSection.displayName = "CustomSection";
+GeneralSection.displayName = "GeneralSection";
 
-export default CustomSection;
+export default GeneralSection;
