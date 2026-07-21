@@ -166,9 +166,10 @@ export default function FaqThemesTextOverlays() {
         </p>
         <h2
           className="m-0 font-bold"
-          style={{ fontSize: toScale(36), lineHeight: toScale(45) }}
+          style={{ fontSize: toScale(34), lineHeight: toScale(42) }}
         >
-          To conquer Hack the Valley 11!
+          <span className="block whitespace-nowrap">To Conquer Hack The</span>
+          <span className="block whitespace-nowrap">Valley 11!</span>
         </h2>
         <p
           className="m-0 text-[#12184e]"
@@ -178,24 +179,24 @@ export default function FaqThemesTextOverlays() {
             lineHeight: toScale(45),
           }}
         >
-          Browse our FAQs section to get the details on what we&apos;re about,
-          where the event happens, and much more.
+          Browse our <strong>FAQs section</strong>{" "}to get the details on
+          what we&apos;re about, where the event happens, and much more.
         </p>
         <p
           className="m-0 font-semibold"
           style={{
-            marginTop: toScale(4),
+            marginTop: toScale(58),
             fontSize: toScale(24),
             lineHeight: toScale(45),
           }}
         >
-          Still have a question?
+          Still Have A Question?
         </p>
         <p
           className="m-0 italic text-[#12184e]"
           style={{ fontSize: toScale(20), lineHeight: toScale(45) }}
         >
-          Ask our team below!
+          Ask Our Team Below!
         </p>
       </aside>
 

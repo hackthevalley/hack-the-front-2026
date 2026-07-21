@@ -1260,6 +1260,18 @@ export const faqThemesSceneLayers = [
       height: 1211,
     },
   },
+  {
+    id: "stamp",
+    figmaId: "asset:stamp",
+    figmaName: "stamp",
+    src: "/faq-themes/background/stamp.png",
+    left: 1102,
+    top: 654,
+    width: 148.1257,
+    height: 148.1257,
+    zIndex: 111,
+    plane: "rear",
+  },
 ] as const satisfies readonly FaqThemesSceneLayer[];
 
 export const rearSceneLayers = faqThemesSceneLayers.filter(
