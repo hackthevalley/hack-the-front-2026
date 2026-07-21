@@ -1,12 +1,5 @@
-import FaqThemesContentLayer from "./FaqThemesContentLayer";
-import FaqThemesBackground from "./background/FaqThemesBackground";
+import { redirect } from "next/navigation";
 
 export default function FaqThemesPage() {
-  return (
-    <main className="min-h-screen bg-[#030712]">
-      <FaqThemesBackground>
-        <FaqThemesContentLayer />
-      </FaqThemesBackground>
-    </main>
-  );
+  redirect("/#faq-themes");
 }
