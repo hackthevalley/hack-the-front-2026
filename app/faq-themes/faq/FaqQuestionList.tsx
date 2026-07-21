@@ -189,7 +189,7 @@ export default function FaqQuestionList({
               fontSize: toScale(20),
               transform: `rotate(${rotateDeg}deg)`,
               transformOrigin: "center center",
-              zIndex: isActive ? 16 : 11,
+              zIndex: isActive ? 30 : 25,
               transition:
                 "left 280ms cubic-bezier(.22,.61,.36,1), top 280ms cubic-bezier(.22,.61,.36,1), transform 280ms cubic-bezier(.22,.61,.36,1), box-shadow 220ms ease, border-color 220ms ease, opacity 220ms ease",
               boxShadow: isActive

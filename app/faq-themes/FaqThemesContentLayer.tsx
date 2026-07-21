@@ -1,12 +1,12 @@
 "use client";
 
 import { startTransition, useMemo, useState } from "react";
-import FaqPaperPanel from "./interactive/FaqPaperPanel";
-import FaqQuestionList from "./interactive/FaqQuestionList";
-import FaqStaticOverlays from "./interactive/FaqStaticOverlays";
-import { FAQ_ITEMS } from "./interactive/faqContent";
+import FaqPaperPanel from "./faq/FaqPaperPanel";
+import FaqQuestionList from "./faq/FaqQuestionList";
+import FaqStaticOverlays from "./faq/FaqStaticOverlays";
+import { FAQ_ITEMS } from "./faq/faqContent";
 
-export default function FaqThemesTextOverlays() {
+export default function FaqThemesContentLayer() {
   const [activeId, setActiveId] = useState<string | null>(null);
 
   const activeItem = useMemo(

@@ -42,7 +42,7 @@ function PaperAsset() {
   return (
     <div className="absolute inset-0 overflow-hidden">
       <img
-        src="/faq-themes/background/paper.png"
+        src="/faq-themes/faq/paper.png"
         alt=""
         draggable="false"
         className="absolute max-w-none select-none"
@@ -70,7 +70,7 @@ function Stamp({
 }) {
   return (
     <img
-      src="/faq-themes/background/stamp.png"
+      src="/faq-themes/faq/stamp.png"
       alt=""
       draggable="false"
       className="absolute select-none"
