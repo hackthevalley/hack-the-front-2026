@@ -1,4 +1,7 @@
-import { toScale, toStageHeight, toStageWidth, toStageX, toStageY } from "./faqStage";
+"use client";
+
+import Button from "@/components/ui/Button";
+import { toScale, toStageWidth, toStageX, toStageY } from "./faqStage";
 import ThemesTextOverlays from "../themes/ThemesTextOverlays";
 
 export default function FaqStaticOverlays() {
@@ -29,20 +32,22 @@ export default function FaqStaticOverlays() {
         </p>
       </div>
 
-      <a
-        href="mailto:contact@hackthevalley.io"
-        className="absolute grid place-items-center rounded-full border border-white/30 font-semibold text-white shadow-[0_0_24px_rgba(223,99,220,.55)]"
+      <div
+        className="absolute"
         style={{
           left: toStageX(908),
           top: toStageY(1365),
           width: toStageWidth(240),
-          height: toStageHeight(56),
-          fontSize: toScale(12),
-          background: "linear-gradient(95deg,#ff7ccd,#7839dc)",
         }}
       >
-        Contact Us
-      </a>
+        <Button
+          text="Contact Us"
+          width="100%"
+          onClick={() => {
+            window.location.href = "mailto:contact@hackthevalley.io";
+          }}
+        />
+      </div>
 
       <h2
         className="absolute m-0 font-vcr font-normal leading-none text-white"
