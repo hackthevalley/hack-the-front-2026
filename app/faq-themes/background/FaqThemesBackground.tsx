@@ -22,10 +22,10 @@ function ScenePlane({ layers }: { layers: readonly FaqThemesSceneLayer[] }) {
           data-figma-id={layer.figmaId}
           data-figma-name={layer.figmaName}
           style={{
-            left: layer.left,
-            top: layer.top,
-            width: layer.width,
-            height: layer.height,
+            left: `${(layer.left / FAQ_THEMES_DESIGN_WIDTH) * 100}%`,
+            top: `${(layer.top / FAQ_THEMES_DESIGN_HEIGHT) * 100}%`,
+            width: `${(layer.width / FAQ_THEMES_DESIGN_WIDTH) * 100}%`,
+            height: `${(layer.height / FAQ_THEMES_DESIGN_HEIGHT) * 100}%`,
             zIndex: layer.zIndex,
           }}
         >
@@ -61,22 +61,32 @@ export default function FaqThemesBackground({
 }: FaqThemesBackgroundProps) {
   return (
     <div
-      className="relative shrink-0 overflow-hidden"
+      className="relative w-full overflow-hidden"
       style={{
-        width: FAQ_THEMES_DESIGN_WIDTH,
-        height: FAQ_THEMES_DESIGN_HEIGHT,
         background:
           "linear-gradient(180deg, #030712 0%, #0e1648 42%, #303276 100%)",
+        minHeight: "100dvh",
       }}
     >
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0">
-        <ScenePlane layers={rearSceneLayers} />
-      </div>
+      <div
+        className="relative left-1/2 -translate-x-1/2"
+        style={{
+          width: `max(100vw, calc(100dvh * ${FAQ_THEMES_DESIGN_WIDTH} / ${FAQ_THEMES_DESIGN_HEIGHT}))`,
+          aspectRatio: `${FAQ_THEMES_DESIGN_WIDTH} / ${FAQ_THEMES_DESIGN_HEIGHT}`,
+          background:
+            "linear-gradient(180deg, #030712 0%, #0e1648 42%, #303276 100%)",
+          containerType: "inline-size",
+        }}
+      >
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0">
+          <ScenePlane layers={rearSceneLayers} />
+        </div>
 
-      <div className="absolute inset-0 z-10">{children}</div>
+        <div className="absolute inset-0 z-10">{children}</div>
 
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-20">
-        <ScenePlane layers={foregroundSceneLayers} />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-20">
+          <ScenePlane layers={foregroundSceneLayers} />
+        </div>
       </div>
     </div>
   );
