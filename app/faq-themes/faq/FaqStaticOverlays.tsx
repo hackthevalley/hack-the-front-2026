@@ -37,7 +37,7 @@ export default function FaqStaticOverlays() {
           </p>
         </div>
 
-        <div style={{ width: "29.06%" }}>
+        <div className="pointer-events-auto" style={{ width: "29.06%" }}>
           <Button
             text="Contact Us"
             width="100%"
