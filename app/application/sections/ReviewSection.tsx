@@ -9,7 +9,6 @@ import type {
   ExperienceData,
   PortfolioData,
   ReviewData,
-  SurveyData,
 } from "./data";
 
 export type ReviewFormData = {
@@ -17,7 +16,6 @@ export type ReviewFormData = {
   custom: CustomData;
   experience: ExperienceData;
   portfolio: PortfolioData;
-  survey: SurveyData;
 };
 
 type ReviewSectionProps = SectionProps<ReviewData> & {
@@ -35,7 +33,6 @@ const SUMMARY_ROWS: { label: string; get: (data: ReviewFormData) => string }[] =
   { label: "Linkedin", get: (d) => d.experience.linkedin || "—" },
   { label: "Portfolio", get: (d) => d.portfolio.portfolio || "—" },
   { label: "Resume", get: (d) => d.portfolio.resume?.name || "—" },
-  { label: "How did you hear about us?", get: (d) => d.survey.howDidYouHear || "—" },
 ];
 
 const ReviewSection = React.forwardRef<SectionHandle, ReviewSectionProps>(

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import LogoNavbar from "@/components/layout/LogoNavbar";
 import Background from "./background/Background";
 import BackgroundBook from "./backgroundBook";
 import ProgressBar from "./progressBar";
@@ -34,7 +35,9 @@ export default function ApplicationPage() {
 
   function handleNext() {
     const isRightValid = sectionRef.current?.validate() ?? true;
-    const isLeftValid = leftId ? (leftSectionRef.current?.validate() ?? true) : true;
+    const isLeftValid = leftId
+      ? (leftSectionRef.current?.validate() ?? true)
+      : true;
     if (!isRightValid || !isLeftValid) return;
 
     // Hook point for persisting formData[step.id] to the backend once one exists.
@@ -55,8 +58,10 @@ export default function ApplicationPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center px-6 py-10 font-figtree">
+    <div className="relative flex min-h-screen flex-col items-center justify-center px-6 pb-10 font-figtree">
       <Background />
+
+      <LogoNavbar />
 
       {/* Grid rows are auto-sized from the tallest cell in each row, so the
        * nav list (lg:h-full) and the book wrapper (lg:row-start-2) always end

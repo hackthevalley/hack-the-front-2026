@@ -35,11 +35,6 @@ export type OtherSkillsData = {
   machineLearning: string;
 };
 
-export type SurveyData = {
-  howDidYouHear: string;
-  excitedAbout: string;
-};
-
 export type SchoolData = {
   country: string;
   schoolName: string;

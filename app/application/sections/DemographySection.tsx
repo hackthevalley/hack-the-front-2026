@@ -2,18 +2,21 @@
 
 import * as React from "react";
 import TextField, { type TextFieldHandle } from "@/components/ui/TextField";
+import Dropdown, { type DropdownHandle } from "@/components/ui/Dropdown";
 import SectionHeading from "./SectionHeading";
 import type { SectionHandle, SectionProps } from "./types";
 import { useFieldErrors } from "./useFieldErrors";
 import type { DemographyData } from "./data";
+
+const YES_NO_OPTIONS = ["Yes", "No", "Prefer not to say"];
 
 const DemographySection = React.forwardRef<SectionHandle, SectionProps<DemographyData>>(
   ({ value, onChange, onValidityChange }, ref) => {
     const ageRef = React.useRef<TextFieldHandle>(null);
     const genderRef = React.useRef<TextFieldHandle>(null);
     const raceEthnicityRef = React.useRef<TextFieldHandle>(null);
-    const lgbtqRef = React.useRef<TextFieldHandle>(null);
-    const disabilityRef = React.useRef<TextFieldHandle>(null);
+    const lgbtqRef = React.useRef<DropdownHandle>(null);
+    const disabilityRef = React.useRef<DropdownHandle>(null);
     const setFieldError = useFieldErrors(onValidityChange);
 
     React.useImperativeHandle(ref, () => ({
@@ -74,21 +77,19 @@ const DemographySection = React.forwardRef<SectionHandle, SectionProps<Demograph
           />
         </div>
 
-        <TextField
+        <Dropdown
           ref={lgbtqRef}
           name="Part Of The 2SLGBTQI+ Community?"
-          placeholder="Yes/No"
-          theme="application"
+          options={YES_NO_OPTIONS}
           value={value.lgbtq}
           onChange={(v) => set("lgbtq", v)}
           onValidityChange={(hasError) => setFieldError("lgbtq", hasError)}
         />
 
-        <TextField
+        <Dropdown
           ref={disabilityRef}
           name="Person With Disabilities?"
-          placeholder="Yes/No"
-          theme="application"
+          options={YES_NO_OPTIONS}
           value={value.disability}
           onChange={(v) => set("disability", v)}
           onValidityChange={(hasError) => setFieldError("disability", hasError)}

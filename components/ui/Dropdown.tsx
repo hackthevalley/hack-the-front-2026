@@ -141,7 +141,11 @@ function Dropdown(
     function updateRect() {
       const rect = triggerRef.current?.getBoundingClientRect();
       if (rect) {
-        setListRect({ top: rect.bottom + 6, left: rect.left, width: rect.width });
+        setListRect({
+          top: rect.bottom + 6,
+          left: rect.left,
+          width: rect.width,
+        });
       }
     }
     updateRect();
@@ -261,6 +265,7 @@ function Dropdown(
                   }}
                   className={`
                     cursor-pointer rounded-[8px] px-[13px] py-2 font-figtree
+                    transition-colors duration-200 ease-out
                     ${inputSizeClass}
                     ${option === value ? "bg-white/15 text-white" : "text-white/80"}
                     hover:bg-white/10 hover:text-white

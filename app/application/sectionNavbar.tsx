@@ -20,18 +20,15 @@ export default function SectionNavbar({
 }: SectionNavbarProps) {
   return (
     <div className="hidden md:contents">
-      <img
-        src="/icons/htv-logo.svg"
-        alt="Hack the Valley"
-        className="h-10 w-10 lg:col-start-1 lg:row-start-1"
-      />
-
       {/* No fixed width here: the grid column in page.tsx auto-sizes to this
        * nav's widest button (Experience), and lg:items-stretch below then
        * stretches every other button to match that same width. lg:h-full
        * stretches the whole nav to match the book's grid row, so the ul can
-       * center its buttons as a group against the book's full height. */}
-      <nav className="nav-collapse:hidden flex w-full shrink-0 lg:col-start-1 lg:row-start-2 lg:h-full lg:w-fit">
+       * center its buttons as a group against the book's full height.
+       * z-20 needs to live here (not on the display:contents wrapper above,
+       * which generates no box and silently drops z-index) so the nav paints
+       * above the book's z-10 elements when they overlap. */}
+      <nav className="nav-collapse:hidden relative z-20 flex w-full shrink-0 lg:col-start-1 lg:row-start-2 lg:h-full lg:w-fit">
         <ul className="flex w-full flex-row flex-wrap items-center justify-center gap-2 lg:h-full lg:flex-col lg:flex-nowrap lg:items-stretch lg:justify-center lg:gap-6">
           {groups.map((group, index) => {
             const isActive = index === currentGroupIndex;
@@ -49,12 +46,12 @@ export default function SectionNavbar({
                   type="button"
                   disabled={isLocked}
                   onClick={() => onGroupClick(index)}
-                  className={`rounded-full border-2 px-4 py-2 text-center text-xs font-semibold tracking-wide uppercase transition-colors lg:flex-1 lg:px-6 lg:py-3 lg:text-sm ${
+                  className={`rounded-full border-2 px-4 py-2 text-center text-xs font-semibold [background:linear-gradient(#030712,#191a3d)_padding-box,linear-gradient(to_bottom_left,#FF7CCD,#7839DC)_border-box] opacity-80 tracking-wide uppercase transition-all duration-300 ease-out lg:flex-1 lg:px-6 lg:py-3 lg:text-sm ${
                     isActive
-                      ? "border-transparent text-white [background:linear-gradient(#0B0730,#0B0730)_padding-box,linear-gradient(to_bottom_left,#FF7CCD,#7839DC)_border-box]"
+                      ? "border-transparent text-white hover:scale-105"
                       : isLocked
-                        ? "cursor-not-allowed border-[#303276]/40 text-white/30"
-                        : "border-[#303276] text-white/80 hover:border-[#303276]"
+                        ? "cursor-not-allowed border-[#303276]/40 bg-[#303276] text-white/30"
+                        : "border-[#303276] bg-[#303276] text-white hover:scale-105 hover:border-[#4A4DA8] hover:bg-[#3A3D96] hover:text-white"
                   }`}
                 >
                   {group.label}
