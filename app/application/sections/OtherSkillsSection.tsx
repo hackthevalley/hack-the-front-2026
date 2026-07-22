@@ -1,20 +1,22 @@
 "use client";
 
 import * as React from "react";
-import TextField, { type TextFieldHandle } from "@/components/ui/TextField";
+import Dropdown, { type DropdownHandle } from "@/components/ui/Dropdown";
 import SectionHeading from "./SectionHeading";
 import type { SectionHandle, SectionProps } from "./types";
 import { useFieldErrors } from "./useFieldErrors";
 import type { OtherSkillsData } from "./data";
 
+const SKILL_LEVELS = ["Beginner", "Intermediate", "Advanced", "Expert"];
+
 const OtherSkillsSection = React.forwardRef<
   SectionHandle,
   SectionProps<OtherSkillsData>
 >(({ value, onChange, onValidityChange }, ref) => {
-  const productManagementRef = React.useRef<TextFieldHandle>(null);
-  const webCryptoBlockchainRef = React.useRef<TextFieldHandle>(null);
-  const cyberSecurityRef = React.useRef<TextFieldHandle>(null);
-  const machineLearningRef = React.useRef<TextFieldHandle>(null);
+  const productManagementRef = React.useRef<DropdownHandle>(null);
+  const webCryptoBlockchainRef = React.useRef<DropdownHandle>(null);
+  const cyberSecurityRef = React.useRef<DropdownHandle>(null);
+  const machineLearningRef = React.useRef<DropdownHandle>(null);
   const setFieldError = useFieldErrors(onValidityChange);
 
   React.useImperativeHandle(ref, () => ({
@@ -42,11 +44,10 @@ const OtherSkillsSection = React.forwardRef<
         Tell Us How Comfy You Feel With...
       </SectionHeading>
 
-      <TextField
+      <Dropdown
         ref={productManagementRef}
         name="Product Management"
-        placeholder="Beginner / Intermediate / Advanced / Expert"
-        theme="application"
+        options={SKILL_LEVELS}
         value={value.productManagement}
         onChange={(v) => set("productManagement", v)}
         onValidityChange={(hasError) =>
@@ -54,11 +55,10 @@ const OtherSkillsSection = React.forwardRef<
         }
       />
 
-      <TextField
+      <Dropdown
         ref={webCryptoBlockchainRef}
         name="Web, Crypto, Blockchain"
-        placeholder="Beginner / Intermediate / Advanced / Expert"
-        theme="application"
+        options={SKILL_LEVELS}
         value={value.webCryptoBlockchain}
         onChange={(v) => set("webCryptoBlockchain", v)}
         onValidityChange={(hasError) =>
@@ -66,11 +66,10 @@ const OtherSkillsSection = React.forwardRef<
         }
       />
 
-      <TextField
+      <Dropdown
         ref={cyberSecurityRef}
         name="Cyber Security"
-        placeholder="Beginner / Intermediate / Advanced / Expert"
-        theme="application"
+        options={SKILL_LEVELS}
         value={value.cyberSecurity}
         onChange={(v) => set("cyberSecurity", v)}
         onValidityChange={(hasError) =>
@@ -78,11 +77,10 @@ const OtherSkillsSection = React.forwardRef<
         }
       />
 
-      <TextField
+      <Dropdown
         ref={machineLearningRef}
         name="Machine Learning"
-        placeholder="Beginner / Intermediate / Advanced / Expert"
-        theme="application"
+        options={SKILL_LEVELS}
         value={value.machineLearning}
         onChange={(v) => set("machineLearning", v)}
         onValidityChange={(hasError) =>

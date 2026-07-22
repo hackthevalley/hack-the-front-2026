@@ -19,7 +19,7 @@ export default function SectionNavbar({
   onGroupClick,
 }: SectionNavbarProps) {
   return (
-    <>
+    <div className="hidden md:contents">
       <img
         src="/icons/htv-logo.svg"
         alt="Hack the Valley"
@@ -64,6 +64,6 @@ export default function SectionNavbar({
           })}
         </ul>
       </nav>
-    </>
+    </div>
   );
 }

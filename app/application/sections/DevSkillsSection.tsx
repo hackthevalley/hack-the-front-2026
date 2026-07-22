@@ -1,20 +1,22 @@
 "use client";
 
 import * as React from "react";
-import TextField, { type TextFieldHandle } from "@/components/ui/TextField";
+import Dropdown, { type DropdownHandle } from "@/components/ui/Dropdown";
 import SectionHeading from "./SectionHeading";
 import type { SectionHandle, SectionProps } from "./types";
 import { useFieldErrors } from "./useFieldErrors";
 import type { DevSkillsData } from "./data";
 
+const SKILL_LEVELS = ["Beginner", "Intermediate", "Advanced", "Expert"];
+
 const DevSkillsSection = React.forwardRef<
   SectionHandle,
   SectionProps<DevSkillsData>
 >(({ value, onChange, onValidityChange }, ref) => {
-  const uiuxRef = React.useRef<TextFieldHandle>(null);
-  const frontendRef = React.useRef<TextFieldHandle>(null);
-  const backendRef = React.useRef<TextFieldHandle>(null);
-  const fullstackRef = React.useRef<TextFieldHandle>(null);
+  const uiuxRef = React.useRef<DropdownHandle>(null);
+  const frontendRef = React.useRef<DropdownHandle>(null);
+  const backendRef = React.useRef<DropdownHandle>(null);
+  const fullstackRef = React.useRef<DropdownHandle>(null);
   const setFieldError = useFieldErrors(onValidityChange);
 
   React.useImperativeHandle(ref, () => ({
@@ -40,41 +42,37 @@ const DevSkillsSection = React.forwardRef<
         Tell Us How Comfy You Feel With...
       </SectionHeading>
 
-      <TextField
+      <Dropdown
         ref={uiuxRef}
         name="UI/UX Design"
-        placeholder="Beginner / Intermediate / Advanced / Expert"
-        theme="application"
+        options={SKILL_LEVELS}
         value={value.uiux}
         onChange={(v) => set("uiux", v)}
         onValidityChange={(hasError) => setFieldError("uiux", hasError)}
       />
 
-      <TextField
+      <Dropdown
         ref={frontendRef}
         name="Front End Development"
-        placeholder="Beginner / Intermediate / Advanced / Expert"
-        theme="application"
+        options={SKILL_LEVELS}
         value={value.frontend}
         onChange={(v) => set("frontend", v)}
         onValidityChange={(hasError) => setFieldError("frontend", hasError)}
       />
 
-      <TextField
+      <Dropdown
         ref={backendRef}
         name="Back End Development"
-        placeholder="Beginner / Intermediate / Advanced / Expert"
-        theme="application"
+        options={SKILL_LEVELS}
         value={value.backend}
         onChange={(v) => set("backend", v)}
         onValidityChange={(hasError) => setFieldError("backend", hasError)}
       />
 
-      <TextField
+      <Dropdown
         ref={fullstackRef}
         name="Full Stack Development"
-        placeholder="Beginner / Intermediate / Advanced / Expert"
-        theme="application"
+        options={SKILL_LEVELS}
         value={value.fullstack}
         onChange={(v) => set("fullstack", v)}
         onValidityChange={(hasError) => setFieldError("fullstack", hasError)}
