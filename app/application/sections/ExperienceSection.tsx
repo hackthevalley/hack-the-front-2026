@@ -36,6 +36,8 @@ const ExperienceSection = React.forwardRef<SectionHandle, SectionProps<Experienc
           name="Hackathon Count?"
           placeholder="Hackathon Count"
           required
+          type="number"
+          min={0}
           theme="application"
           value={value.hackathonCount}
           onChange={(v) => set("hackathonCount", v)}

@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 import AboutSection from "./sections/AboutSection";
+import CustomSection from "./sections/CustomSection";
 import DemographySection from "./sections/DemographySection";
 import DevSkillsSection from "./sections/DevSkillsSection";
 import ExperienceSection from "./sections/ExperienceSection";
@@ -8,7 +9,6 @@ import MlhSection from "./sections/MlhSection";
 import OtherSkillsSection from "./sections/OtherSkillsSection";
 import PortfolioSection from "./sections/PortfolioSection";
 import SchoolSection from "./sections/SchoolSection";
-import SurveySection from "./sections/SurveySection";
 import ReviewSection from "./sections/ReviewSection";
 import WelcomeSection from "./sections/WelcomeSection";
 import type {
@@ -19,10 +19,10 @@ import type {
   ExperienceData,
   MlhData,
   OtherSkillsData,
+  PlaceholderData,
   PortfolioData,
   ReviewData,
   SchoolData,
-  SurveyData,
 } from "./sections/data";
 
 export type WizardFormData = {
@@ -30,12 +30,12 @@ export type WizardFormData = {
   school: SchoolData;
   demography: DemographyData;
   custom: CustomData;
+  customPlaceholder: PlaceholderData;
   experience: ExperienceData;
   portfolio: PortfolioData;
   devSkills: DevSkillsData;
   otherSkills: OtherSkillsData;
   mlh: MlhData;
-  survey: SurveyData;
   review: ReviewData;
 };
 
@@ -58,6 +58,7 @@ export const initialFormData: WizardFormData = {
     disability: "",
   },
   custom: { tshirtSize: "", dietaryRestrictions: "" },
+  customPlaceholder: {},
   experience: { hackathonCount: "", github: "", linkedin: "" },
   portfolio: { portfolio: "", resume: null },
   devSkills: { uiux: "", frontend: "", backend: "", fullstack: "" },
@@ -73,13 +74,11 @@ export const initialFormData: WizardFormData = {
     authorizedMlhEmails: false,
     consentMediaRelease: false,
   },
-  survey: { howDidYouHear: "", excitedAbout: "" },
   review: {},
 };
 
 export type SectionConfigItem = {
   id: SectionId;
-  label: string;
   title: string;
   // Each section has a different data shape, so the shared registry type-erases
   // the component's props; page.tsx supplies value/onChange (and formData for
@@ -93,53 +92,122 @@ export type SectionConfigItem = {
   leftId?: SectionId;
 };
 
-// [Left, Right] component pair for each step, alongside the metadata (id/label/title)
-// still needed for form-data keys, nav labels, and the Left's title text.
-export const SECTIONS: SectionConfigItem[] = [
+export type SectionGroup = {
+  id: string;
+  label: string;
+  // One pair of [Left, Right] panels per subsection. The nav bar shows one
+  // button per group; "Next" walks through every group's steps in order,
+  // and clicking a group's nav button always jumps to its first step.
+  steps: SectionConfigItem[];
+};
+
+// Nav groups, in order. Add a group here to add a nav button; add/remove a
+// step inside a group to change how many [Left, Right] subsections it has —
+// the flattened step list, nav bar, and progress bar all derive from this.
+export const SECTION_GROUPS: SectionGroup[] = [
   {
     id: "about",
     label: "About",
-    title: "Join Us",
-    Left: WelcomeSection,
-    Right: AboutSection,
+    steps: [
+      {
+        id: "about",
+        title: "Join Us",
+        Left: WelcomeSection,
+        Right: AboutSection,
+      },
+      {
+        id: "demography",
+        leftId: "school",
+        title: "Background",
+        Left: SchoolSection,
+        Right: DemographySection,
+      },
+    ],
   },
   {
-    id: "demography",
-    leftId: "school",
-    label: "Background",
-    title: "Background",
-    Left: SchoolSection,
-    Right: DemographySection,
+    id: "custom",
+    label: "Custom",
+    steps: [
+      {
+        id: "customPlaceholder",
+        title: "Custom",
+        Left: WelcomeSection,
+        Right: CustomSection,
+      },
+    ],
   },
   {
-    id: "portfolio",
-    leftId: "experience",
+    id: "experience",
     label: "Experience",
-    title: "Experience Info",
-    Left: ExperienceSection,
-    Right: PortfolioSection,
+    steps: [
+      {
+        id: "portfolio",
+        leftId: "experience",
+        title: "Experience Info",
+        Left: ExperienceSection,
+        Right: PortfolioSection,
+      },
+      {
+        id: "otherSkills",
+        leftId: "devSkills",
+        title: "Skill Confidence",
+        Left: DevSkillsSection,
+        Right: OtherSkillsSection,
+      },
+    ],
   },
   {
-    id: "otherSkills",
-    leftId: "devSkills",
-    label: "Skills",
-    title: "Skill Confidence",
-    Left: DevSkillsSection,
-    Right: OtherSkillsSection,
-  },
-  {
-    id: "mlh",
-    leftId: "custom",
+    id: "survey",
     label: "Survey",
-    title: "General Info",
-    Left: GeneralSection,
-    Right: MlhSection,
+    steps: [
+      {
+        id: "mlh",
+        leftId: "custom",
+        title: "General Info",
+        Left: GeneralSection,
+        Right: MlhSection,
+      },
+    ],
   },
   {
     id: "review",
     label: "Review",
-    title: "Review",
-    Left: WelcomeSection,
-    Right: ReviewSection,
+    steps: [
+      {
+        id: "review",
+        title: "Review",
+        Left: WelcomeSection,
+        Right: ReviewSection,
+      },
+    ],
   },
 ];
+
+export type FlatSectionStep = SectionConfigItem & {
+  groupIndex: number;
+  stepIndexInGroup: number;
+};
+
+// Flattened [Left, Right] steps in wizard order, each tagged with the group
+// it belongs to. This is what page.tsx pages through with stepIndex.
+export const SECTIONS: FlatSectionStep[] = SECTION_GROUPS.flatMap(
+  (group, groupIndex) =>
+    group.steps.map((step, stepIndexInGroup) => ({
+      ...step,
+      groupIndex,
+      stepIndexInGroup,
+    })),
+);
+
+// The flat step index each group's first subsection starts at, e.g. for
+// groups of sizes [2, 1, 2, 1, 1] this is [0, 2, 3, 5, 6]. Used to jump to a
+// group's first step when its nav button is clicked.
+export const GROUP_START_STEP_INDEX: number[] = (() => {
+  const starts: number[] = [];
+  let stepCount = 0;
+  for (const group of SECTION_GROUPS) {
+    starts.push(stepCount);
+    stepCount += group.steps.length;
+  }
+  return starts;
+})();

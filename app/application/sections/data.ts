@@ -64,3 +64,5 @@ export type MlhData = {
 };
 
 export type ReviewData = Record<string, never>;
+
+export type PlaceholderData = Record<string, never>;

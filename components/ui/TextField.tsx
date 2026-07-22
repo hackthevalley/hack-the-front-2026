@@ -9,7 +9,7 @@ export type TextFieldHandle = {
   validate: () => boolean;
 };
 
-type TextFieldType = "text" | "email" | "password";
+type TextFieldType = "text" | "email" | "password" | "number";
 
 /** Override the default validation messages. Any omitted key falls back to the default. */
 type ErrorMessages = {
@@ -26,6 +26,10 @@ type TextFieldProps = {
   type?: TextFieldType;
   /** Enforce the strength rule (8+ chars, a capital, a number). Use for sign-up, not login. */
   requireStrongPassword?: boolean;
+  /** For `type="number"`: minimum accepted value (inclusive). */
+  min?: number;
+  /** For `type="number"`: maximum accepted value (inclusive). */
+  max?: number;
   errorMessages?: ErrorMessages;
   value?: string;
   onChange?: (value: string) => void;
@@ -69,6 +73,8 @@ function TextField(
     required = false,
     type = "text",
     requireStrongPassword = false,
+    min,
+    max,
     errorMessages = {},
     value: controlledValue,
     onChange,
@@ -103,6 +109,18 @@ function TextField(
         "Password must be at least 8 characters with a capital letter and a number."
       );
     }
+    if (type === "number") {
+      if (!/^\d+$/.test(trimmed)) {
+        return errorMessages.invalid ?? `${name} must be a valid number.`;
+      }
+      const num = Number(trimmed);
+      if (min !== undefined && num < min) {
+        return errorMessages.invalid ?? `${name} must be ${min} or greater.`;
+      }
+      if (max !== undefined && num > max) {
+        return errorMessages.invalid ?? `${name} must be ${max} or less.`;
+      }
+    }
     return null;
   }
 
@@ -116,7 +134,10 @@ function TextField(
   React.useImperativeHandle(ref, () => ({ validate }));
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const next = event.target.value;
+    const next =
+      type === "number"
+        ? event.target.value.replace(/[^\d]/g, "")
+        : event.target.value;
     setInternalValue(next);
     onChange?.(next);
 
@@ -127,7 +148,17 @@ function TextField(
     }
   }
 
-  const inputType = isPassword ? (showPassword ? "text" : "password") : type;
+  // Numeric fields stay a plain text input (with a numeric keyboard hint via
+  // inputMode) rather than type="number", since native number inputs allow
+  // "e", "+", "-", and "." to be typed even though our validation treats the
+  // field as a non-negative integer.
+  const inputType = isPassword
+    ? showPassword
+      ? "text"
+      : "password"
+    : type === "number"
+      ? "text"
+      : type;
 
   // Keep the minimum at 16px: anything smaller makes iOS Safari zoom the page
   // when the field is focused on mobile.
@@ -192,6 +223,8 @@ function TextField(
             onBlur={validate}
             placeholder={placeholder}
             required={required}
+            inputMode={type === "number" ? "numeric" : undefined}
+            pattern={type === "number" ? "[0-9]*" : undefined}
             aria-invalid={error !== null}
             aria-describedby={error ? errorId : undefined}
             className={`

@@ -41,6 +41,9 @@ const DemographySection = React.forwardRef<SectionHandle, SectionProps<Demograph
             name="Age"
             placeholder="Age"
             required
+            type="number"
+            min={1}
+            errorMessages={{ invalid: "Age must be greater than 0." }}
             theme="application"
             value={value.age}
             onChange={(v) => set("age", v)}

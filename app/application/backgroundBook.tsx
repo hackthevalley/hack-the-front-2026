@@ -23,7 +23,7 @@ export default function BackgroundBook({
 }: BackgroundBookProps) {
   return (
     <div
-      className={`relative flex h-auto w-[min(90vw,1100px)] flex-col overflow-hidden rounded-[28px] border border-white/10 md:h-[min(78vh,720px)] md:flex-row ${className}`}
+      className={`relative flex h-auto w-full flex-col overflow-hidden rounded-[28px] border border-white/10 md:h-[min(78vh,720px)] md:flex-row ${className}`}
     >
       {onBack && (
         <Button

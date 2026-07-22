@@ -94,6 +94,7 @@ const SchoolSection = React.forwardRef<SectionHandle, SectionProps<SchoolData>>(
             name="Year of Graduation"
             placeholder="Year of Graduation"
             required
+            type="number"
             theme="application"
             value={value.yearOfGraduation}
             onChange={(v) => set("yearOfGraduation", v)}

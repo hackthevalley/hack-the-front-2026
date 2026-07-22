@@ -6,6 +6,8 @@ import BackgroundBook from "./backgroundBook";
 import ProgressBar from "./progressBar";
 import SectionNavbar from "./sectionNavbar";
 import {
+  GROUP_START_STEP_INDEX,
+  SECTION_GROUPS,
   SECTIONS,
   initialFormData,
   type WizardFormData,
@@ -27,6 +29,8 @@ export default function ApplicationPage() {
   const ActiveRight = step.Right;
   const leftId = step.leftId;
   const isLastStep = stepIndex === SECTIONS.length - 1;
+  const furthestVisitedGroupIndex = SECTIONS[furthestVisited].groupIndex;
+  const groupStepCounts = SECTION_GROUPS.map((group) => group.steps.length);
 
   function handleNext() {
     const isRightValid = sectionRef.current?.validate() ?? true;
@@ -45,58 +49,70 @@ export default function ApplicationPage() {
     setStepIndex((prev) => Math.max(prev - 1, 0));
   }
 
-  function handleStepClick(index: number) {
-    if (index > furthestVisited) return;
-    setStepIndex(index);
+  function handleGroupClick(groupIndex: number) {
+    if (groupIndex > furthestVisitedGroupIndex) return;
+    setStepIndex(GROUP_START_STEP_INDEX[groupIndex]);
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center px-6 py-10 font-figtree">
+    <div className="relative flex min-h-screen flex-col items-center justify-center px-6 py-10 font-figtree">
       <Background />
 
-      <SectionNavbar
-        className="absolute left-6 top-10 md:left-12 md:top-12"
-        steps={SECTIONS.map((s) => ({ id: s.id, label: s.label }))}
-        currentStep={stepIndex}
-        furthestVisited={furthestVisited}
-        onStepClick={handleStepClick}
-      />
+      {/* Grid rows are auto-sized from the tallest cell in each row, so the
+       * nav list (lg:h-full) and the book wrapper (lg:row-start-2) always end
+       * up the same height without any manual measurement — the nav's
+       * buttons then center as a group against that height. The first column
+       * is "auto"-width so it sizes to the nav's widest button instead of a
+       * fixed pixel value. */}
+      <div className="grid w-full items-center gap-6 lg:grid-cols-[auto_minmax(0,1100px)] lg:grid-rows-[auto_auto] lg:justify-center lg:gap-x-16 lg:gap-y-6">
+        <SectionNavbar
+          groups={SECTION_GROUPS.map((g) => ({ id: g.id, label: g.label }))}
+          currentGroupIndex={step.groupIndex}
+          furthestVisitedGroupIndex={furthestVisitedGroupIndex}
+          onGroupClick={handleGroupClick}
+        />
 
-      <div className="relative z-10 flex w-full max-w-3xl flex-col items-center gap-6">
-        <ProgressBar currentStep={stepIndex} totalSteps={SECTIONS.length} />
+        <ProgressBar
+          className="lg:col-start-2 lg:row-start-1"
+          groupStepCounts={groupStepCounts}
+          currentGroupIndex={step.groupIndex}
+          currentStepInGroup={step.stepIndexInGroup}
+        />
 
-        <BackgroundBook
-          onBack={stepIndex > 0 ? handleBack : undefined}
-          onNext={handleNext}
-          nextDisabled={sectionHasErrors || leftSectionHasErrors}
-          nextLabel={isLastStep ? "Submit" : "Next"}
-          left={
-            leftId ? (
-              <ActiveLeft
-                ref={leftSectionRef}
-                value={formData[leftId]}
-                onChange={(value: WizardFormData[typeof leftId]) =>
-                  setFormData((prev) => ({ ...prev, [leftId]: value }))
+        <div className="relative z-10 w-full max-w-[1100px] lg:col-start-2 lg:row-start-2">
+          <BackgroundBook
+            onBack={stepIndex > 0 ? handleBack : undefined}
+            onNext={handleNext}
+            nextDisabled={sectionHasErrors || leftSectionHasErrors}
+            nextLabel={isLastStep ? "Submit" : "Next"}
+            left={
+              leftId ? (
+                <ActiveLeft
+                  ref={leftSectionRef}
+                  value={formData[leftId]}
+                  onChange={(value: WizardFormData[typeof leftId]) =>
+                    setFormData((prev) => ({ ...prev, [leftId]: value }))
+                  }
+                  onValidityChange={setLeftSectionHasErrors}
+                  formData={formData}
+                />
+              ) : (
+                <ActiveLeft>{step.title}</ActiveLeft>
+              )
+            }
+            right={
+              <ActiveRight
+                ref={sectionRef}
+                value={formData[step.id]}
+                onChange={(value: WizardFormData[typeof step.id]) =>
+                  setFormData((prev) => ({ ...prev, [step.id]: value }))
                 }
-                onValidityChange={setLeftSectionHasErrors}
+                onValidityChange={setSectionHasErrors}
                 formData={formData}
               />
-            ) : (
-              <ActiveLeft>{step.title}</ActiveLeft>
-            )
-          }
-          right={
-            <ActiveRight
-              ref={sectionRef}
-              value={formData[step.id]}
-              onChange={(value: WizardFormData[typeof step.id]) =>
-                setFormData((prev) => ({ ...prev, [step.id]: value }))
-              }
-              onValidityChange={setSectionHasErrors}
-              formData={formData}
-            />
-          }
-        />
+            }
+          />
+        </div>
       </div>
     </div>
   );
