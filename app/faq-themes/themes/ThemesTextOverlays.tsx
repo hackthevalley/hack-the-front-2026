@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import { toScale, toStageHeight, toStageWidth, toStageX, toStageY } from "../faq/faqStage";
 
 const THEMES = [
@@ -78,79 +81,161 @@ const THEME_CARD_PADDING_Y = 32;
 const THEME_CARD_INNER_GAP = 46.8606;
 const THEME_TEXT_GAP = 7.53;
 const THEME_TITLE_GLOW = "0 0 10px rgba(255,255,255,.5)";
+const THEME_REVEAL_OFFSET = 42;
+const THEME_REVEAL_VIEWPORT_RATIO = 0.7;
+
+function ThemeCard({
+  theme,
+  revealed,
+  onRegister,
+}: {
+  theme: (typeof THEMES)[number];
+  revealed: boolean;
+  onRegister: (node: HTMLElement | null) => void;
+}) {
+  const iconOnLeft = theme.iconSide === "left";
+
+  return (
+    <article
+      ref={onRegister}
+      className="absolute flex border border-white/10 text-white duration-700 ease-out"
+      style={{
+        left: toStageX(355),
+        top: toStageY(theme.top),
+        width: toStageWidth(802),
+        height: toStageHeight(theme.height),
+        borderRadius: toScale(22),
+        background: `rgba(82, 89, 189, ${theme.opacity})`,
+        boxShadow: "inset 0 1px 0 rgba(255,255,255,.08)",
+        flexDirection: iconOnLeft ? "row" : "row-reverse",
+        alignItems: "center",
+        gap: toScale(THEME_CARD_INNER_GAP),
+        paddingInline: toScale(THEME_CARD_PADDING_X),
+        paddingBlock: toScale(THEME_CARD_PADDING_Y),
+        opacity: revealed ? 1 : 0,
+        filter: revealed ? "blur(0px)" : "blur(8px)",
+        transform: revealed
+          ? "translate3d(0, 0, 0) scale(1)"
+          : `translate3d(0, ${toScale(THEME_REVEAL_OFFSET)}, 0) scale(.985)`,
+        transitionProperty: "opacity, transform, filter",
+        willChange: "opacity, transform, filter",
+      }}
+    >
+      <div
+        aria-hidden="true"
+        className="grid shrink-0 place-items-center"
+        style={{
+          width: toScale(theme.iconWidth),
+          height: toScale(theme.iconHeight),
+        }}
+      >
+        <img
+          src={theme.iconSrc}
+          alt=""
+          draggable="false"
+          className="h-full w-full select-none object-contain"
+        />
+      </div>
+      <div
+        className="min-w-0 shrink-0"
+        style={{
+          width: toScale(theme.textWidth),
+          height: toScale(theme.textHeight),
+          textAlign: "left",
+        }}
+      >
+        <h3
+          className="m-0 font-bold"
+          style={{
+            fontSize: toScale(28),
+            lineHeight: "100%",
+            textShadow: THEME_TITLE_GLOW,
+          }}
+        >
+          {theme.title}
+        </h3>
+        <p
+          className="m-0"
+          style={{
+            marginTop: toScale(THEME_TEXT_GAP),
+            fontSize: toScale(20),
+            lineHeight: toScale(24),
+          }}
+        >
+          {theme.description}
+        </p>
+      </div>
+    </article>
+  );
+}
 
 export default function ThemesTextOverlays() {
+  const cardRefs = useRef<Array<HTMLElement | null>>([]);
+  const [revealed, setRevealed] = useState<boolean[]>(() => THEMES.map(() => false));
+
+  useEffect(() => {
+    let frameId = 0;
+
+    const revealVisibleCards = () => {
+      frameId = 0;
+      const revealThreshold = window.innerHeight * THEME_REVEAL_VIEWPORT_RATIO;
+
+      setRevealed((current) => {
+        let changed = false;
+        const next = [...current];
+
+        cardRefs.current.forEach((card, index) => {
+          if (!card || next[index]) {
+            return;
+          }
+
+          const rect = card.getBoundingClientRect();
+          const cardMidpoint = rect.top + rect.height / 2;
+
+          if (cardMidpoint <= revealThreshold) {
+            next[index] = true;
+            changed = true;
+          }
+        });
+
+        return changed ? next : current;
+      });
+    };
+
+    const scheduleRevealCheck = () => {
+      if (frameId) {
+        return;
+      }
+
+      frameId = window.requestAnimationFrame(revealVisibleCards);
+    };
+
+    scheduleRevealCheck();
+    window.addEventListener("scroll", scheduleRevealCheck, { passive: true });
+    window.addEventListener("resize", scheduleRevealCheck);
+
+    return () => {
+      if (frameId) {
+        window.cancelAnimationFrame(frameId);
+      }
+
+      window.removeEventListener("scroll", scheduleRevealCheck);
+      window.removeEventListener("resize", scheduleRevealCheck);
+    };
+  }, []);
+
   return (
     <section aria-label="Hackathon themes">
-      {THEMES.map((theme) => {
-        const iconOnLeft = theme.iconSide === "left";
-
-        return (
-          <article
-            key={theme.title}
-            className="absolute flex border border-white/10 text-white"
-            style={{
-              left: toStageX(355),
-              top: toStageY(theme.top),
-              width: toStageWidth(802),
-              height: toStageHeight(theme.height),
-              borderRadius: toScale(22),
-              background: `rgba(82, 89, 189, ${theme.opacity})`,
-              boxShadow: "inset 0 1px 0 rgba(255,255,255,.08)",
-              flexDirection: iconOnLeft ? "row" : "row-reverse",
-              alignItems: "center",
-              gap: toScale(THEME_CARD_INNER_GAP),
-              paddingInline: toScale(THEME_CARD_PADDING_X),
-              paddingBlock: toScale(THEME_CARD_PADDING_Y),
-            }}
-          >
-            <div
-              aria-hidden="true"
-              className="grid shrink-0 place-items-center"
-              style={{
-                width: toScale(theme.iconWidth),
-                height: toScale(theme.iconHeight),
-              }}
-            >
-              <img
-                src={theme.iconSrc}
-                alt=""
-                draggable="false"
-                className="h-full w-full select-none object-contain"
-              />
-            </div>
-            <div
-              className="min-w-0 shrink-0"
-              style={{
-                width: toScale(theme.textWidth),
-                height: toScale(theme.textHeight),
-                textAlign: "left",
-              }}
-            >
-              <h3
-                className="m-0 font-bold"
-                style={{
-                  fontSize: toScale(28),
-                  lineHeight: "100%",
-                  textShadow: THEME_TITLE_GLOW,
-                }}
-              >
-                {theme.title}
-              </h3>
-              <p
-                className="m-0"
-                style={{
-                  marginTop: toScale(THEME_TEXT_GAP),
-                  fontSize: toScale(20),
-                  lineHeight: toScale(24),
-                }}
-              >
-                {theme.description}
-              </p>
-            </div>
-          </article>
-        );
-      })}
+      {THEMES.map((theme, index) => (
+        <ThemeCard
+          key={theme.title}
+          theme={theme}
+          revealed={revealed[index]}
+          onRegister={(node) => {
+            cardRefs.current[index] = node;
+          }}
+        />
+      ))}
     </section>
   );
 }
