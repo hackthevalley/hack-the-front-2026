@@ -15,7 +15,7 @@ export default function FaqStaticOverlays() {
           width: toStageWidth(826),
         }}
       >
-        <div style={{ width: "43.95%" }}>
+        <div className="pointer-events-auto select-text" style={{ width: "43.95%" }}>
           <p
             className="m-0 font-medium leading-none"
             style={{
@@ -49,7 +49,7 @@ export default function FaqStaticOverlays() {
       </div>
 
       <h2
-        className="absolute m-0 font-vcr font-normal leading-none text-white"
+        className="pointer-events-auto absolute m-0 select-text font-vcr font-normal leading-none text-white"
         style={{
           left: toStageX(629),
           top: toStageY(1569.708),
@@ -63,7 +63,7 @@ export default function FaqStaticOverlays() {
         Themes
       </h2>
       <p
-        className="absolute m-0 text-white"
+        className="pointer-events-auto absolute m-0 select-text text-white"
         style={{
           left: toStageX(593.5),
           top: toStageY(1676.7119),

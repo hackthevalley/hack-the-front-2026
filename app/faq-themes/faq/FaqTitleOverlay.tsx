@@ -6,7 +6,7 @@ const HEADING_GLOW =
 export default function FaqTitleOverlay() {
   return (
     <h1
-      className="absolute m-0 font-vcr font-normal leading-none text-white"
+      className="pointer-events-auto absolute m-0 select-text font-vcr font-normal leading-none text-white"
       style={{
         left: toStageX(693),
         top: toStageY(101),

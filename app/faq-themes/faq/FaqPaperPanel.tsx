@@ -89,7 +89,7 @@ function Stamp({
 function DefaultCardContent({ card }: { card: FaqDefaultCard }) {
   return (
     <div
-      className="absolute text-[#121221]"
+      className="pointer-events-auto absolute select-text text-[#121221]"
       style={{
         left: toPaperX(56),
         top: toPaperY(67),
@@ -151,7 +151,7 @@ function SelectedCardContent({ item }: { item: FaqItem }) {
 
   return (
     <div
-      className="absolute text-[#12184e]"
+      className="pointer-events-auto absolute select-text text-[#12184e]"
       style={{
         left: toPaperX(56),
         top: toPaperY(64),
@@ -233,7 +233,7 @@ export default function FaqPaperPanel({ activeItem }: FaqPaperPanelProps) {
 
   return (
     <div
-      className="pointer-events-none absolute"
+      className="absolute"
       style={{
         left: toStageX(paperPose.x),
         top: toStageY(paperPose.y),

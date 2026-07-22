@@ -98,7 +98,7 @@ function ThemeCard({
   return (
     <article
       ref={onRegister}
-      className="absolute flex border border-white/10 text-white duration-700 ease-out"
+      className="pointer-events-auto absolute flex select-text border border-white/10 text-white duration-700 ease-out"
       style={{
         left: toStageX(355),
         top: toStageY(theme.top),
