@@ -5,6 +5,7 @@ import {
   foregroundSceneLayers,
   rearSceneLayers,
 } from "./layers";
+import FaqStaticOverlays from "../faq/FaqStaticOverlays";
 import type { FaqThemesSceneLayer } from "./types";
 
 type FaqThemesBackgroundProps = {
@@ -86,6 +87,10 @@ export default function FaqThemesBackground({
 
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-20">
           <ScenePlane layers={foregroundSceneLayers} />
+        </div>
+
+        <div className="pointer-events-none absolute inset-0 z-35">
+          <FaqStaticOverlays />
         </div>
       </div>
     </div>

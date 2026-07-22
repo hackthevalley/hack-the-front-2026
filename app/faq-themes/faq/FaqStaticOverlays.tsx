@@ -1,24 +1,9 @@
 import { toScale, toStageHeight, toStageWidth, toStageX, toStageY } from "./faqStage";
 import ThemesTextOverlays from "../themes/ThemesTextOverlays";
 
-const HEADING_GLOW =
-  "0 0 8px rgba(255,255,255,.9), 0 0 24px rgba(202,210,255,.48)";
-
 export default function FaqStaticOverlays() {
   return (
     <>
-      <h1
-        className="absolute m-0 font-vcr font-normal leading-none text-white"
-        style={{
-          left: toStageX(693),
-          top: toStageY(101),
-          fontSize: toScale(72),
-          textShadow: HEADING_GLOW,
-        }}
-      >
-        FAQ
-      </h1>
-
       <div
         className="absolute text-white"
         style={{
@@ -67,7 +52,8 @@ export default function FaqStaticOverlays() {
           width: toStageWidth(254),
           fontSize: toScale(72),
           textAlign: "center",
-          textShadow: HEADING_GLOW,
+          textShadow:
+            "0 0 8px rgba(255,255,255,.9), 0 0 24px rgba(202,210,255,.48)",
         }}
       >
         Themes

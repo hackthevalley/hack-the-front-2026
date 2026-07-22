@@ -3,7 +3,6 @@
 import { startTransition, useMemo, useState } from "react";
 import FaqPaperPanel from "./faq/FaqPaperPanel";
 import FaqQuestionList from "./faq/FaqQuestionList";
-import FaqStaticOverlays from "./faq/FaqStaticOverlays";
 import { FAQ_ITEMS } from "./faq/faqContent";
 import { toStageY } from "./faq/faqStage";
 
@@ -35,7 +34,6 @@ export default function FaqThemesContentLayer() {
         className="pointer-events-none absolute left-0 right-0 h-px"
         style={{ top: toStageY(1560), scrollMarginTop: "24px" }}
       />
-      <FaqStaticOverlays />
       <FaqQuestionList activeId={activeId} onSelect={handleSelect} />
       <FaqPaperPanel activeItem={activeItem} />
     </div>
