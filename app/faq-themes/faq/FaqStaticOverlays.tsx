@@ -8,45 +8,44 @@ export default function FaqStaticOverlays() {
   return (
     <>
       <div
-        className="absolute text-white"
+        className="absolute flex items-center justify-between text-white"
         style={{
           left: toStageX(322),
           top: toStageY(1345),
-          width: toStageWidth(363),
+          width: toStageWidth(826),
         }}
       >
-        <p
-          className="m-0 font-medium leading-none"
-          style={{
-            fontSize: toScale(36),
-            textShadow: "0 0 12px rgba(255,255,255,.75)",
-          }}
-        >
-          Have more questions?
-        </p>
-        <p
-          className="m-0 italic leading-none"
-          style={{ marginTop: toScale(15), fontSize: toScale(24) }}
-        >
-          Message us at @hackthevalley.io
-        </p>
-      </div>
+        <div style={{ width: "43.95%" }}>
+          <p
+            className="m-0 font-medium leading-none"
+            style={{
+              fontSize: toScale(36),
+              textShadow: "0 0 12px rgba(255,255,255,.75)",
+            }}
+          >
+            Have more questions?
+          </p>
+          <p
+            className="m-0 italic leading-none"
+            style={{
+              marginTop: toScale(15),
+              fontSize: toScale(24),
+              textShadow: "0 0 12px rgba(255,255,255,.75)",
+            }}
+          >
+            Message us at @hackthevalley.io
+          </p>
+        </div>
 
-      <div
-        className="absolute"
-        style={{
-          left: toStageX(908),
-          top: toStageY(1365),
-          width: toStageWidth(240),
-        }}
-      >
-        <Button
-          text="Contact Us"
-          width="100%"
-          onClick={() => {
-            window.location.href = "mailto:contact@hackthevalley.io";
-          }}
-        />
+        <div style={{ width: "29.06%" }}>
+          <Button
+            text="Contact Us"
+            width="100%"
+            onClick={() => {
+              window.location.href = "mailto:contact@hackthevalley.io";
+            }}
+          />
+        </div>
       </div>
 
       <h2
