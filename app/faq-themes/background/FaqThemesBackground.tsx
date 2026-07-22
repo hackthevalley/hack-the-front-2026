@@ -60,12 +60,14 @@ function ScenePlane({ layers }: { layers: readonly FaqThemesSceneLayer[] }) {
 export default function FaqThemesBackground({
   children,
 }: FaqThemesBackgroundProps) {
+  const faqBackground =
+    "linear-gradient(180deg, #030712 37.54%, #050917 44.79%, #303276 98.56%)";
+
   return (
     <div
       className="relative w-full overflow-hidden"
       style={{
-        background:
-          "linear-gradient(180deg, #030712 0%, #0e1648 42%, #303276 100%)",
+        background: faqBackground,
         minHeight: "100dvh",
       }}
     >
@@ -74,8 +76,7 @@ export default function FaqThemesBackground({
         style={{
           width: `max(100vw, calc(100dvh * ${FAQ_THEMES_DESIGN_WIDTH} / ${FAQ_THEMES_DESIGN_HEIGHT}))`,
           aspectRatio: `${FAQ_THEMES_DESIGN_WIDTH} / ${FAQ_THEMES_DESIGN_HEIGHT}`,
-          background:
-            "linear-gradient(180deg, #030712 0%, #0e1648 42%, #303276 100%)",
+          background: faqBackground,
           containerType: "inline-size",
         }}
       >
