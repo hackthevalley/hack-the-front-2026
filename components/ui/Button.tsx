@@ -225,7 +225,6 @@ export default function Button({
         }
         .button-component:hover:not(:disabled) {
           filter: brightness(1.15) saturate(1.1);
-          transform: translateY(-1px);
         }
         .button-component:active:not(:disabled) {
           filter: brightness(0.8) saturate(0.95);
