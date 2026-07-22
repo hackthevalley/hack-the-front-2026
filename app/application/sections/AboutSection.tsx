@@ -71,7 +71,8 @@ const AboutSection = React.forwardRef<SectionHandle, SectionProps<AboutData>>(
         <TextField
           ref={phoneRef}
           name="Phone Number"
-          placeholder="Phone Number"
+          placeholder="555-123-4567"
+          type="tel"
           required
           theme="application"
           value={value.phone}

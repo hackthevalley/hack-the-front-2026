@@ -1,7 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { isValidEmail, isValidPassword } from "@/components/ui/validation";
+import {
+  isValidEmail,
+  isValidPassword,
+  isValidPhoneNumber,
+  formatPhoneNumber,
+} from "@/components/ui/validation";
 import EyeIcon from "@/components/ui/EyeIcon";
 
 export type TextFieldHandle = {
@@ -9,7 +14,7 @@ export type TextFieldHandle = {
   validate: () => boolean;
 };
 
-type TextFieldType = "text" | "email" | "password" | "number";
+type TextFieldType = "text" | "email" | "password" | "number" | "tel";
 
 /** Override the default validation messages. Any omitted key falls back to the default. */
 type ErrorMessages = {
@@ -121,6 +126,9 @@ function TextField(
         return errorMessages.invalid ?? `${name} must be ${max} or less.`;
       }
     }
+    if (type === "tel" && !isValidPhoneNumber(trimmed)) {
+      return errorMessages.invalid ?? "Please enter a valid 10-digit phone number.";
+    }
     return null;
   }
 
@@ -137,7 +145,9 @@ function TextField(
     const next =
       type === "number"
         ? event.target.value.replace(/[^\d]/g, "")
-        : event.target.value;
+        : type === "tel"
+          ? formatPhoneNumber(event.target.value.replace(/\D/g, ""))
+          : event.target.value;
     setInternalValue(next);
     onChange?.(next);
 
@@ -223,7 +233,9 @@ function TextField(
             onBlur={validate}
             placeholder={placeholder}
             required={required}
-            inputMode={type === "number" ? "numeric" : undefined}
+            inputMode={
+              type === "number" ? "numeric" : type === "tel" ? "tel" : undefined
+            }
             pattern={type === "number" ? "[0-9]*" : undefined}
             aria-invalid={error !== null}
             aria-describedby={error ? errorId : undefined}
