@@ -20,6 +20,7 @@ export type FaqThemesSceneLayer = {
   height: number;
   zIndex: number;
   plane: FaqThemesScenePlane;
+  rotation?: number;
   visibleBounds?: FaqThemesVisibleBounds;
 };
 

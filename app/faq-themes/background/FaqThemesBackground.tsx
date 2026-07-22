@@ -32,6 +32,8 @@ function ScenePlane({ layers }: { layers: readonly FaqThemesSceneLayer[] }) {
             width: `${(layer.width / FAQ_THEMES_DESIGN_WIDTH) * 100}%`,
             height: `${(layer.height / FAQ_THEMES_DESIGN_HEIGHT) * 100}%`,
             zIndex: layer.zIndex,
+            transform: layer.rotation ? `rotate(${layer.rotation}deg)` : undefined,
+            transformOrigin: layer.rotation ? "center center" : undefined,
           }}
         >
           {layer.visibleBounds ? (
