@@ -1,5 +1,9 @@
 import type { ReactNode } from "react";
 import {
+  HOME_BACKGROUND_DESIGN_HEIGHT,
+  HOME_BACKGROUND_DESIGN_WIDTH,
+} from "@/app/home/background/layers";
+import {
   FAQ_THEMES_DESIGN_HEIGHT,
   FAQ_THEMES_DESIGN_WIDTH,
   foregroundSceneLayers,
@@ -61,7 +65,8 @@ export default function FaqThemesBackground({
   children,
 }: FaqThemesBackgroundProps) {
   const faqBackground =
-    "linear-gradient(180deg, #030712 37.54%, #050917 44.79%, #303276 98.56%)";
+    "linear-gradient(180deg, #030712 37.54%, #303276 98.56%)";
+  const stageWidth = `max(100vw, calc(100dvh * ${HOME_BACKGROUND_DESIGN_WIDTH} / ${HOME_BACKGROUND_DESIGN_HEIGHT}))`;
 
   return (
     <div
@@ -74,7 +79,7 @@ export default function FaqThemesBackground({
       <div
         className="relative left-1/2 -translate-x-1/2"
         style={{
-          width: `max(100vw, calc(100dvh * ${FAQ_THEMES_DESIGN_WIDTH} / ${FAQ_THEMES_DESIGN_HEIGHT}))`,
+          width: stageWidth,
           aspectRatio: `${FAQ_THEMES_DESIGN_WIDTH} / ${FAQ_THEMES_DESIGN_HEIGHT}`,
           background: faqBackground,
           containerType: "inline-size",

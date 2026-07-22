@@ -1,7 +1,7 @@
 import type { FaqThemesSceneLayer } from "./types";
 
 export const FAQ_THEMES_DESIGN_WIDTH = 1512;
-export const FAQ_THEMES_DESIGN_HEIGHT = 3311;
+export const FAQ_THEMES_DESIGN_HEIGHT = 3485;
 
 export const faqThemesSceneLayers = [
   {

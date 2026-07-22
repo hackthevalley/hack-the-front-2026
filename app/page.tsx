@@ -1,5 +1,9 @@
 import HomeNavbar from "@/components/layout/HomeNavbar";
 import Button from "@/components/ui/Button";
+import {
+  HOME_BACKGROUND_DESIGN_HEIGHT,
+  HOME_BACKGROUND_DESIGN_WIDTH,
+} from "./home/background/layers";
 import FaqThemesContentLayer from "./faq-themes/FaqThemesContentLayer";
 import FaqThemesBackground from "./faq-themes/background/FaqThemesBackground";
 import {
@@ -12,6 +16,8 @@ import HomeTextOverlays from "./home/HomeTextOverlays";
 import HomeToFaqTransition from "./transitions/home-to-faq/HomeToFaqTransition";
 
 export default function Home() {
+  const faqStageWidth = `max(100vw, calc(100dvh * ${HOME_BACKGROUND_DESIGN_WIDTH} / ${HOME_BACKGROUND_DESIGN_HEIGHT}))`;
+
   return (
     <main className="relative w-full overflow-x-hidden bg-[#040142]">
       <HomeToFaqTransition className="pointer-events-none z-30" />
@@ -74,7 +80,7 @@ export default function Home() {
           <div
             className="relative left-1/2 -translate-x-1/2"
             style={{
-              width: `max(100vw, calc(100dvh * ${FAQ_THEMES_DESIGN_WIDTH} / ${FAQ_THEMES_DESIGN_HEIGHT}))`,
+              width: faqStageWidth,
               aspectRatio: `${FAQ_THEMES_DESIGN_WIDTH} / ${FAQ_THEMES_DESIGN_HEIGHT}`,
               containerType: "inline-size",
             }}
