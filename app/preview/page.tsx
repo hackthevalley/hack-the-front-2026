@@ -3,6 +3,7 @@ import Navbar from "@/components/layout/Navbar";
 import Button from "@/components/ui/Button";
 import TextField from "@/components/ui/TextField";
 import TeamBackground from "../team/background/TeamBackground";
+import { teamMembers } from "../team/members";
 import TeamOverlays from "../team/TeamOverlays";
 
 /**
@@ -51,7 +52,7 @@ export default function Preview() {
           Team section preview — edit app/team/*.
         </p>
         <TeamBackground>
-          <TeamOverlays />
+          <TeamOverlays teamMembers={teamMembers} />
         </TeamBackground>
       </main>
     </div>

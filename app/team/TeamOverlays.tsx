@@ -1,16 +1,22 @@
+"use client";
+
 import Image from "next/image";
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties, ReactNode, Ref } from "react";
+import { useEffect, useRef, useState } from "react";
+import DesignBox from "@/components/layout/DesignBox";
 import {
   JAR_AVATAR_INSET,
   JAR_HEIGHT,
   JAR_SRC_BY_COLOR,
+  JAR_TOP_OFFSET,
   JAR_WIDTH,
   SHELF_ROW_BANDS,
+  SHELF_TOPS,
   TEAM_DESIGN_HEIGHT,
   TEAM_DESIGN_WIDTH,
 } from "./background/layers";
+import type { TeamLayer } from "./background/types";
 import { jarSlots, SHELF_PROPS, SHELF_ROW_WIDTHS } from "./data";
-import { teamMembers } from "./members";
 import type { JarColor, TeamMember } from "./types";
 
 type MarqueeDirection = "left" | "right";
@@ -19,47 +25,10 @@ type VerticalBand = { top: number; height: number };
 const HEADING_GLOW = "0 0 13.53cqh #FFFFFF";
 const NAME_GLOW = "0 0 2.58cqh #FFFFFF";
 const ROLE_GLOW = "0 0 1.3cqh rgba(255, 255, 255, 0.55)";
+const SHELF_TAP_NAME_GLOW = "0 0 8.93cqh #FFFFFF";
+const SHELF_TAP_ROLE_GLOW = "0 0 3.5cqh rgba(255, 255, 255, 0.55)";
 
-const MARQUEE_SPEED_PX_PER_SEC = TEAM_DESIGN_WIDTH / 72;
-
-type DesignBoxProps = {
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-  zIndex?: number;
-  className?: string;
-  style?: CSSProperties;
-  children: ReactNode;
-};
-
-function DesignBox({
-  left,
-  top,
-  width,
-  height,
-  zIndex = 5,
-  className = "",
-  style,
-  children,
-}: DesignBoxProps) {
-  return (
-    <div
-      className={`absolute ${className}`}
-      style={{
-        left: `${(left / TEAM_DESIGN_WIDTH) * 100}%`,
-        top: `${(top / TEAM_DESIGN_HEIGHT) * 100}%`,
-        width: `${(width / TEAM_DESIGN_WIDTH) * 100}%`,
-        height: `${(height / TEAM_DESIGN_HEIGHT) * 100}%`,
-        zIndex,
-        containerType: "size",
-        ...style,
-      }}
-    >
-      {children}
-    </div>
-  );
-}
+const MARQUEE_SPEED_PX_PER_SEC = TEAM_DESIGN_WIDTH / 40;
 
 function TeamJar({ color, member }: { color: JarColor; member?: TeamMember }) {
   return (
@@ -68,7 +37,7 @@ function TeamJar({ color, member }: { color: JarColor; member?: TeamMember }) {
         src={JAR_SRC_BY_COLOR[color]}
         alt=""
         draggable="false"
-        className="h-full w-full max-w-none select-none"
+        className="team-shelf-jar-glow h-full w-full max-w-none select-none"
       />
       {member ? (
         <div className="team-shelf-tooltip pointer-events-none absolute bottom-full left-1/2 z-30 mb-[10%] w-max max-w-[240cqw] -translate-x-1/2 text-center">
@@ -121,6 +90,9 @@ function MarqueeItem({
   zIndex,
   direction,
   isHoverTrigger = false,
+  isTapped = false,
+  triggerLabel,
+  onToggleTap,
   children,
 }: {
   left: number;
@@ -132,6 +104,9 @@ function MarqueeItem({
   zIndex: number;
   direction: MarqueeDirection;
   isHoverTrigger?: boolean;
+  isTapped?: boolean;
+  triggerLabel?: string;
+  onToggleTap?: () => void;
   children: ReactNode;
 }) {
   const travelPercent = (loopWidth / width) * 100;
@@ -161,10 +136,18 @@ function MarqueeItem({
         >
           {children}
           {isHoverTrigger ? (
-            <div
-              aria-hidden="true"
-              className="team-shelf-hover-trigger pointer-events-auto absolute inset-0"
+            <button
+              type="button"
+              aria-label={triggerLabel}
+              className={`team-shelf-hover-trigger pointer-events-auto absolute inset-0 appearance-none border-0 bg-transparent p-0 ${
+                isTapped ? "is-tapped" : ""
+              }`}
               style={{ clipPath: "ellipse(50% 50% at 50% 52%)" }}
+              onClick={(event) => {
+                event.stopPropagation();
+                if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+                onToggleTap?.();
+              }}
             />
           ) : null}
         </div>
@@ -174,7 +157,6 @@ function MarqueeItem({
 }
 
 function ShelfProp({
-  id,
   src,
   left,
   top,
@@ -184,7 +166,6 @@ function ShelfProp({
   loopWidth,
   direction,
 }: {
-  id: string;
   src: string;
   left: number;
   top: number;
@@ -206,7 +187,6 @@ function ShelfProp({
       direction={direction}
     >
       <img
-        key={id}
         src={src}
         alt=""
         draggable="false"
@@ -221,72 +201,197 @@ function ShelfJars({
   band,
   loopWidth,
   direction,
+  teamMembers,
+  activeSlotId,
+  onToggleTap,
 }: {
   shelfId: "shelf-1" | "shelf-2" | "shelf-3";
   band: VerticalBand;
   loopWidth: number;
   direction: MarqueeDirection;
+  teamMembers: Record<string, TeamMember>;
+  activeSlotId: string | null;
+  onToggleTap: (slotId: string) => void;
 }) {
   const slots = jarSlots.filter((slot) => slot.id.startsWith(shelfId));
 
   return (
     <>
-      {slots.map((slot) => (
-        <MarqueeItem
-          key={slot.id}
-          left={slot.left}
-          top={slot.top}
-          width={JAR_WIDTH}
-          height={JAR_HEIGHT}
-          band={band}
-          loopWidth={loopWidth}
-          zIndex={4}
-          direction={direction}
-          isHoverTrigger
-        >
-          <TeamJar color={slot.color} member={teamMembers[slot.id]} />
-        </MarqueeItem>
-      ))}
+      {slots.map((slot) => {
+        const member = teamMembers[slot.id];
+        return (
+          <MarqueeItem
+            key={slot.id}
+            left={slot.left}
+            top={slot.top}
+            width={JAR_WIDTH}
+            height={JAR_HEIGHT}
+            band={band}
+            loopWidth={loopWidth}
+            zIndex={4}
+            direction={direction}
+            isHoverTrigger
+            isTapped={activeSlotId === slot.id}
+            triggerLabel={member ? `${member.name}, ${member.role}` : undefined}
+            onToggleTap={() => onToggleTap(slot.id)}
+          >
+            <TeamJar color={slot.color} member={member} />
+          </MarqueeItem>
+        );
+      })}
     </>
+  );
+}
+
+const SHELF_TAP_LABEL_HEIGHT = 44;
+const SHELF_TAP_LABEL_GAP = 20;
+
+function ShelfTapLabel({ member }: { member: TeamMember }) {
+  return (
+    <div className="flex h-full w-full flex-col items-center justify-end text-center">
+      <p
+        className="m-0 whitespace-nowrap font-figtree font-normal leading-tight text-white"
+        style={{ fontSize: "45cqh", textShadow: SHELF_TAP_NAME_GLOW }}
+      >
+        {member.name}
+      </p>
+      <p
+        className="m-0 whitespace-nowrap font-figtree font-normal leading-tight text-white/60"
+        style={{ fontSize: "35cqh", textShadow: SHELF_TAP_ROLE_GLOW }}
+      >
+        {member.role}
+      </p>
+    </div>
   );
 }
 
 function ShelfRow({
   band,
+  containerRef,
   children,
 }: {
   band: VerticalBand;
+  containerRef?: Ref<HTMLDivElement>;
   children: ReactNode;
 }) {
   return (
     <div
+      ref={containerRef}
       className="team-shelf-row pointer-events-none absolute left-0 w-full"
       style={{
         top: `${(band.top / TEAM_DESIGN_HEIGHT) * 100}%`,
         height: `${(band.height / TEAM_DESIGN_HEIGHT) * 100}%`,
+        containerType: "size",
       }}
     >
       {children}
       <div
         aria-hidden="true"
-        className="pointer-events-auto absolute left-0 top-0 h-full"
-        style={{ width: `${((JAR_WIDTH * 1.5) / TEAM_DESIGN_WIDTH) * 100}%`, zIndex: 20 }}
+        className="team-shelf-edge-blocker pointer-events-auto absolute left-0 top-0 h-full"
+        style={{
+          width: `${((JAR_WIDTH * 1.5) / TEAM_DESIGN_WIDTH) * 100}%`,
+          zIndex: 20,
+        }}
       />
       <div
         aria-hidden="true"
-        className="pointer-events-auto absolute right-0 top-0 h-full"
-        style={{ width: `${((JAR_WIDTH * 1.5) / TEAM_DESIGN_WIDTH) * 100}%`, zIndex: 20 }}
+        className="team-shelf-edge-blocker pointer-events-auto absolute right-0 top-0 h-full"
+        style={{
+          width: `${((JAR_WIDTH * 1.5) / TEAM_DESIGN_WIDTH) * 100}%`,
+          zIndex: 20,
+        }}
       />
     </div>
   );
 }
 
-export default function TeamOverlays() {
+function ShelfSection({
+  shelfId,
+  band,
+  jarTop,
+  loopWidth,
+  direction,
+  teamMembers,
+  props,
+}: {
+  shelfId: "shelf-1" | "shelf-2" | "shelf-3";
+  band: VerticalBand;
+  jarTop: number;
+  loopWidth: number;
+  direction: MarqueeDirection;
+  teamMembers: Record<string, TeamMember>;
+  props: readonly TeamLayer[];
+}) {
+  const [activeSlotId, setActiveSlotId] = useState<string | null>(null);
+  const rowRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!activeSlotId) return;
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (!rowRef.current?.contains(event.target as Node)) {
+        setActiveSlotId(null);
+      }
+    };
+    document.addEventListener("click", handleOutsideClick);
+    return () => document.removeEventListener("click", handleOutsideClick);
+  }, [activeSlotId]);
+
+  const activeMember = activeSlotId ? (teamMembers[activeSlotId] ?? null) : null;
+
+  return (
+    <>
+      <ShelfRow band={band} containerRef={rowRef}>
+        <ShelfJars
+          shelfId={shelfId}
+          band={band}
+          loopWidth={loopWidth}
+          direction={direction}
+          teamMembers={teamMembers}
+          activeSlotId={activeSlotId}
+          onToggleTap={(slotId) =>
+            setActiveSlotId((current) => (current === slotId ? null : slotId))
+          }
+        />
+        {props.map((prop) => (
+          <ShelfProp key={prop.id} {...prop} band={band} loopWidth={loopWidth} direction={direction} />
+        ))}
+      </ShelfRow>
+      {activeMember ? (
+        <DesignBox
+          designWidth={TEAM_DESIGN_WIDTH}
+          designHeight={TEAM_DESIGN_HEIGHT}
+          left={0}
+          top={jarTop - SHELF_TAP_LABEL_HEIGHT - SHELF_TAP_LABEL_GAP}
+          width={TEAM_DESIGN_WIDTH}
+          height={SHELF_TAP_LABEL_HEIGHT}
+          zIndex={40}
+          className="pointer-events-none"
+        >
+          <ShelfTapLabel member={activeMember} />
+        </DesignBox>
+      ) : null}
+    </>
+  );
+}
+
+export default function TeamOverlays({
+  teamMembers,
+}: {
+  teamMembers: Record<string, TeamMember>;
+}) {
   const [band1, band2, band3] = SHELF_ROW_BANDS;
 
   return (
     <>
-      <DesignBox left={482} top={81} width={549} height={70} zIndex={4}>
+      <DesignBox
+        designWidth={TEAM_DESIGN_WIDTH}
+        designHeight={TEAM_DESIGN_HEIGHT}
+        left={482}
+        top={81}
+        width={549}
+        height={70}
+        zIndex={4}
+      >
         <p
           className="m-0 w-full text-center font-vcr leading-none text-white"
           style={{ fontSize: "72cqh", textShadow: HEADING_GLOW }}
@@ -295,59 +400,35 @@ export default function TeamOverlays() {
         </p>
       </DesignBox>
 
-      <ShelfRow band={band1}>
-        <ShelfJars
-          shelfId="shelf-1"
-          band={band1}
-          loopWidth={SHELF_ROW_WIDTHS.shelf1}
-          direction="right"
-        />
-        {SHELF_PROPS.shelf1.map((prop) => (
-          <ShelfProp
-            key={prop.id}
-            {...prop}
-            band={band1}
-            loopWidth={SHELF_ROW_WIDTHS.shelf1}
-            direction="right"
-          />
-        ))}
-      </ShelfRow>
+      <ShelfSection
+        shelfId="shelf-1"
+        band={band1}
+        jarTop={SHELF_TOPS[0] + JAR_TOP_OFFSET}
+        loopWidth={SHELF_ROW_WIDTHS.shelf1}
+        direction="right"
+        teamMembers={teamMembers}
+        props={SHELF_PROPS.shelf1}
+      />
 
-      <ShelfRow band={band2}>
-        <ShelfJars
-          shelfId="shelf-2"
-          band={band2}
-          loopWidth={SHELF_ROW_WIDTHS.shelf2}
-          direction="left"
-        />
-        {SHELF_PROPS.shelf2.map((prop) => (
-          <ShelfProp
-            key={prop.id}
-            {...prop}
-            band={band2}
-            loopWidth={SHELF_ROW_WIDTHS.shelf2}
-            direction="left"
-          />
-        ))}
-      </ShelfRow>
+      <ShelfSection
+        shelfId="shelf-2"
+        band={band2}
+        jarTop={SHELF_TOPS[1] + JAR_TOP_OFFSET}
+        loopWidth={SHELF_ROW_WIDTHS.shelf2}
+        direction="left"
+        teamMembers={teamMembers}
+        props={SHELF_PROPS.shelf2}
+      />
 
-      <ShelfRow band={band3}>
-        <ShelfJars
-          shelfId="shelf-3"
-          band={band3}
-          loopWidth={SHELF_ROW_WIDTHS.shelf3}
-          direction="right"
-        />
-        {SHELF_PROPS.shelf3.map((prop) => (
-          <ShelfProp
-            key={prop.id}
-            {...prop}
-            band={band3}
-            loopWidth={SHELF_ROW_WIDTHS.shelf3}
-            direction="right"
-          />
-        ))}
-      </ShelfRow>
+      <ShelfSection
+        shelfId="shelf-3"
+        band={band3}
+        jarTop={SHELF_TOPS[2] + JAR_TOP_OFFSET}
+        loopWidth={SHELF_ROW_WIDTHS.shelf3}
+        direction="right"
+        teamMembers={teamMembers}
+        props={SHELF_PROPS.shelf3}
+      />
     </>
   );
 }
