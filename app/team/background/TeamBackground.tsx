@@ -14,12 +14,9 @@ type TeamBackgroundProps = {
 export default function TeamBackground({ children }: TeamBackgroundProps) {
   return (
     <div
-      className="relative left-1/2 w-full -translate-x-1/2 overflow-hidden"
+      className="relative w-full overflow-hidden"
       style={{
         aspectRatio: `${TEAM_DESIGN_WIDTH} / ${TEAM_DESIGN_HEIGHT}`,
-        // Matches the background-glow gradient's own outer edge color
-        // (#040815) so the glow's inset box doesn't create a visible seam
-        // against the base background.
         background: "#040815",
       }}
     >
