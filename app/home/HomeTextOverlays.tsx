@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from "react";
+import DesignBox from "@/components/layout/DesignBox";
 import {
   HOME_BACKGROUND_DESIGN_HEIGHT,
   HOME_BACKGROUND_DESIGN_WIDTH,
@@ -7,45 +7,6 @@ import {
 const PIXEL_GLOW =
   "0 0 8px rgba(255, 255, 255, 0.85), 0 0 18px rgba(255, 245, 230, 0.45)";
 const SOFT_GLOW = "0 0 10px rgba(255, 255, 255, 0.35)";
-
-type BoxProps = {
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-  zIndex?: number;
-  className?: string;
-  style?: CSSProperties;
-  children: ReactNode;
-};
-
-function DesignBox({
-  left,
-  top,
-  width,
-  height,
-  zIndex = 9,
-  className = "",
-  style,
-  children,
-}: BoxProps) {
-  return (
-    <div
-      className={`absolute ${className}`}
-      style={{
-        left: `${(left / HOME_BACKGROUND_DESIGN_WIDTH) * 100}%`,
-        top: `${(top / HOME_BACKGROUND_DESIGN_HEIGHT) * 100}%`,
-        width: `${(width / HOME_BACKGROUND_DESIGN_WIDTH) * 100}%`,
-        height: `${(height / HOME_BACKGROUND_DESIGN_HEIGHT) * 100}%`,
-        zIndex,
-        containerType: "size",
-        ...style,
-      }}
-    >
-      {children}
-    </div>
-  );
-}
 
 type StatProps = {
   left: number;
@@ -59,6 +20,8 @@ type StatProps = {
 function StatBlock({ left, top, width, height, value, lines }: StatProps) {
   return (
     <DesignBox
+      designWidth={HOME_BACKGROUND_DESIGN_WIDTH}
+      designHeight={HOME_BACKGROUND_DESIGN_HEIGHT}
       left={left}
       top={top}
       width={width}
@@ -95,10 +58,13 @@ export default function HomeTextOverlays() {
         quadrant of an ellipse so it sits on the hill and curves right.
       */}
       <DesignBox
+        designWidth={HOME_BACKGROUND_DESIGN_WIDTH}
+        designHeight={HOME_BACKGROUND_DESIGN_HEIGHT}
         left={112.5}
         top={670}
         width={1624.44}
         height={529.77}
+        zIndex={9}
         className="overflow-visible"
         style={{
           transform: "rotate(3deg)",
@@ -136,10 +102,13 @@ export default function HomeTextOverlays() {
       </DesignBox>
 
       <DesignBox
+        designWidth={HOME_BACKGROUND_DESIGN_WIDTH}
+        designHeight={HOME_BACKGROUND_DESIGN_HEIGHT}
         left={755.55}
         top={1022.18}
         width={665}
         height={348}
+        zIndex={9}
         className="flex flex-col text-white"
       >
         <h2

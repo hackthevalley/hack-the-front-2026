@@ -7,9 +7,10 @@
 }
 
 @font-face {
-  font-family: 'VCR OSD Mono';
-  src: url('/fonts/VCROSDMono.woff2') format('woff2'),
-       url('/fonts/VCROSDMono.ttf') format('truetype');
+  font-family: "VCR OSD Mono";
+  src:
+    url("/fonts/VCROSDMono.woff2") format("woff2"),
+    url("/fonts/VCROSDMono.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -21,7 +22,7 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-figtree: var(--font-figtree-family);
-  --font-vcr: 'VCR OSD Mono', monospace;
+  --font-vcr: "VCR OSD Mono", monospace;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -35,4 +36,103 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes team-shelf-scroll-right {
+  from {
+    transform: translateX(calc(var(--marquee-travel) * -1));
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes team-shelf-scroll-left {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(calc(var(--marquee-travel) * -1));
+  }
+}
+
+.team-shelf-marquee-item {
+  animation-duration: var(--marquee-duration);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.team-shelf-marquee-item--right {
+  animation-name: team-shelf-scroll-right;
+}
+
+.team-shelf-marquee-item--left {
+  animation-name: team-shelf-scroll-left;
+}
+
+.team-shelf-tooltip {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease;
+}
+
+@media (hover: hover) {
+  .team-shelf-row:has(.team-shelf-hover-trigger:hover) .team-shelf-marquee-item {
+    animation-play-state: paused;
+  }
+
+  .team-shelf-marquee-item:has(.team-shelf-hover-trigger:hover) .team-shelf-tooltip {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .team-shelf-marquee-item:has(.team-shelf-hover-trigger:hover) {
+    z-index: 50 !important;
+  }
+
+  .team-shelf-marquee-item:has(.team-shelf-hover-trigger:hover) .team-shelf-jar-glow {
+    filter:
+      drop-shadow(0 0 1px rgba(255, 255, 255, 0.2))
+      drop-shadow(0 0 4px rgba(152, 174, 244, 0.3))
+      drop-shadow(0 0 7px rgba(112, 204, 200, 0.2));
+  }
+}
+
+.team-shelf-row:has(.team-shelf-hover-trigger.is-tapped, .team-shelf-hover-trigger:focus-visible) .team-shelf-marquee-item {
+  animation-play-state: paused;
+}
+
+.team-shelf-marquee-item:has(.team-shelf-hover-trigger.is-tapped, .team-shelf-hover-trigger:focus-visible) {
+  z-index: 50 !important;
+}
+
+.team-shelf-marquee-item:has(.team-shelf-hover-trigger:focus-visible) .team-shelf-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.team-shelf-canvas {
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .team-shelf-canvas {
+    width: 220%;
+    margin-left: -60%;
+  }
+
+  .team-shelf-edge-blocker {
+    pointer-events: none;
+  }
+}
+
+.team-shelf-jar-glow {
+  transition: filter 0.2s ease;
+}
+
+.team-shelf-marquee-item:has(.team-shelf-hover-trigger.is-tapped) .team-shelf-jar-glow {
+  filter:
+    drop-shadow(0 0 1px rgba(255, 255, 255, 0.2))
+    drop-shadow(0 0 4px rgba(152, 174, 244, 0.3))
+    drop-shadow(0 0 7px rgba(112, 204, 200, 0.2));
 }
