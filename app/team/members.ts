@@ -57,10 +57,10 @@ export const teamMembers: Record<string, TeamMember> = {
     avatarSrc: resolvePhoto("jinie"),
   },
   "shelf-1-jar-10": {
-    id: "jessica",
-    name: "Jessica Ocampo",
-    role: "Director of Design",
-    avatarSrc: resolvePhoto("jessica"),
+    id: "tony",
+    name: "Tony Park",
+    role: "Marketing Coordinator",
+    avatarSrc: resolvePhoto("tony"),
   },
   "shelf-1-jar-11": {
     id: "amanda",
@@ -69,10 +69,10 @@ export const teamMembers: Record<string, TeamMember> = {
     avatarSrc: resolvePhoto("amanda"),
   },
   "shelf-2-jar-1": {
-    id: "tony",
-    name: "Tony Park",
-    role: "Marketing Coordinator",
-    avatarSrc: resolvePhoto("tony"),
+    id: "jessica",
+    name: "Jessica Ocampo",
+    role: "Director of Design",
+    avatarSrc: resolvePhoto("jessica"),
   },
   "shelf-2-jar-2": {
     id: "chavi",
