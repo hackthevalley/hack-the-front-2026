@@ -1,0 +1,17 @@
+<svg preserveAspectRatio="none" width="255" height="94" viewBox="0 0 255 94" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="rocks">
+<path id="Vector 336" d="M143.355 93.443C87.5656 95.9342 77.0957 53.7915 80.4164 32.4087C83.7372 11.026 267.055 13.1019 253.564 32.4087C240.073 51.7155 199.144 90.9518 143.355 93.443Z" fill="url(#paint0_linear_3007_3068)"/>
+<path id="Vector 337" d="M69.2802 43.0438C13.6241 45.541 -20.7874 14.7374 13.9976 6.72796C48.7826 -1.28146 94.7486 -3.15511 117.714 6.72796C140.679 16.611 124.936 40.5467 69.2802 43.0438Z" fill="url(#paint1_linear_3007_3068)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_3007_3068" x1="187.454" y1="-17.8725" x2="132.98" y2="141.071" gradientUnits="userSpaceOnUse">
+<stop offset="0.00370806" stop-color="#192985"/>
+<stop offset="1" stop-color="#F6C7FC"/>
+</linearGradient>
+<linearGradient id="paint1_linear_3007_3068" x1="31.3588" y1="-41.9732" x2="22.3716" y2="44.5537" gradientUnits="userSpaceOnUse">
+<stop offset="0.00370806" stop-color="#2136AE"/>
+<stop offset="1" stop-color="#F6C7FC"/>
+</linearGradient>
+</defs>
+</svg>
+

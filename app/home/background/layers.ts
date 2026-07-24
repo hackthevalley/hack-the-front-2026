@@ -7,7 +7,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   // Upper scene
   {
     id: "tree-overhead",
-    src: "/home/background/tree-overhead.png",
+    src: "/home/background/tree-overhead.svg",
     left: -46.65,
     top: 0,
     width: 1605.32,
@@ -16,7 +16,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "tree-overhead-front",
-    src: "/home/background/tree-overhead-front.png",
+    src: "/home/background/tree-overhead-front.svg",
     left: -46.65,
     top: -37.33,
     width: 1605.32,
@@ -25,7 +25,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "trees",
-    src: "/home/background/trees.png",
+    src: "/home/background/trees.svg",
     left: -146.97,
     top: -162.0,
     width: 1537.42,
@@ -34,7 +34,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "front-tree",
-    src: "/home/background/front-tree.png",
+    src: "/home/background/front-tree.svg",
     left: 1100.63,
     top: -130.51,
     width: 591.32,
@@ -43,7 +43,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "tree",
-    src: "/home/background/tree.png",
+    src: "/home/background/tree.svg",
     left: 14.8,
     top: -129.81,
     width: 455.85,
@@ -53,7 +53,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "grass-top",
-    src: "/home/background/grass-top.png",
+    src: "/home/background/grass-top.svg",
     left: -133.65,
     top: 351.86,
     width: 402.41,
@@ -62,7 +62,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "bg-leaves-left",
-    src: "/home/background/bg-leaves-left.png",
+    src: "/home/background/bg-leaves-left.svg",
     left: 70.32,
     top: 598.48,
     width: 53.81,
@@ -71,7 +71,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "bg-leaves-middle",
-    src: "/home/background/bg-leaves-middle.png",
+    src: "/home/background/bg-leaves-middle.svg",
     left: 326.06,
     top: 528.72,
     width: 69.93,
@@ -80,7 +80,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "bg-leaves-rigt",
-    src: "/home/background/bg-leaves-right.png",
+    src: "/home/background/bg-leaves-right.svg",
     left: 751.18,
     top: 544.55,
     width: 53.81,
@@ -89,7 +89,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "bgbg",
-    src: "/home/background/bgbg.png",
+    src: "/home/background/bgbg.svg",
     left: -21.05,
     top: 421.06,
     width: 1569.39,
@@ -98,7 +98,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "ground-bg",
-    src: "/home/background/ground-bg.png",
+    src: "/home/background/ground-bg.svg",
     left: -30.93,
     top: 512.15,
     width: 1572.96,
@@ -107,7 +107,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "cabin-ground",
-    src: "/home/background/cabin-ground.png",
+    src: "/home/background/cabin-ground.svg",
     left: -382.57,
     top: 372.38,
     width: 2409.93,
@@ -116,7 +116,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "cabin",
-    src: "/home/background/cabin.png",
+    src: "/home/background/cabin.svg",
     left: 800.37,
     top: 137.49,
     width: 685.67,
@@ -125,7 +125,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "cabin-frame",
-    src: "/home/background/cabin-frame.png",
+    src: "/home/background/cabin-frame.svg",
     left: 808.552734375,
     top: 137.48828125,
     width: 677.49,
@@ -134,7 +134,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "upper-grass",
-    src: "/home/background/upper-grass.png",
+    src: "/home/background/upper-grass.svg",
     left: -133.65,
     top: 351.8623046875,
     width: 402.41,
@@ -143,7 +143,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "left-mushroom",
-    src: "/home/background/left-mushroom.png",
+    src: "/home/background/left-mushroom.svg",
     left: -69.02,
     top: 624.04,
     width: 480.57,
@@ -152,7 +152,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "right-mushroom",
-    src: "/home/background/right-mushroom.png",
+    src: "/home/background/right-mushroom.svg",
     left: 100.83,
     top: 762.05,
     width: 452.27,
@@ -161,16 +161,16 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "upper-sparkles",
-    src: "/home/background/upper-sparkles.png",
-    left: 143.84,
+    src: "/home/background/upper-sparkles.svg",
+    left: 144.84,
     top: 107.63,
-    width: 1341.2,
-    height: 2342.2,
+    width: 1653.2,
+    height: 3216.06,
     zIndex: 7,
   },
   {
     id: "rocks-mid",
-    src: "/home/background/rocks-mid.png",
+    src: "/home/background/rocks-mid.svg",
     left: 245.63,
     top: 1033.46,
     width: 222.67,
@@ -180,7 +180,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   // About us section
   {
     id: "path",
-    src: "/home/background/path.png",
+    src: "/home/background/path.svg",
     left: -12.35,
     top: 810.24,
     width: 1540.2879638671875,
@@ -190,7 +190,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   // Bottom section
   {
     id: "about-ground",
-    src: "/home/background/about-ground.png",
+    src: "/home/background/about-ground.svg",
     left: -21.05,
     top: 988.97,
     width: 1554.0987548828125,
@@ -199,7 +199,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "grasses",
-    src: "/home/background/grasses.png",
+    src: "/home/background/grasses.svg",
     left: -7.33,
     top: 903.42,
     width: 480.6872863769531,
@@ -208,7 +208,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "rocks",
-    src: "/home/background/rocks.png",
+    src: "/home/background/rocks.svg",
     left: 249.0513,
     top: 1302.4503,
     width: 254.2735,
@@ -218,7 +218,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "leaves1",
-    src: "/home/background/leaves1.png",
+    src: "/home/background/leaves1.svg",
     left: -61.35,
     top: 1289.2,
     width: 273.2554073660684,
@@ -228,7 +228,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "leaves2",
-    src: "/home/background/leaves2.png",
+    src: "/home/background/leaves2.svg",
     left: -43.8,
     top: 1757.2,
     width: 273.2546544140124,
@@ -238,7 +238,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "leaves4",
-    src: "/home/background/leaves4.png",
+    src: "/home/background/leaves4.svg",
     left: 1325.7,
     top: 1425.2,
     width: 273.254641678237,
@@ -248,7 +248,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "leaves6",
-    src: "/home/background/leaves6.png",
+    src: "/home/background/leaves6.svg",
     left: -43.7461,
     top: 1435.8555,
     width: 407.4272,
@@ -257,7 +257,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "leaves7",
-    src: "/home/background/leaves7.png",
+    src: "/home/background/leaves7.svg",
     left: 1217.502,
     top: 1585.5488,
     width: 374.6788,
@@ -266,7 +266,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "first-stump",
-    src: "/home/background/first-stump.png",
+    src: "/home/background/first-stump.svg",
     left: 240.5283,
     top: 1641.627,
     width: 595.5572,
@@ -283,7 +283,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "second-stump",
-    src: "/home/background/second-stump.png",
+    src: "/home/background/second-stump.svg",
     left: 848.544,
     top: 1808.6274,
     width: 462.9641,
@@ -300,7 +300,7 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
   },
   {
     id: "third-stump",
-    src: "/home/background/third-stump.png",
+    src: "/home/background/third-stump.svg",
     left: 370.6692,
     top: 2021.2324,
     width: 554.6922,
