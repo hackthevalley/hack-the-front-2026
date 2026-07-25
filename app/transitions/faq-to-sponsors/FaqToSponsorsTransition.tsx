@@ -43,12 +43,22 @@ export default function FaqToSponsorsTransition({
               zIndex: layer.zIndex,
             }}
           >
-            <img
-              src={layer.src}
-              alt=""
-              draggable="false"
+            <svg
+              width={layer.width}
+              height={layer.height}
+              viewBox={`0 0 ${layer.width} ${layer.height}`}
+              overflow="visible"
+              data-figma-rotation={layer.rotation}
               className="h-full w-full max-w-none select-none"
-            />
+            >
+              <image
+                href={layer.src}
+                width={layer.sourceWidth}
+                height={layer.sourceHeight}
+                preserveAspectRatio="none"
+                transform={`matrix(${layer.matrix.join(" ")})`}
+              />
+            </svg>
           </div>
         ))}
       </div>
