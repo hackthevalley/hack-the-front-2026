@@ -13,6 +13,10 @@ import {
 import FaqTitleOverlay from "./faq-themes/faq/FaqTitleOverlay";
 import HomeBackground from "./home/background/HomeBackground";
 import HomeTextOverlays from "./home/HomeTextOverlays";
+import SponsorsBackground from "./sponsors/background/SponsorsBackground";
+import SponsorsForeground from "./sponsors/foreground/SponsorsForeground";
+import SponsorsTextOverlays from "./sponsors/SponsorsTextOverlays";
+import FaqToSponsorsTransition from "./transitions/faq-to-sponsors/FaqToSponsorsTransition";
 import HomeToFaqTransition from "./transitions/home-to-faq/HomeToFaqTransition";
 
 export default function Home() {
@@ -88,6 +92,18 @@ export default function Home() {
             <FaqTitleOverlay />
           </div>
         </div>
+      </section>
+
+      <section
+        id="sponsors"
+        aria-labelledby="sponsors-title"
+        className="relative"
+      >
+        <SponsorsBackground stageWidth={faqStageWidth}>
+          <FaqToSponsorsTransition className="pointer-events-none z-[2]" />
+          <SponsorsForeground />
+          <SponsorsTextOverlays />
+        </SponsorsBackground>
       </section>
     </main>
   );
