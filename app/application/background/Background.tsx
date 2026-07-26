@@ -200,6 +200,24 @@ const LOOSE_STICKERS: Sticker[] = [
 const BACKDROP =
   "radial-gradient(120% 100% at 50% -10%, #241C6B 0%, #0B0730 55%, #05041C 100%)";
 
+// Soft vertical light-beam columns. Gradient runs the opposite way to the
+// backdrop (blue at top fading to black at the bottom) so they read as
+// light spilling down onto a floor that's dark at top / lit at bottom.
+type Column = {
+  id: string;
+  left: string;
+  width: string;
+  opacity: number;
+};
+
+const COLUMNS: Column[] = [
+  { id: "col-1", left: "8%", width: "50px", opacity: 0.35 },
+  { id: "col-2", left: "26%", width: "34px", opacity: 0.25 },
+  { id: "col-3", left: "50%", width: "60px", opacity: 0.3 },
+  { id: "col-4", left: "72%", width: "38px", opacity: 0.25 },
+  { id: "col-5", left: "90%", width: "46px", opacity: 0.35 },
+];
+
 export default function Background() {
   return (
     <div
@@ -207,6 +225,20 @@ export default function Background() {
       className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
       style={{ background: BACKDROP }}
     >
+      {COLUMNS.map((column) => (
+        <div
+          key={column.id}
+          className="absolute top-0 bottom-0 -translate-x-1/2"
+          style={{
+            left: column.left,
+            width: column.width,
+            opacity: column.opacity,
+            background:
+              "linear-gradient(180deg, #4A3FB8 0%, #241C6B 35%, #05041C 75%, #120D2E 100%)",
+            filter: "blur(12px)",
+          }}
+        />
+      ))}
       {CLUSTERS.map((cluster) => (
         <div key={cluster.id} className={cluster.wrapperClassName}>
           {cluster.stickers.map((sticker) => (

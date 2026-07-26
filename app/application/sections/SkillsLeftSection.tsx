@@ -9,7 +9,7 @@ import type { DevSkillsData } from "./data";
 
 const SKILL_LEVELS = ["Beginner", "Intermediate", "Advanced", "Expert"];
 
-const DevSkillsSection = React.forwardRef<
+const SkillsLeftSection = React.forwardRef<
   SectionHandle,
   SectionProps<DevSkillsData>
 >(({ value, onChange, onValidityChange }, ref) => {
@@ -81,6 +81,6 @@ const DevSkillsSection = React.forwardRef<
   );
 });
 
-DevSkillsSection.displayName = "DevSkillsSection";
+SkillsLeftSection.displayName = "SkillsLeftSection";
 
-export default DevSkillsSection;
+export default SkillsLeftSection;

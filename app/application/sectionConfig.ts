@@ -2,14 +2,15 @@ import type { ComponentType } from "react";
 import AboutSection from "./sections/AboutSection";
 import CustomSection from "./sections/CustomSection";
 import DemographySection from "./sections/DemographySection";
-import DevSkillsSection from "./sections/DevSkillsSection";
+import SkillsLeftSection from "./sections/SkillsLeftSection";
 import ExperienceSection from "./sections/ExperienceSection";
 import GeneralSection from "./sections/GeneralSection";
 import MlhSection from "./sections/MlhSection";
-import OtherSkillsSection from "./sections/OtherSkillsSection";
+import SkillsRightSection from "./sections/SkillsRightSection";
 import PortfolioSection from "./sections/PortfolioSection";
 import SchoolSection from "./sections/SchoolSection";
-import ReviewSection from "./sections/ReviewSection";
+import ReviewSectionRight from "./sections/ReviewSectionRight";
+import ReviewSectionLeft from "./sections/ReviewSectionLeft";
 import WelcomeSection from "./sections/WelcomeSection";
 import type {
   AboutData,
@@ -151,8 +152,8 @@ export const SECTION_GROUPS: SectionGroup[] = [
         id: "otherSkills",
         leftId: "devSkills",
         title: "Skill Confidence",
-        Left: DevSkillsSection,
-        Right: OtherSkillsSection,
+        Left: SkillsLeftSection,
+        Right: SkillsRightSection,
       },
     ],
   },
@@ -175,9 +176,10 @@ export const SECTION_GROUPS: SectionGroup[] = [
     steps: [
       {
         id: "review",
+        leftId: "review",
         title: "Review",
-        Left: WelcomeSection,
-        Right: ReviewSection,
+        Left: ReviewSectionLeft,
+        Right: ReviewSectionRight,
       },
     ],
   },

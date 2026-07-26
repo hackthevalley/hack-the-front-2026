@@ -9,7 +9,7 @@ import type { OtherSkillsData } from "./data";
 
 const SKILL_LEVELS = ["Beginner", "Intermediate", "Advanced", "Expert"];
 
-const OtherSkillsSection = React.forwardRef<
+const SkillsRightSection = React.forwardRef<
   SectionHandle,
   SectionProps<OtherSkillsData>
 >(({ value, onChange, onValidityChange }, ref) => {
@@ -38,8 +38,8 @@ const OtherSkillsSection = React.forwardRef<
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Invisible spacer matching Dev Skills' heading, so this panel's
-       * fields line up with UI/UX Design on the opposite panel. */}
+      {/* Invisible spacer matching SkillsLeftSection's heading, so this
+       * panel's fields line up with UI/UX Design on the opposite panel. */}
       <SectionHeading className="invisible text-lg">
         Tell Us How Comfy You Feel With...
       </SectionHeading>
@@ -91,6 +91,6 @@ const OtherSkillsSection = React.forwardRef<
   );
 });
 
-OtherSkillsSection.displayName = "OtherSkillsSection";
+SkillsRightSection.displayName = "SkillsRightSection";
 
-export default OtherSkillsSection;
+export default SkillsRightSection;

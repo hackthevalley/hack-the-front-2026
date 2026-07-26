@@ -237,6 +237,10 @@ function TextField(
               type === "number" ? "numeric" : type === "tel" ? "tel" : undefined
             }
             pattern={type === "number" ? "[0-9]*" : undefined}
+            // Backs up the JS truncation in handleChange with a hard DOM cap —
+            // on mobile keyboards, an input event can render a keystroke before
+            // React's controlled-value re-render catches up and trims it.
+            maxLength={type === "tel" ? 12 : undefined}
             aria-invalid={error !== null}
             aria-describedby={error ? errorId : undefined}
             className={`

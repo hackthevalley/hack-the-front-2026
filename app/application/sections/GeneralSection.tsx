@@ -49,6 +49,7 @@ const GeneralSection = React.forwardRef<
       <Dropdown
         ref={tshirtRef}
         name="T-Shirt Size"
+        required
         options={TSHIRT_SIZES}
         value={value.tshirtSize}
         onChange={(v) => set("tshirtSize", v)}
