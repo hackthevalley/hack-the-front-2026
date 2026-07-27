@@ -60,4 +60,14 @@ export type MlhData = {
 
 export type ReviewData = Record<string, never>;
 
-export type PlaceholderData = Record<string, never>;
+export type AvatarKey = "owl" | "bear" | "chipmunk" | "raccoon";
+
+export type AccessoryKey = "hat" | "book" | "potion";
+
+export type CharacterData = {
+  character: AvatarKey | "";
+};
+
+export type AccessoryData = {
+  accessory: AccessoryKey | "";
+};

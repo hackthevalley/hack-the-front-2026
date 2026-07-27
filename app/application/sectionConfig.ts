@@ -1,6 +1,9 @@
 import type { ComponentType } from "react";
 import AboutSection from "./sections/AboutSection";
-import CustomSection from "./sections/CustomSection";
+import AccessoryLeftSection from "./sections/AccessoryLeftSection";
+import AccessoryRightSection from "./sections/AccessoryRightSection";
+import CharacterLeftSection from "./sections/CharacterLeftSection";
+import CharacterRightSection from "./sections/CharacterRightSection";
 import DemographySection from "./sections/DemographySection";
 import SkillsLeftSection from "./sections/SkillsLeftSection";
 import ExperienceSection from "./sections/ExperienceSection";
@@ -14,13 +17,14 @@ import ReviewSectionLeft from "./sections/ReviewSectionLeft";
 import WelcomeSection from "./sections/WelcomeSection";
 import type {
   AboutData,
+  AccessoryData,
+  CharacterData,
   CustomData,
   DemographyData,
   DevSkillsData,
   ExperienceData,
   MlhData,
   OtherSkillsData,
-  PlaceholderData,
   PortfolioData,
   ReviewData,
   SchoolData,
@@ -31,7 +35,8 @@ export type WizardFormData = {
   school: SchoolData;
   demography: DemographyData;
   custom: CustomData;
-  customPlaceholder: PlaceholderData;
+  customCharacter: CharacterData;
+  customAccessory: AccessoryData;
   experience: ExperienceData;
   portfolio: PortfolioData;
   devSkills: DevSkillsData;
@@ -59,7 +64,8 @@ export const initialFormData: WizardFormData = {
     disability: "",
   },
   custom: { tshirtSize: "", dietaryRestrictions: "" },
-  customPlaceholder: {},
+  customCharacter: { character: "" },
+  customAccessory: { accessory: "" },
   experience: { hackathonCount: "", github: "", linkedin: "" },
   portfolio: { portfolio: "", resume: null },
   devSkills: { uiux: "", frontend: "", backend: "", fullstack: "" },
@@ -130,10 +136,18 @@ export const SECTION_GROUPS: SectionGroup[] = [
     label: "Custom",
     steps: [
       {
-        id: "customPlaceholder",
-        title: "Custom",
-        Left: WelcomeSection,
-        Right: CustomSection,
+        id: "customCharacter",
+        leftId: "customCharacter",
+        title: "Choose An Avatar",
+        Left: CharacterLeftSection,
+        Right: CharacterRightSection,
+      },
+      {
+        id: "customAccessory",
+        leftId: "customAccessory",
+        title: "Choose An Accessory",
+        Left: AccessoryLeftSection,
+        Right: AccessoryRightSection,
       },
     ],
   },
