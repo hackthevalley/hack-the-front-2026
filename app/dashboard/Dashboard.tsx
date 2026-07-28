@@ -30,14 +30,14 @@ const STATUS_DETAILS: Record<
   },
   pending: {
     title: "Pending",
-    titleColor: "#ffffff",
+    titleColor: "#d1d5db",
     action: "Open",
     disabled: false,
     potionClass: "grayscale",
   },
   "not-submitted": {
     title: "Not Submitted",
-    titleColor: "#ffffff",
+    titleColor: "#d1d5db",
     action: "Application Closed",
     disabled: true,
     potionClass: "grayscale",
@@ -78,6 +78,7 @@ function Art({ src, className }: ArtProps) {
 export default function Dashboard({ status }: { status: DashboardStatus }) {
   const router = useRouter();
   const current = STATUS_DETAILS[status];
+  const isNotSubmitted = status === "not-submitted";
 
   return (
     <main className="relative h-dvh min-h-[520px] overflow-hidden bg-[radial-gradient(circle_at_50%_55%,#171b70_0%,#0d0a46_42%,#07021d_100%)] text-white">
@@ -190,7 +191,7 @@ export default function Dashboard({ status }: { status: DashboardStatus }) {
           className="left-[-3.66%] top-[65.27%] h-[39.87%] w-[26.92%]"
         />
         <div className="pointer-events-none absolute left-[-9.66%] top-[70.95%] flex h-[43.57%] w-[25.35%] items-center justify-center">
-          <div className="relative h-[92.1%] w-[89.75%] flex-none rotate-[174deg] -scale-y-100">
+          <div className="relative h-[92.1%] w-[89.75%] flex-none rotate-174 -scale-y-100">
             <img
               src="/dashboard/left-leaves.svg"
               alt=""
@@ -231,7 +232,7 @@ export default function Dashboard({ status }: { status: DashboardStatus }) {
           directionIconSrc="/dashboard/chevron-left.svg"
           directionTextClassName="font-figtree text-[24px] font-normal leading-[29px]"
           onClick={() => router.push("/")}
-          className="absolute left-[6.68%] top-[13.14%] z-20 h-[29px] w-[83px]"
+          className="absolute left-[6.68%] top-[13.14%] z-20 h-7.25 w-20.75"
         />
 
         <h1 className="absolute left-1/2 top-[17.62%] z-10 -translate-x-1/2 whitespace-nowrap font-vcr text-[clamp(32px,4.23vw,64px)] leading-none tracking-[0.02em] [text-shadow:0_0_10px_rgba(255,255,255,.9),0_0_18px_#7075ff]">
@@ -244,7 +245,11 @@ export default function Dashboard({ status }: { status: DashboardStatus }) {
         >
           <Art
             src="/dashboard/wooden-board.svg"
-            className="inset-0 h-full w-full"
+            className={
+              isNotSubmitted
+                ? "inset-0 h-full w-full origin-left scale-x-[1.1446]"
+                : "inset-0 h-full w-full"
+            }
           />
           <Art
             src="/dashboard/status-potion.svg"
