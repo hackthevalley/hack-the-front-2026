@@ -230,6 +230,7 @@ export default function Dashboard({ status }: { status: DashboardStatus }) {
           buttonType="direction"
           direction="back"
           directionIconSrc="/dashboard/chevron-left.svg"
+          directionIconRotation={0}
           directionTextClassName="font-figtree text-[24px] font-normal leading-[29px]"
           onClick={() => router.push("/")}
           className="absolute left-[6.68%] top-[13.14%] z-20 h-7.25 w-20.75"
