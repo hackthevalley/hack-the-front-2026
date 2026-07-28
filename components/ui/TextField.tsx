@@ -27,6 +27,7 @@ type ErrorMessages = {
 type TextFieldProps = {
   name: string;
   placeholder?: string;
+  autoComplete?: React.HTMLInputAutoCompleteAttribute;
   required?: boolean;
   type?: TextFieldType;
   /** Enforce the strength rule (8+ chars, a capital, a number). Use for sign-up, not login. */
@@ -75,6 +76,7 @@ function TextField(
   {
     name,
     placeholder = "",
+    autoComplete,
     required = false,
     type = "text",
     requireStrongPassword = false,
@@ -246,7 +248,9 @@ function TextField(
 
           <input
             id={fieldId}
+            name={name}
             type={inputType}
+            autoComplete={autoComplete}
             value={value}
             onChange={handleChange}
             onBlur={validate}

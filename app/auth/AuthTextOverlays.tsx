@@ -1,16 +1,67 @@
+"use client";
+
+import * as React from "react";
+import { useRouter } from "next/navigation";
 import DesignBox from "@/components/layout/DesignBox";
 import Button from "@/components/ui/Button";
 import TextField from "@/components/ui/TextField";
+import { isValidEmail } from "@/components/ui/validation";
 import {
   AUTH_BACKGROUND_DESIGN_HEIGHT,
   AUTH_BACKGROUND_DESIGN_WIDTH,
 } from "./background/layers";
 
 const TITLE_GLOW = "0 0 16.6px #FEE9D3";
+const DEMO_EMAIL = "hacker@hackthevalley.io";
+const DEMO_PASSWORD = "Password1";
+const EMAIL_ERROR = "Please enter a valid email.";
+const CREDENTIAL_ERROR = "Email or password incorrect";
 
 export default function AuthTextOverlays() {
+  const router = useRouter();
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [emailError, setEmailError] = React.useState<string | null>(null);
+  const [credentialError, setCredentialError] = React.useState<string | null>(null);
+
+  const canSubmit = email.trim().length > 0 && password.length > 0;
+
+  function handleEmailChange(value: string) {
+    setEmail(value);
+    setCredentialError(null);
+
+    if (emailError && isValidEmail(value)) {
+      setEmailError(null);
+    }
+  }
+
+  function handlePasswordChange(value: string) {
+    setPassword(value);
+    setCredentialError(null);
+  }
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!canSubmit) return;
+
+    if (!isValidEmail(email)) {
+      setEmailError(EMAIL_ERROR);
+      setCredentialError(null);
+      return;
+    }
+
+    setEmailError(null);
+
+    if (email.trim().toLowerCase() === DEMO_EMAIL && password === DEMO_PASSWORD) {
+      router.push("/application");
+      return;
+    }
+
+    setCredentialError(CREDENTIAL_ERROR);
+  }
+
   return (
-    <section aria-labelledby="auth-title">
+    <form aria-labelledby="auth-title" noValidate onSubmit={handleSubmit}>
       <DesignBox
         designWidth={AUTH_BACKGROUND_DESIGN_WIDTH}
         designHeight={AUTH_BACKGROUND_DESIGN_HEIGHT}
@@ -59,7 +110,38 @@ export default function AuthTextOverlays() {
         height={98}
         zIndex={40}
       >
-        <TextField name="Email" placeholder="Enter Email" type="email" theme="auth" />
+        <TextField
+          name="Email"
+          placeholder="Enter Email"
+          type="email"
+          theme="auth"
+          autoComplete="email"
+          value={email}
+          onChange={handleEmailChange}
+          onValidityChange={(hasError) =>
+            setEmailError(hasError ? EMAIL_ERROR : null)
+          }
+        />
+      </DesignBox>
+
+      <DesignBox
+        designWidth={AUTH_BACKGROUND_DESIGN_WIDTH}
+        designHeight={AUTH_BACKGROUND_DESIGN_HEIGHT}
+        left={434}
+        top={493}
+        width={430}
+        height={28}
+        zIndex={45}
+        className="font-figtree font-normal leading-[normal] text-[#FFDADA]"
+      >
+        <p
+          role="alert"
+          aria-hidden={!emailError}
+          className={`m-0 whitespace-nowrap ${emailError ? "" : "invisible"}`}
+          style={{ fontSize: "71.429cqh" }}
+        >
+          {emailError ?? EMAIL_ERROR}
+        </p>
       </DesignBox>
 
       <DesignBox
@@ -76,7 +158,36 @@ export default function AuthTextOverlays() {
           placeholder="Enter Password"
           type="password"
           theme="auth"
+          autoComplete="current-password"
+          value={password}
+          onChange={handlePasswordChange}
         />
+      </DesignBox>
+
+      <DesignBox
+        designWidth={AUTH_BACKGROUND_DESIGN_WIDTH}
+        designHeight={AUTH_BACKGROUND_DESIGN_HEIGHT}
+        left={390}
+        top={648}
+        width={470}
+        height={29}
+        zIndex={45}
+        className="flex items-center gap-[2cqw] font-figtree font-normal leading-[normal] text-[#FFDADA]"
+      >
+        <img
+          src="/icons/news-signup-error.svg"
+          alt=""
+          aria-hidden="true"
+          className={`h-[68.966cqh] w-auto shrink-0 ${credentialError ? "" : "invisible"}`}
+        />
+        <p
+          role="alert"
+          aria-hidden={!credentialError}
+          className={`m-0 whitespace-nowrap ${credentialError ? "" : "invisible"}`}
+          style={{ fontSize: "68.966cqh" }}
+        >
+          {credentialError ?? CREDENTIAL_ERROR}
+        </p>
       </DesignBox>
 
       <DesignBox
@@ -106,7 +217,7 @@ export default function AuthTextOverlays() {
       >
         <Button
           text="Log In"
-          buttonType="disabled"
+          buttonType={canSubmit ? "primary" : "disabled"}
           width="100%"
           fontSize={24}
           className="h-full"
@@ -128,6 +239,6 @@ export default function AuthTextOverlays() {
           <span className="text-[#EAEFFF]">Sign up.</span>
         </p>
       </DesignBox>
-    </section>
+    </form>
   );
 }
