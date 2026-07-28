@@ -8,7 +8,15 @@ import {
   AUTH_BACKGROUND_DESIGN_WIDTH,
 } from "./background/layers";
 
-export default function AuthBackButton() {
+type AuthBackButtonProps = {
+  href?: string;
+  onClick?: () => void;
+};
+
+export default function AuthBackButton({
+  href = "/",
+  onClick,
+}: AuthBackButtonProps) {
   const router = useRouter();
 
   return (
@@ -30,7 +38,7 @@ export default function AuthBackButton() {
         directionIconSize="77.871cqh"
         directionGap="17.778cqh"
         fontSize="82.222cqh"
-        onClick={() => router.push("/")}
+        onClick={onClick ?? (() => router.push(href))}
         className="h-full w-full"
       />
     </DesignBox>
