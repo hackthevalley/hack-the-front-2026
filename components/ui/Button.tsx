@@ -16,6 +16,12 @@ type ButtonProps = {
   directionIconSrc?: string;
   /** Overrides the direction label typography without changing other variants. */
   directionTextClassName?: string;
+  /** Direction buttons are circled by default; focused flows can opt into a plain icon. */
+  directionAppearance?: "circled" | "plain";
+  directionIconSize?: number | string;
+  directionGap?: number | string;
+  /** Rotation applied to an exported direction icon. */
+  directionIconRotation?: number;
   onClick?: () => void;
   width?: number | string;
   /** Overrides the default button artwork ratio for compact design variants. */
@@ -23,7 +29,7 @@ type ButtonProps = {
   /** Uses the compact 240 × 56 artwork geometry from the dashboard design. */
   artworkVariant?: "default" | "compact";
   /** Optional design-frame font size. Defaults to the shared 20px label size. */
-  fontSize?: number;
+  fontSize?: number | string;
   /** Only used when buttonType is "direction" — the "disabled" buttonType covers
    * the primary/disabled pair instead. Grays out the button and blocks onClick. */
   disabled?: boolean;
@@ -87,6 +93,10 @@ function pxToCqw(value: number): string {
 
 function gradientBorder(gradient: string): string {
   return `linear-gradient(#0000, #0000) padding-box, ${gradient} border-box`;
+}
+
+function toCssSize(value: number | string): string {
+  return typeof value === "number" ? `${value}px` : value;
 }
 
 const LAYERS: readonly LayerConfig[] = [
@@ -172,8 +182,12 @@ export default function Button({
   text,
   buttonType = "primary",
   direction = "next",
+  directionAppearance = "circled",
   directionIconSrc,
   directionTextClassName,
+  directionIconSize = 24,
+  directionGap = 8,
+  directionIconRotation,
   onClick,
   className = "",
   width,
@@ -184,6 +198,44 @@ export default function Button({
 }: ButtonProps) {
   if (buttonType === "direction") {
     const isBack = direction === "back";
+    const isPlain = directionAppearance === "plain";
+
+    const directionIcon = (
+      <span
+        className={`flex shrink-0 items-center justify-center ${
+          isPlain
+            ? ""
+            : `rounded-full border-2 ${
+                disabled ? "border-white/40" : "border-white"
+              }`
+        }`}
+        style={{
+          width: toCssSize(directionIconSize),
+          height: toCssSize(directionIconSize),
+        }}
+      >
+        {directionIconSrc ? (
+          <img
+            src={directionIconSrc}
+            alt=""
+            aria-hidden="true"
+            className="block max-w-none"
+            style={{
+              width: "75.8%",
+              height: "44.22%",
+              transform: `rotate(${
+                directionIconRotation ?? (isBack ? -90 : 90)
+              }deg)`,
+            }}
+          />
+        ) : (
+          <ChevronIcon
+            direction={isBack ? "left" : "right"}
+            className={isPlain ? "h-[44.22%] w-[75.8%]" : "h-3 w-3"}
+          />
+        )}
+      </span>
+    );
 
     return (
       <button
@@ -191,54 +243,26 @@ export default function Button({
         onClick={disabled ? undefined : onClick}
         disabled={disabled}
         aria-disabled={disabled}
-        className={`inline-flex items-center gap-2 border-0 bg-transparent p-0 text-white transition-opacity ${
+        className={`inline-flex items-center border-0 bg-transparent p-0 text-white transition-opacity ${
           disabled
             ? "cursor-not-allowed opacity-40"
             : "cursor-pointer hover:opacity-70"
         } ${className}`}
+        style={{ gap: toCssSize(directionGap) }}
       >
-        {isBack && directionIconSrc && (
-          <img
-            src={directionIconSrc}
-            alt=""
-            aria-hidden="true"
-            className="h-6 w-6 shrink-0"
-          />
-        )}
-        {isBack && !directionIconSrc && (
-          <span
-            className={`flex h-6 w-6 items-center justify-center rounded-full border-2 ${
-              disabled ? "border-white/40" : "border-white"
-            }`}
-          >
-            <ChevronIcon direction="left" className="h-3 w-3" />
-          </span>
-        )}
+        {isBack ? directionIcon : null}
         <span
           className={
             directionTextClassName ??
-            `${figtree.className} text-[20px] font-semibold`
+            `${figtree.className} font-semibold leading-[normal]`
           }
+          style={{
+            fontSize: directionTextClassName ? undefined : toCssSize(fontSize),
+          }}
         >
           {text}
         </span>
-        {!isBack && directionIconSrc && (
-          <img
-            src={directionIconSrc}
-            alt=""
-            aria-hidden="true"
-            className="h-6 w-6 shrink-0"
-          />
-        )}
-        {!isBack && !directionIconSrc && (
-          <span
-            className={`flex h-6 w-6 items-center justify-center rounded-full border-2 ${
-              disabled ? "border-white/40" : "border-white"
-            }`}
-          >
-            <ChevronIcon direction="right" className="h-3 w-3" />
-          </span>
-        )}
+        {!isBack ? directionIcon : null}
       </button>
     );
   }
@@ -356,7 +380,9 @@ export default function Button({
           letterSpacing: "0%",
           fontSize: isCompact
             ? "clamp(10px, 5.83cqw, 14px)"
-            : pxToCqw(fontSize),
+            : typeof fontSize === "number"
+              ? pxToCqw(fontSize)
+              : fontSize,
           WebkitFontSmoothing: "antialiased",
           MozOsxFontSmoothing: "grayscale",
         }}
