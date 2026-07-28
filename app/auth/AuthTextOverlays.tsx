@@ -242,7 +242,13 @@ export default function AuthTextOverlays({ onNavigate }: AuthSectionProps) {
       >
         <p className="m-0" style={{ fontSize: "81.521cqh" }}>
           <span className="text-[#F6C7FC]">Don&apos;t have an account? </span>
-          <span className="text-[#EAEFFF]">Sign up.</span>
+          <button
+            type="button"
+            onClick={() => onNavigate("sign-up")}
+            className="cursor-pointer border-0 bg-transparent p-0 font-inherit text-[#EAEFFF] transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current"
+          >
+            Sign up.
+          </button>
         </p>
       </DesignBox>
     </form>
