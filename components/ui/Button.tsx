@@ -22,6 +22,8 @@ type ButtonProps = {
   aspectRatio?: string;
   /** Uses the compact 240 × 56 artwork geometry from the dashboard design. */
   artworkVariant?: "default" | "compact";
+  /** Optional design-frame font size. Defaults to the shared 20px label size. */
+  fontSize?: number;
   /** Only used when buttonType is "direction" — the "disabled" buttonType covers
    * the primary/disabled pair instead. Grays out the button and blocks onClick. */
   disabled?: boolean;
@@ -177,6 +179,7 @@ export default function Button({
   width,
   aspectRatio,
   artworkVariant = "default",
+  fontSize = BASE_FONT_SIZE,
   disabled = false,
 }: ButtonProps) {
   if (buttonType === "direction") {
@@ -353,7 +356,7 @@ export default function Button({
           letterSpacing: "0%",
           fontSize: isCompact
             ? "clamp(10px, 5.83cqw, 14px)"
-            : pxToCqw(BASE_FONT_SIZE),
+            : pxToCqw(fontSize),
           WebkitFontSmoothing: "antialiased",
           MozOsxFontSmoothing: "grayscale",
         }}

@@ -1,4 +1,5 @@
 import HomeNavbar from "@/components/layout/HomeNavbar";
+import AuthTextOverlays from "./AuthTextOverlays";
 import AuthBackground from "./background/AuthBackground";
 
 export default function AuthPage() {
@@ -6,6 +7,7 @@ export default function AuthPage() {
     <main>
       <AuthBackground>
         <HomeNavbar showSocialLinks={false} />
+        <AuthTextOverlays />
       </AuthBackground>
     </main>
   );
