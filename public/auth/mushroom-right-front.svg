@@ -1,0 +1,43 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="1057.56" height="911.921" viewBox="0 0 1057.56 911.921" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="mushroom">
+<path id="Vector 363" d="M181.196 797.005C206.101 752.173 181.196 577.253 181.196 577.253H233.614C233.614 577.253 239.696 777.756 257.807 797.005C275.917 816.253 287.876 853.653 287.876 853.653L273.935 911.921H181.196L162.75 853.653C162.75 853.653 156.292 841.836 181.196 797.005Z" fill="url(#paint0_linear_0_207)"/>
+<path id="Vector 364" d="M154.867 651.678C154.867 649.65 166.69 580.74 166.69 580.74H245.51C245.51 580.74 255.091 637.477 259.303 645.766C261.488 650.064 257.488 654.061 253.392 656.604C247.285 660.395 241.814 647.967 235.657 651.678C223.273 659.142 219.947 639.027 208.07 638.87C195.844 638.708 189.176 659.152 179.498 651.678C177.12 649.841 177.078 647.425 174.572 645.766C167.872 641.333 154.867 659.712 154.867 651.678Z" fill="url(#paint1_linear_0_207)"/>
+<g id="glow" filter="url(#filter0_f_0_207)">
+<path d="M216.091 440.474C105.892 436.992 20.3788 518.402 33.7871 558.245C47.1954 598.089 376.043 594.635 385.489 558.245C394.935 521.855 326.29 443.955 216.091 440.474Z" fill="url(#paint2_linear_0_207)"/>
+</g>
+<path id="Vector 365" d="M216.091 440.474C105.892 436.992 20.3788 518.402 33.7871 558.245C47.1954 598.089 376.043 594.635 385.489 558.245C394.935 521.855 326.29 443.955 216.091 440.474Z" fill="url(#paint3_radial_0_207)"/>
+<g id="dots">
+<ellipse id="Ellipse 132" cx="222.412" cy="529.328" rx="23.6901" ry="12.055" transform="rotate(11.4683 222.412 529.328)" fill="#F6C7FC"/>
+<ellipse id="Ellipse 133" cx="296.639" cy="505.856" rx="19.0138" ry="8.88088" transform="rotate(11.4683 296.639 505.856)" fill="#F6C7FC"/>
+<ellipse id="Ellipse 134" cx="149.187" cy="495.667" rx="29.6236" ry="15.8322" transform="rotate(11.4683 149.187 495.667)" fill="#F6C7FC"/>
+<ellipse id="Ellipse 135" cx="204.986" cy="499.421" rx="12.5776" ry="6.60067" transform="rotate(11.4683 204.986 499.421)" fill="#F6C7FC"/>
+<ellipse id="Ellipse 136" cx="186.685" cy="468.223" rx="19.2032" ry="9.49978" transform="rotate(11.4683 186.685 468.223)" fill="#F6C7FC"/>
+<ellipse id="Ellipse 137" cx="89.5327" cy="513.707" rx="10.914" ry="10.2258" transform="rotate(11.4683 89.5327 513.707)" fill="#F6C7FC"/>
+<ellipse id="Ellipse 139" cx="349.872" cy="543.955" rx="13.6471" ry="10.118" transform="rotate(11.4683 349.872 543.955)" fill="#F6C7FC"/>
+<ellipse id="Ellipse 140" cx="1049.66" cy="14.2527" rx="13.6471" ry="6.50407" transform="rotate(83.9917 1049.66 14.2527)" fill="#F6C7FC"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_f_0_207" x="1.45918e-06" y="407.966" width="418.754" height="211.282" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="16.2" result="effect1_foregroundBlur_0_207"/>
+</filter>
+<linearGradient id="paint0_linear_0_207" x1="224.936" y1="577.253" x2="224.936" y2="911.921" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FF7CCD"/>
+<stop offset="1" stop-color="#FFE6CC"/>
+</linearGradient>
+<linearGradient id="paint1_linear_0_207" x1="207.394" y1="580.74" x2="207.394" y2="657.332" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FF7CCD"/>
+<stop offset="1" stop-color="#FFE6CC"/>
+</linearGradient>
+<linearGradient id="paint2_linear_0_207" x1="173.739" y1="492.904" x2="144.724" y2="596.654" gradientUnits="userSpaceOnUse">
+<stop stop-color="#A842E5"/>
+<stop offset="1" stop-color="#FF7CCD"/>
+</linearGradient>
+<radialGradient id="paint3_radial_0_207" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(258.73 456.755) rotate(75.5754) scale(143.052 186.779)">
+<stop stop-color="#FF7CCD"/>
+<stop offset="1" stop-color="#A842E5"/>
+</radialGradient>
+</defs>
+</svg>
