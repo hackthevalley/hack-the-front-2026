@@ -272,7 +272,7 @@ function TextField(
               placeholder:tracking-normal
               ${
                 isAuthTheme
-                  ? "mt-0 text-[#EAEFFF] placeholder:text-[#EAEFFF]"
+                  ? "auth-autofill-input mt-0 text-[#EAEFFF] placeholder:text-[#EAEFFF]"
                   : isApplicationTheme
                     ? "mt-0 placeholder:text-white/40"
                     : "mt-1 placeholder:text-[#EAEFFF]"

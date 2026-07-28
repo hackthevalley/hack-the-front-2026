@@ -155,7 +155,7 @@ export const authBackgroundLayers: readonly AuthBackgroundLayer[] = [
     width: 609.446,
     height: 747.55,
     transform: "rotate(8.12deg)",
-    bleed: { top: 3.76, right: 4.61, bottom: 0.53, left: 0.66 },
+    bleed: { top: 10.18, right: 4.61, bottom: 0.53, left: 0.66 },
     zIndex: 13,
   },
   {
