@@ -109,38 +109,39 @@ export default function HomeTextOverlays() {
         width={665}
         height={348}
         zIndex={9}
-        className="flex flex-col text-white"
+        className="text-white"
       >
-        <h2
-          id="about-title"
-          className="m-0 font-vcr leading-none"
-          style={{ fontSize: "15cqh", textShadow: PIXEL_GLOW }}
-        >
-          About Us
-        </h2>
-        <p
-          className="m-0 mt-[4cqh] font-figtree font-normal leading-[1.4]"
-          style={{ fontSize: "5.8cqh", textShadow: SOFT_GLOW }}
-        >
-          Join 750 innovative and creative developers, designers, and creators
-          for <strong className="font-bold">36 hours of hacking</strong>.
-          You&apos;ll get access to some of the best hardware and APIs on the
-          market. Plus, you get to meet some experienced and awesome mentors!
-        </p>
-        <p
-          className="m-0 mt-[4cqh] font-figtree font-bold leading-[1.3]"
-          style={{ fontSize: "6.5cqh", textShadow: SOFT_GLOW }}
-        >
-          All this in just one weekend? I know, it&apos;s hard to believe.
-        </p>
-        <p
-          className="m-0 mt-[4cqh] font-figtree font-normal leading-[1.4]"
-          style={{ fontSize: "5.8cqh", textShadow: SOFT_GLOW }}
-        >
-          Remember, you don&apos;t need to be a pro to attend. So if this is
-          your first hackathon, we can&apos;t wait to expose you to the
-          incomparable world of creation.
-        </p>
+        <div id="about" className="flex h-full flex-col" style={{ scrollMarginTop: "24px" }}>
+          <h2
+            className="m-0 font-vcr leading-none"
+            style={{ fontSize: "15cqh", textShadow: PIXEL_GLOW }}
+          >
+            About Us
+          </h2>
+          <p
+            className="m-0 mt-[4cqh] font-figtree font-normal leading-[1.4]"
+            style={{ fontSize: "5.8cqh", textShadow: SOFT_GLOW }}
+          >
+            Join 750 innovative and creative developers, designers, and creators
+            for <strong className="font-bold">36 hours of hacking</strong>.
+            You&apos;ll get access to some of the best hardware and APIs on the
+            market. Plus, you get to meet some experienced and awesome mentors!
+          </p>
+          <p
+            className="m-0 mt-[4cqh] font-figtree font-bold leading-[1.3]"
+            style={{ fontSize: "6.5cqh", textShadow: SOFT_GLOW }}
+          >
+            All this in just one weekend? I know, it&apos;s hard to believe.
+          </p>
+          <p
+            className="m-0 mt-[4cqh] font-figtree font-normal leading-[1.4]"
+            style={{ fontSize: "5.8cqh", textShadow: SOFT_GLOW }}
+          >
+            Remember, you don&apos;t need to be a pro to attend. So if this is
+            your first hackathon, we can&apos;t wait to expose you to the
+            incomparable world of creation.
+          </p>
+        </div>
       </DesignBox>
 
       <StatBlock

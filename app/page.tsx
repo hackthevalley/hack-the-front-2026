@@ -1,4 +1,4 @@
-import HomeNavbar from "@/components/layout/HomeNavbar";
+import NewHomeNavBar from "@/components/layout/NewHomeNavBar";
 import Button from "@/components/ui/Button";
 import {
   HOME_BACKGROUND_DESIGN_HEIGHT,
@@ -20,16 +20,13 @@ export default function Home() {
 
   return (
     <main className="relative w-full overflow-x-hidden bg-[#040142]">
+      <NewHomeNavBar />
       <HomeToFaqTransition className="pointer-events-none z-30" />
 
       <div className="relative">
         <section aria-labelledby="home-title">
           <HomeBackground>
             <div className="pointer-events-none absolute left-0 top-0 z-[9] h-[10.87%] w-full bg-[rgba(14,22,72,0.35)] blur-[50px]" />
-
-            <div className="absolute left-0 top-0 z-20 w-full">
-              <HomeNavbar />
-            </div>
 
             <div
               className="absolute z-20 flex flex-col items-start"
@@ -71,7 +68,7 @@ export default function Home() {
         </section>
       </div>
 
-      <section id="faq-themes" aria-label="FAQ and themes" className="relative">
+      <section id="faq" aria-label="FAQ and themes" className="relative">
         <FaqThemesBackground>
           <FaqThemesContentLayer />
         </FaqThemesBackground>

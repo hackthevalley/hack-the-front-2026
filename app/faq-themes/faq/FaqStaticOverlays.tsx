@@ -49,6 +49,7 @@ export default function FaqStaticOverlays() {
       </div>
 
       <h2
+        id="themes"
         className="pointer-events-auto absolute m-0 select-text font-vcr font-normal leading-none text-white"
         style={{
           left: toStageX(629),
