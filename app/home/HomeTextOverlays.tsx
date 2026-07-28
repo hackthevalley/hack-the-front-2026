@@ -111,7 +111,12 @@ export default function HomeTextOverlays() {
         zIndex={9}
         className="text-white"
       >
-        <div id="about" className="flex h-full flex-col" style={{ scrollMarginTop: "24px" }}>
+        <div
+          id="about"
+          data-nav-target="about"
+          className="flex h-full flex-col"
+          style={{ scrollMarginTop: "24px" }}
+        >
           <h2
             className="m-0 font-vcr leading-none"
             style={{ fontSize: "15cqh", textShadow: PIXEL_GLOW }}

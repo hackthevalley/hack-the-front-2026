@@ -195,7 +195,7 @@ function LogoButton({
       type="button"
       onClick={onClick}
       aria-label="Hack the Valley home"
-      className="inline-flex shrink-0 sparkle-icon"
+      className="inline-flex h-10 w-10 shrink-0 items-center justify-center sparkle-icon md:h-[45px] md:w-[45px]"
     >
       <MaskIcon
         src="/icons/htv-logo.svg"
@@ -483,8 +483,25 @@ export default function NewHomeNavBar({
     return () => mediaQuery.removeEventListener("change", handleDesktopMatch);
   }, []);
 
+  const resolveTargetElement = (targetId: string) => {
+    const exactMatch = document.getElementById(targetId);
+
+    if (exactMatch && exactMatch.getClientRects().length > 0) {
+      return exactMatch;
+    }
+
+    const dataTargetMatches = Array.from(
+      document.querySelectorAll<HTMLElement>(`[data-nav-target="${targetId}"]`),
+    );
+
+    return (
+      dataTargetMatches.find((element) => element.getClientRects().length > 0) ??
+      exactMatch
+    );
+  };
+
   const handleSectionClick = (item: NewHomeNavItem) => {
-    const target = document.getElementById(item.targetId);
+    const target = resolveTargetElement(item.targetId);
     if (!target) return;
 
     const offset = window.innerHeight * (item.offsetRatio ?? 0.12);
