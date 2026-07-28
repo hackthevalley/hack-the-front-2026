@@ -10,6 +10,7 @@ import {
   AUTH_BACKGROUND_DESIGN_HEIGHT,
   AUTH_BACKGROUND_DESIGN_WIDTH,
 } from "./background/layers";
+import type { AuthSectionProps } from "./types";
 
 const TITLE_GLOW = "0 0 16.6px #FEE9D3";
 const DEMO_EMAIL = "hacker@hackthevalley.io";
@@ -17,7 +18,7 @@ const DEMO_PASSWORD = "Password1";
 const EMAIL_ERROR = "Please enter a valid email.";
 const CREDENTIAL_ERROR = "Email or password incorrect";
 
-export default function AuthTextOverlays() {
+export default function AuthTextOverlays({ onNavigate }: AuthSectionProps) {
   const router = useRouter();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -200,9 +201,14 @@ export default function AuthTextOverlays() {
         zIndex={40}
         className="whitespace-nowrap font-figtree font-medium leading-[normal] text-[#EAEFFF]"
       >
-        <p className="m-0" style={{ fontSize: "81.521cqh" }}>
+        <button
+          type="button"
+          onClick={() => onNavigate("forgot-password")}
+          className="m-0 cursor-pointer border-0 bg-transparent p-0 text-inherit transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current"
+          style={{ fontSize: "81.521cqh" }}
+        >
           Forgot Password?
-        </p>
+        </button>
       </DesignBox>
 
       <DesignBox

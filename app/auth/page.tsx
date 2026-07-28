@@ -1,16 +1,16 @@
-import HomeNavbar from "@/components/layout/HomeNavbar";
-import AuthBackButton from "./AuthBackButton";
-import AuthTextOverlays from "./AuthTextOverlays";
-import AuthBackground from "./background/AuthBackground";
+import AuthFlow from "./AuthFlow";
+import type { AuthView } from "./types";
 
-export default function AuthPage() {
-  return (
-    <main>
-      <AuthBackground>
-        <HomeNavbar showSocialLinks={false} />
-        <AuthBackButton />
-        <AuthTextOverlays />
-      </AuthBackground>
-    </main>
-  );
+type AuthPageProps = {
+  searchParams: Promise<{ view?: string | string[] }>;
+};
+
+function getInitialView(view: string | string[] | undefined): AuthView {
+  return view === "forgot-password" ? "forgot-password" : "login";
+}
+
+export default async function AuthPage({ searchParams }: AuthPageProps) {
+  const { view } = await searchParams;
+
+  return <AuthFlow initialView={getInitialView(view)} />;
 }
