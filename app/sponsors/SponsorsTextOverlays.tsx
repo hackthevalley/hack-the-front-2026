@@ -72,6 +72,10 @@ function cqh(value: number, boxHeight: number) {
 }
 
 function CtaCopy({ blurred = false }: { blurred?: boolean }) {
+  const boxClassName = blurred
+    ? "pointer-events-none select-none text-center text-white"
+    : "select-text text-center text-white";
+
   return (
     <>
       <DesignBox
@@ -82,7 +86,7 @@ function CtaCopy({ blurred = false }: { blurred?: boolean }) {
         width={CTA_HEADING.width}
         height={CTA_HEADING.height}
         zIndex={6}
-        className="pointer-events-none text-center text-white"
+        className={boxClassName}
       >
         <p
           aria-hidden={blurred || undefined}
@@ -106,7 +110,7 @@ function CtaCopy({ blurred = false }: { blurred?: boolean }) {
         width={CTA_EMAIL.width}
         height={CTA_EMAIL.height}
         zIndex={6}
-        className="pointer-events-none text-center text-white"
+        className={boxClassName}
       >
         <p
           aria-hidden={blurred || undefined}
