@@ -256,12 +256,12 @@ function MobileMenuOverlay({
       id="mobile-nav-overlay"
       aria-hidden={!isOpen}
       className={[
-        "fixed inset-0 z-40 md:hidden",
+        "fixed inset-0 z-[70] md:hidden",
         "transition-[opacity,visibility] duration-300 ease-out",
         isOpen ? "visible opacity-100" : "invisible opacity-0",
       ].join(" ")}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(223,99,220,0.18),_transparent_32%),linear-gradient(180deg,rgba(4,7,30,0.985),rgba(15,27,96,0.965))]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(223,99,220,0.24),_transparent_30%),linear-gradient(180deg,rgba(4,7,30,0.997),rgba(15,27,96,0.988))]" />
 
       <div className="absolute inset-0 overflow-y-auto px-8 pb-10 pt-32">
         <div className="flex min-h-full flex-col items-center">
@@ -537,10 +537,10 @@ export default function NewHomeNavBar({
   return (
     <>
       <header
-        className="fixed inset-x-0 top-0 z-50 w-full transition-transform duration-300 ease-out"
+        className="fixed inset-x-0 top-0 z-[80] w-full transition-transform duration-300 ease-out"
         style={{ transform: `translateY(${translateY}px)` }}
       >
-        <Shell shellProgress={shellProgress}>
+        <Shell shellProgress={isMenuOpen ? 0 : shellProgress}>
           <NavContents
             items={items}
             isMenuOpen={isMenuOpen}

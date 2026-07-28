@@ -15,12 +15,15 @@ type HomeToFaqTransitionProps = {
   className?: string;
 };
 
-export default function HomeToFaqTransition({
-  children,
+function TransitionBand({
+  stageWidth,
   className = "",
-}: HomeToFaqTransitionProps) {
-  const stageWidth = `max(100vw, calc(100dvh * ${HOME_BACKGROUND_DESIGN_WIDTH} / ${HOME_BACKGROUND_DESIGN_HEIGHT}))`;
-
+  children,
+}: {
+  stageWidth: string;
+  className?: string;
+  children?: ReactNode;
+}) {
   return (
     <div
       className={`absolute left-1/2 -translate-x-1/2 overflow-visible ${className}`}
@@ -63,5 +66,31 @@ export default function HomeToFaqTransition({
         {children}
       </div>
     </div>
+  );
+}
+
+export default function HomeToFaqTransition({
+  children,
+  className = "",
+}: HomeToFaqTransitionProps) {
+  const stageWidth = `max(100vw, calc(100dvh * ${HOME_BACKGROUND_DESIGN_WIDTH} / ${HOME_BACKGROUND_DESIGN_HEIGHT}))`;
+  const mobileStageWidth = "clamp(1560px, 410vw, 1820px)";
+
+  return (
+    <>
+      <TransitionBand
+        stageWidth={mobileStageWidth}
+        className={`${className} md:hidden`}
+      >
+        {children}
+      </TransitionBand>
+
+      <TransitionBand
+        stageWidth={stageWidth}
+        className={`${className} hidden md:block`}
+      >
+        {children}
+      </TransitionBand>
+    </>
   );
 }

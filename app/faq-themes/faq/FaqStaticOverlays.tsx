@@ -8,7 +8,7 @@ export default function FaqStaticOverlays() {
   return (
     <>
       <div
-        className="absolute flex items-center justify-between text-white"
+        className="absolute hidden items-center justify-between text-white md:flex"
         style={{
           left: toStageX(322),
           top: toStageY(1345),

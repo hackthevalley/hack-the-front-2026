@@ -26,7 +26,7 @@ const ICON_BACKGROUNDS: Record<FaqIconId, string> = {
   calendar: "linear-gradient(180deg,#63B7A4,#2C8473)",
 };
 
-function QuestionIcon({
+export function QuestionIcon({
   icon,
   style,
 }: {

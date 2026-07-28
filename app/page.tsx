@@ -20,7 +20,7 @@ export default function Home() {
   return (
     <main className="relative w-full overflow-x-hidden bg-[#040142]">
       <NewHomeNavBar />
-      <HomeToFaqTransition className="pointer-events-none z-30 hidden md:block" />
+      <HomeToFaqTransition className="pointer-events-none z-30" />
 
       <div className="relative">
         <MobileHomeSection />
@@ -33,8 +33,22 @@ export default function Home() {
         </FaqThemesBackground>
 
         <div className="pointer-events-none absolute inset-0 z-40">
+          <div className="absolute inset-x-0 top-[2.2%] flex justify-center md:hidden">
+            <h1
+              data-nav-target="faq"
+              className="m-0 select-text font-vcr leading-none text-white"
+              style={{
+                fontSize: "clamp(2.5rem, 12vw, 3.6rem)",
+                textShadow:
+                  "0 0 8px rgba(255,255,255,.9), 0 0 24px rgba(202,210,255,.48)",
+              }}
+            >
+              FAQ
+            </h1>
+          </div>
+
           <div
-            className="relative left-1/2 -translate-x-1/2"
+            className="relative left-1/2 hidden -translate-x-1/2 md:block"
             style={{
               width: faqStageWidth,
               aspectRatio: `${FAQ_THEMES_DESIGN_WIDTH} / ${FAQ_THEMES_DESIGN_HEIGHT}`,
