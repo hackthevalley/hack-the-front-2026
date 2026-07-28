@@ -32,6 +32,8 @@ type TextFieldProps = {
   type?: TextFieldType;
   /** Enforce the strength rule (8+ chars, a capital, a number). Use for sign-up, not login. */
   requireStrongPassword?: boolean;
+  /** Hide the reveal control on password fields whose design does not include it. */
+  showPasswordToggle?: boolean;
   /** For `type="number"`: minimum accepted value (inclusive). */
   min?: number;
   /** For `type="number"`: maximum accepted value (inclusive). */
@@ -80,6 +82,7 @@ function TextField(
     required = false,
     type = "text",
     requireStrongPassword = false,
+    showPasswordToggle = true,
     min,
     max,
     errorMessages = {},
@@ -282,7 +285,7 @@ function TextField(
           />
         </div>
 
-        {isPassword && (
+        {isPassword && showPasswordToggle && (
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
