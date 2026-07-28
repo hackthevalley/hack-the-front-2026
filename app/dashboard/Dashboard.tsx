@@ -104,7 +104,7 @@ export default function Dashboard({ status }: { status: DashboardStatus }) {
           src="/dashboard/rear-trunk-right.svg"
           className="left-[93.85%] top-[-4.89%] h-[117.48%] w-[6.15%]"
         />
-        <div className="pointer-events-none absolute left-[15.47%] top-[-4.8%] h-[107.96%] w-[13.86%] origin-top-left rotate-[7.3251deg]">
+        <div className="pointer-events-none absolute left-[24.41%] top-[-4.8%] h-[107.96%] w-[13.86%] origin-top-left rotate-[7.3251deg]">
           <img
             src="/dashboard/back-tree.svg"
             alt=""
