@@ -88,42 +88,25 @@ export default function Dashboard({ status }: { status: DashboardStatus }) {
           height: "max(100vh, calc(100vw * 982 / 1512))",
         }}
       >
-        <div className="pointer-events-none absolute left-[-1.2%] top-[-30.66%] h-[134.01%] w-[31.69%] origin-top-left rotate-[-0.4659deg]">
-          <img
-            src="/dashboard/back-tree-left.svg"
-            alt=""
-            aria-hidden="true"
-            draggable="false"
-            className="h-full w-full max-w-none"
-          />
-        </div>
-        <div
-          className="pointer-events-none absolute left-[92.3%] top-[-20.57%] h-[137.42%] w-[38.41%] origin-top-left -scale-x-100"
-        >
-          <img
-            src="/dashboard/back-tree-right.svg"
-            alt=""
-            aria-hidden="true"
-            draggable="false"
-            className="h-full w-full max-w-none"
-          />
-        </div>
+        <Art
+          src="/dashboard/back-tree-left.svg"
+          className="left-[6.08%] top-[-30.66%] h-[134.4%] w-[32.39%]"
+        />
+        <Art
+          src="/dashboard/back-tree-right.svg"
+          className="left-[60.12%] top-[-20.57%] h-[137.42%] w-[37.57%] -scale-x-100"
+        />
+        <Art
+          src="/dashboard/rear-trunk-left.svg"
+          className="left-[3.64%] top-[-15.3%] h-[117.2%] w-[5.36%]"
+        />
+        <Art
+          src="/dashboard/rear-trunk-right.svg"
+          className="left-[93.85%] top-[-4.89%] h-[117.48%] w-[6.15%]"
+        />
         <div className="pointer-events-none absolute left-[15.47%] top-[-4.8%] h-[107.96%] w-[13.86%] origin-top-left rotate-[7.3251deg]">
           <img
             src="/dashboard/back-tree.svg"
-            alt=""
-            aria-hidden="true"
-            draggable="false"
-            className="h-full w-full max-w-none"
-          />
-        </div>
-        <Art
-          src="/dashboard/rear-trunk-left.svg"
-          className="left-[8.7%] top-[-15.3%] h-[117.2%] w-[5.4%]"
-        />
-        <div className="pointer-events-none absolute left-[90.53%] top-[-4.89%] h-[117.21%] w-[5.36%] origin-top-left rotate-[4.9607deg]">
-          <img
-            src="/dashboard/rear-trunk-right.svg"
             alt=""
             aria-hidden="true"
             draggable="false"
