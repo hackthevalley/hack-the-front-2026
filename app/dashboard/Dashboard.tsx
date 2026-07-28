@@ -284,6 +284,7 @@ export default function Dashboard({ status }: { status: DashboardStatus }) {
               buttonType={current.disabled ? "disabled" : "primary"}
               width="100%"
               aspectRatio="240 / 56"
+              artworkVariant="compact"
               onClick={() => router.push("/application")}
             />
           </div>
