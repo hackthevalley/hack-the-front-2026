@@ -102,7 +102,8 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
 
   function handleEmailChange(value: string) {
     setEmail(value);
-    if (errors.email && isValidEmail(value.trim())) setFieldError("email", null);
+    if (errors.email && isValidEmail(value.trim()))
+      setFieldError("email", null);
   }
 
   function handlePasswordChange(value: string) {
@@ -348,8 +349,8 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
       >
         <TextField
           ref={refs.confirmation}
-          name="Retype Password"
-          placeholder="Retype Password"
+          name="Confirm Password"
+          placeholder="Confirm Password"
           type="password"
           theme="auth"
           autoComplete="new-password"
