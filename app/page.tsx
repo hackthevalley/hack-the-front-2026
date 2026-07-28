@@ -98,6 +98,7 @@ export default function Home() {
         id="sponsors"
         aria-labelledby="sponsors-title"
         className="relative"
+        style={{ marginTop: "-2px" }}
       >
         <SponsorsBackground stageWidth={faqStageWidth}>
           <FaqToSponsorsTransition className="pointer-events-none z-[2]" />
