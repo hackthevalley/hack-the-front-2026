@@ -92,19 +92,32 @@ export default function Dashboard({ status }: { status: DashboardStatus }) {
           src="/dashboard/back-tree-left.svg"
           className="left-[6.08%] top-[-30.66%] h-[134.4%] w-[32.39%]"
         />
-        <Art
-          src="/dashboard/back-tree-right.svg"
-          className="left-[92.3%] top-[-20.57%] h-[137.42%] w-[38.41%]"
-        />
+        <div className="pointer-events-none absolute left-[92.3%] top-[-20.57%] flex h-[137.42%] w-[38.41%] items-center justify-center">
+          <img
+            src="/dashboard/back-tree-right.svg"
+            alt=""
+            aria-hidden="true"
+            draggable="false"
+            className="h-[97.52%] w-[82.5%] max-w-none rotate-[-4.4948deg]"
+          />
+        </div>
         <Art
           src="/dashboard/back-tree.svg"
           className="left-[15.47%] top-[-4.8%] h-[109.8%] w-[22.68%]"
         />
         <Art
-          src="/dashboard/tree-trunk.svg"
-          className="left-[20.63%] top-[-2.14%] h-[91.45%] w-[58.73%]"
+          src="/dashboard/rear-trunk-left.svg"
+          className="left-[8.7%] top-[-15.3%] h-[117.2%] w-[5.4%]"
         />
-
+        <div className="pointer-events-none absolute left-[90.53%] top-[-4.89%] flex h-[117.48%] w-[11.92%] items-center justify-center">
+          <img
+            src="/dashboard/rear-trunk-right.svg"
+            alt=""
+            aria-hidden="true"
+            draggable="false"
+            className="h-[99.77%] w-[44.94%] max-w-none rotate-[-4.9607deg]"
+          />
+        </div>
         <Art
           src="/dashboard/leaves-right.svg"
           className="left-[68.25%] top-[65.28%] h-[23.7%] w-[12.09%]"
@@ -121,17 +134,84 @@ export default function Dashboard({ status }: { status: DashboardStatus }) {
           src="/dashboard/small-mushroom.svg"
           className="left-[2.78%] top-[88.55%] h-[44.25%] w-[25.58%]"
         />
+        <div className="pointer-events-none absolute left-[15.55%] top-[69.05%] h-[12%] w-[7.8%]">
+          <img
+            src="/dashboard/glow-orange.svg"
+            alt=""
+            aria-hidden="true"
+            draggable="false"
+            className="absolute inset-0 h-full w-full"
+          />
+          <img
+            src="/dashboard/star-left.svg"
+            alt=""
+            aria-hidden="true"
+            draggable="false"
+            className="absolute left-1/2 top-1/2 h-[69.69%] w-[58.39%] -translate-x-1/2 -translate-y-1/2 rotate-[-20.8417deg]"
+          />
+        </div>
+        <div className="pointer-events-none absolute left-[81.35%] top-[44.1%] h-[12.41%] w-[8.06%]">
+          <img
+            src="/dashboard/glow-cream.svg"
+            alt=""
+            aria-hidden="true"
+            draggable="false"
+            className="absolute inset-0 h-full w-full"
+          />
+          <img
+            src="/dashboard/star-right.svg"
+            alt=""
+            aria-hidden="true"
+            draggable="false"
+            className="absolute left-1/2 top-1/2 h-[91.09%] w-[76.32%] -translate-x-1/2 -translate-y-1/2 rotate-[9.4885deg]"
+          />
+        </div>
+        <Art
+          src="/dashboard/glow-large.svg"
+          className="left-[79.8%] top-[45.8%] h-[4.2%] w-[2.7%]"
+        />
+        <Art
+          src="/dashboard/glow-small.svg"
+          className="left-[21.6%] top-[65.3%] h-[5%] w-[3.3%]"
+        />
+        <Art
+          src="/dashboard/glow-tiny.svg"
+          className="left-[82.5%] top-[20%] h-[3.9%] w-[2.6%]"
+        />
+        <Art
+          src="/dashboard/glow-muted.svg"
+          className="left-[78.2%] top-[56%] h-[5%] w-[3.3%]"
+        />
+        <Art
+          src="/dashboard/glow-muted-right.svg"
+          className="left-[96%] top-[30.5%] h-[5%] w-[3.3%]"
+        />
+        <Art
+          src="/dashboard/glow-muted-left.svg"
+          className="left-[18.5%] top-[43.5%] h-[4.8%] w-[3.1%]"
+        />
         <Art
           src="/dashboard/left-grasses.svg"
           className="left-[-3.66%] top-[65.27%] h-[39.87%] w-[26.92%]"
         />
-        <Art
-          src="/dashboard/left-leaves.svg"
-          className="left-[-9.66%] top-[70.95%] h-[68%] w-[44.29%]"
-        />
+        <div className="pointer-events-none absolute left-[-9.66%] top-[70.95%] flex h-[43.57%] w-[25.35%] items-center justify-center">
+          <div className="relative h-[92.1%] w-[89.75%] flex-none rotate-[174deg] -scale-y-100">
+            <img
+              src="/dashboard/left-leaves.svg"
+              alt=""
+              aria-hidden="true"
+              draggable="false"
+              className="absolute left-[-49.89%] top-[-40.87%] h-[169.41%] w-[194.69%] max-w-none select-none"
+            />
+          </div>
+        </div>
         <Art
           src="/dashboard/right-foreground.svg"
           className="left-[62.63%] top-[43.69%] h-[108.11%] w-[64.74%]"
+        />
+        <Art
+          src="/dashboard/tree-trunk.svg"
+          className="left-[20.63%] top-[-2.14%] h-[91.45%] w-[58.73%]"
         />
         <Art
           src="/dashboard/rocks-left.svg"
@@ -205,14 +285,6 @@ export default function Dashboard({ status }: { status: DashboardStatus }) {
           </div>
         </section>
 
-        <Art
-          src="/application/star.svg"
-          className="left-[82.99%] top-[43.02%] h-[12.71%] w-[7.28%]"
-        />
-        <Art
-          src="/application/star.svg"
-          className="left-[16.34%] top-[72.35%] h-[10.31%] w-[6.19%]"
-        />
       </div>
     </main>
   );
