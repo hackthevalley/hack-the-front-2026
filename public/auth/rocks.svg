@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="148" height="52" viewBox="0 0 148 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="rocks">
+<path id="Vector 336" d="M81.224 0.0636639C47.6373 -1.4361 41.3341 23.935 43.3333 36.808C45.3325 49.681 155.695 48.4312 147.573 36.808C139.451 25.1848 114.811 1.56343 81.224 0.0636639Z" fill="url(#paint0_linear_0_310)"/>
+<path id="Vector 337" d="M41.7085 26.0864C8.20207 24.5831 -12.5146 43.1277 8.42694 47.9496C29.3685 52.7715 57.0412 53.8995 70.8668 47.9496C84.6924 41.9997 75.215 27.5898 41.7085 26.0864Z" fill="#2F185D"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_310" x1="141" y1="29" x2="80.5" y2="15" gradientUnits="userSpaceOnUse">
+<stop offset="0.00370806" stop-color="#2C165A"/>
+<stop offset="1" stop-color="#3D1F6B"/>
+</linearGradient>
+</defs>
+</svg>
