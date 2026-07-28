@@ -54,7 +54,7 @@ const STATUS_DETAILS: Record<
     titleColor: "#ff6068",
     action: "Application Closed",
     disabled: true,
-    potionClass: "hue-rotate-[125deg] saturate-150",
+    potionClass: "",
   },
 };
 
@@ -252,7 +252,11 @@ export default function Dashboard({ status }: { status: DashboardStatus }) {
             }
           />
           <Art
-            src="/dashboard/status-potion.svg"
+            src={
+              status === "declined"
+                ? "/dashboard/declined-potion.svg"
+                : "/dashboard/status-potion.svg"
+            }
             className={`left-[7.54%] top-[14.52%] h-[79.31%] w-[29.04%] rotate-[-13.27deg] ${current.potionClass}`}
           />
 
