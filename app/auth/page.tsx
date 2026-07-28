@@ -6,7 +6,11 @@ type AuthPageProps = {
 };
 
 function getInitialView(view: string | string[] | undefined): AuthView {
-  return view === "forgot-password" ? "forgot-password" : "login";
+  if (view === "sign-up" || view === "forgot-password") {
+    return view;
+  }
+
+  return "login";
 }
 
 export default async function AuthPage({ searchParams }: AuthPageProps) {

@@ -7,6 +7,7 @@ import AuthBackButton from "./AuthBackButton";
 import AuthTextOverlays from "./AuthTextOverlays";
 import AuthBackground from "./background/AuthBackground";
 import ForgotPasswordSection from "./sections/ForgotPasswordSection";
+import SignUpSection from "./sections/SignUpSection";
 import type { AuthSectionProps, AuthView } from "./types";
 
 type AuthFlowProps = {
@@ -24,6 +25,11 @@ const AUTH_VIEWS: Record<AuthView, AuthViewConfig> = {
     path: "/auth",
     showMlhLink: false,
     Section: AuthTextOverlays,
+  },
+  "sign-up": {
+    path: "/auth?view=sign-up",
+    showMlhLink: false,
+    Section: SignUpSection,
   },
   "forgot-password": {
     path: "/auth?view=forgot-password",
