@@ -3,7 +3,7 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import { Figtree } from "next/font/google";
 
-const figtree = Figtree({ subsets: ["latin"], weight: ["600"] });
+const figtree = Figtree({ subsets: ["latin"], weight: ["400", "600"] });
 
 type ButtonProps = {
   className?: string;
@@ -11,8 +11,14 @@ type ButtonProps = {
   buttonType?: "primary" | "disabled" | "direction";
   /** Only used when buttonType is "direction". Controls chevron placement/style. */
   direction?: "next" | "back";
+  /** Uses a supplied direction icon instead of the default circled chevron. */
+  directionIconSrc?: string;
+  /** Overrides the direction label typography without changing other variants. */
+  directionTextClassName?: string;
   onClick?: () => void;
   width?: number | string;
+  /** Overrides the default button artwork ratio for compact design variants. */
+  aspectRatio?: string;
   /** Only used when buttonType is "direction" — the "disabled" buttonType covers
    * the primary/disabled pair instead. Grays out the button and blocks onClick. */
   disabled?: boolean;
@@ -161,9 +167,12 @@ export default function Button({
   text,
   buttonType = "primary",
   direction = "next",
+  directionIconSrc,
+  directionTextClassName,
   onClick,
   className = "",
   width,
+  aspectRatio,
   disabled = false,
 }: ButtonProps) {
   if (buttonType === "direction") {
@@ -181,7 +190,15 @@ export default function Button({
             : "cursor-pointer hover:opacity-70"
         } ${className}`}
       >
-        {isBack && (
+        {isBack && directionIconSrc && (
+          <img
+            src={directionIconSrc}
+            alt=""
+            aria-hidden="true"
+            className="h-6 w-6 shrink-0"
+          />
+        )}
+        {isBack && !directionIconSrc && (
           <span
             className={`flex h-6 w-6 items-center justify-center rounded-full border-2 ${
               disabled ? "border-white/40" : "border-white"
@@ -190,10 +207,23 @@ export default function Button({
             <ChevronIcon direction="left" className="h-3 w-3" />
           </span>
         )}
-        <span className={`${figtree.className} text-[20px] font-semibold`}>
+        <span
+          className={
+            directionTextClassName ??
+            `${figtree.className} text-[20px] font-semibold`
+          }
+        >
           {text}
         </span>
-        {!isBack && (
+        {!isBack && directionIconSrc && (
+          <img
+            src={directionIconSrc}
+            alt=""
+            aria-hidden="true"
+            className="h-6 w-6 shrink-0"
+          />
+        )}
+        {!isBack && !directionIconSrc && (
           <span
             className={`flex h-6 w-6 items-center justify-center rounded-full border-2 ${
               disabled ? "border-white/40" : "border-white"
@@ -234,7 +264,7 @@ export default function Button({
       } ${className}`}
       style={{
         width: resolvedWidth,
-        aspectRatio: `${FRAME_WIDTH} / ${FRAME_HEIGHT}`,
+        aspectRatio: aspectRatio ?? `${FRAME_WIDTH} / ${FRAME_HEIGHT}`,
         background: isDisabled ? DISABLED_BACKGROUND : PRIMARY_BACKGROUND,
         borderRadius: pxToCqw(PILL_RADIUS),
         boxShadow: `inset 0 ${pxToCqw(INNER_SHADOW_OFFSET_Y)} ${pxToCqw(INNER_SHADOW_BLUR)} #FFFFFF`,
