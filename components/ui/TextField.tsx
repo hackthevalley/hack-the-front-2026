@@ -307,8 +307,16 @@ function TextField(
         )}
       </label>
 
-      {/* Always reserve space so showing an error doesn't shift content below. */}
-      {!isAuthTheme ? (
+      {/* Auth layouts render their visible error separately, so keep this copy
+       * available only to assistive technology. Other themes reserve space to
+       * prevent validation from shifting nearby content. */}
+      {isAuthTheme ? (
+        error ? (
+          <p id={errorId} className="sr-only">
+            {error}
+          </p>
+        ) : null
+      ) : (
         <p
           id={errorId}
           role="alert"
@@ -319,7 +327,7 @@ function TextField(
         >
           {error ?? " "}
         </p>
-      ) : null}
+      )}
     </div>
   );
 }
