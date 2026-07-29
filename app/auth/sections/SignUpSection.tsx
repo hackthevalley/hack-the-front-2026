@@ -203,6 +203,7 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
           autoComplete="given-name"
           required
           theme="auth"
+          className="[&>label]:px-[7.986cqw]"
           errorMessages={{ required: FIRST_NAME_ERROR }}
           value={firstName}
           onChange={handleFirstNameChange}
@@ -228,6 +229,7 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
           autoComplete="family-name"
           required
           theme="auth"
+          className="[&>label]:px-[7.986cqw]"
           errorMessages={{ required: LAST_NAME_ERROR }}
           value={lastName}
           onChange={handleLastNameChange}
@@ -386,7 +388,7 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
       <DesignBox
         designWidth={AUTH_BACKGROUND_DESIGN_WIDTH}
         designHeight={AUTH_BACKGROUND_DESIGN_HEIGHT}
-        left={654.5}
+        left={408}
         top={768}
         width={203}
         height={72}
@@ -405,12 +407,12 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
       <DesignBox
         designWidth={AUTH_BACKGROUND_DESIGN_WIDTH}
         designHeight={AUTH_BACKGROUND_DESIGN_HEIGHT}
-        left={548}
+        left={408}
         top={855}
-        width={416}
+        width={420}
         height={33}
         zIndex={40}
-        className="whitespace-nowrap text-center font-figtree font-semibold leading-[normal]"
+        className="whitespace-nowrap font-figtree font-semibold leading-[normal]"
       >
         <p className="m-0" style={{ fontSize: "81.521cqh" }}>
           <span className="text-[#F6C7FC]">Already have an account? </span>
