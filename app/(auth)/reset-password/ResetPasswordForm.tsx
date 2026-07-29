@@ -8,7 +8,7 @@ import TextField, { type TextFieldHandle } from "@/components/ui/TextField";
 import {
   AUTH_BACKGROUND_DESIGN_HEIGHT,
   AUTH_BACKGROUND_DESIGN_WIDTH,
-} from "../background/layers";
+} from "../_components/background/layers";
 
 const TITLE_GLOW = "0 0 16.6px #FEE9D3";
 const PASSWORD_ERROR =
@@ -16,7 +16,7 @@ const PASSWORD_ERROR =
 const CONFIRMATION_ERROR = "Please re-enter your new password.";
 const MISMATCH_ERROR = "Passwords do not match.";
 
-export default function ChangePasswordForm() {
+export default function ResetPasswordForm() {
   const router = useRouter();
   const newPasswordRef = React.useRef<TextFieldHandle>(null);
   const confirmationRef = React.useRef<TextFieldHandle>(null);
@@ -59,13 +59,13 @@ export default function ChangePasswordForm() {
     }
 
     setFormError(null);
-    router.push("/auth");
+    router.push("/login");
   }
 
   return (
     <form
       className="auth-form auth-form--standalone"
-      aria-labelledby="change-password-title"
+      aria-labelledby="reset-password-title"
       noValidate
       onSubmit={handleSubmit}
     >
@@ -82,7 +82,7 @@ export default function ChangePasswordForm() {
         className="flex items-start justify-center text-center text-white"
       >
         <h1
-          id="change-password-title"
+          id="reset-password-title"
           className="m-0 whitespace-nowrap font-vcr font-normal leading-[normal]"
           style={{ fontSize: "101.587cqh", textShadow: TITLE_GLOW }}
         >
