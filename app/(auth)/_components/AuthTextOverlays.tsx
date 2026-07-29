@@ -225,7 +225,7 @@ export default function AuthTextOverlays() {
         className="auth-forgot-link whitespace-nowrap font-figtree font-medium leading-[normal] text-[#EAEFFF]"
       >
         <Link
-          href="/auth?view=forgot-password"
+          href="/forgot-password"
           className="m-0 cursor-pointer border-0 bg-transparent p-0 text-inherit transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current"
           style={{ fontSize: "81.521cqh" }}
         >
@@ -269,7 +269,7 @@ export default function AuthTextOverlays() {
         <p className="m-0" style={{ fontSize: "81.521cqh" }}>
           <span className="text-[#F6C7FC]">Don&apos;t have an account? </span>
           <Link
-            href="/auth?view=sign-up"
+            href="/signup"
             className="cursor-pointer border-0 bg-transparent p-0 font-inherit text-[#EAEFFF] transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current"
           >
             Sign up.

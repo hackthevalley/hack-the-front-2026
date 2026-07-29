@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import HomeNavbar from "@/components/layout/HomeNavbar";
+import AuthNavbar from "./AuthNavbar";
 import AuthBackButton from "./AuthBackButton";
 import AuthTextOverlays from "./AuthTextOverlays";
 import AuthBackground from "./background/AuthBackground";
@@ -16,24 +16,20 @@ type AuthFlowProps = {
 
 type AuthViewConfig = {
   path: string;
-  showMlhLink: boolean;
   Section: React.ComponentType<AuthSectionProps>;
 };
 
 const AUTH_VIEWS: Record<AuthView, AuthViewConfig> = {
   login: {
-    path: "/auth",
-    showMlhLink: false,
+    path: "/login",
     Section: AuthTextOverlays,
   },
   "sign-up": {
-    path: "/auth?view=sign-up",
-    showMlhLink: false,
+    path: "/signup",
     Section: SignUpSection,
   },
   "forgot-password": {
-    path: "/auth?view=forgot-password",
-    showMlhLink: true,
+    path: "/forgot-password",
     Section: ForgotPasswordSection,
   },
 };
@@ -61,10 +57,7 @@ export default function AuthFlow({ initialView = "login" }: AuthFlowProps) {
   return (
     <main>
       <AuthBackground>
-        <HomeNavbar
-          showSocialLinks={false}
-          showMlhLink={activeView.showMlhLink}
-        />
+        <AuthNavbar />
         <AuthBackButton onClick={handleBack} />
         <ActiveSection onNavigate={handleNavigate} />
       </AuthBackground>
