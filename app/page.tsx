@@ -1,4 +1,4 @@
-import NewHomeNavBar from "@/components/layout/NewHomeNavBar";
+import HomeNavbar from "@/components/layout/HomeNavbar";
 import {
   HOME_BACKGROUND_DESIGN_HEIGHT,
   HOME_BACKGROUND_DESIGN_WIDTH,
@@ -19,7 +19,7 @@ export default function Home() {
 
   return (
     <main className="relative w-full overflow-x-hidden bg-[#040142]">
-      <NewHomeNavBar />
+      <HomeNavbar />
       <HomeToFaqTransition className="pointer-events-none z-30" />
 
       <div className="relative">
