@@ -97,6 +97,245 @@ body {
   letter-spacing: inherit !important;
 }
 
+/* HomeNavbar is viewport-aligned on the home page, but authentication content
+ * lives inside a narrower, centered stage. Project the auth navbar back out to
+ * the viewport so the shared logo has the same horizontal position on both
+ * pages, then align Back to that same left edge. */
+.auth-content-stage {
+  --auth-home-logo-inset: clamp(24px, 7.9365vw, 120px);
+  --auth-home-nav-max-width: 1512px;
+  --auth-stage-gutter-x: calc((100vw - 100%) / 2);
+}
+
+.auth-content-stage > .site-navbar {
+  position: relative;
+  left: calc(0px - var(--auth-stage-gutter-x));
+  width: 100vw;
+}
+
+.auth-back-box {
+  left: calc(
+    (100vw - min(100vw, var(--auth-home-nav-max-width))) / 2 +
+      var(--auth-home-logo-inset) - var(--auth-stage-gutter-x)
+  ) !important;
+}
+
+/* Auth screens use their Figma-derived absolute composition on desktop. On
+ * narrow, short, or portrait-tablet viewports, the foreground becomes a
+ * single scrollable column while the forest remains fixed behind it. */
+@media (max-width: 1023px), (max-height: 699px), (orientation: portrait) and (max-width: 1024px) {
+  .auth-compact-scrim {
+    background: rgba(7, 4, 31, 0.32);
+  }
+
+  .auth-content-stage {
+    inset: 0 !important;
+    box-sizing: border-box;
+    width: 100% !important;
+    height: 100% !important;
+    aspect-ratio: auto !important;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    overscroll-behavior-y: contain;
+    transform: none !important;
+    translate: none !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .auth-content-stage .site-navbar,
+  .auth-content-stage .site-navbar__inner {
+    height: 88px;
+  }
+
+  .auth-content-stage .site-navbar__inner {
+    padding-right: max(24px, env(safe-area-inset-right));
+    padding-left: max(24px, env(safe-area-inset-left));
+  }
+
+  .auth-content-stage .site-navbar img[src="/icons/mlh-logo.svg"] {
+    width: 48px;
+    height: auto;
+    max-height: 72px;
+  }
+
+  .auth-back-box {
+    position: relative !important;
+    inset: auto !important;
+    width: min(640px, calc(100% - 48px)) !important;
+    height: 44px !important;
+    margin: 4px auto 0;
+    container-type: size !important;
+  }
+
+  .auth-back-box > button {
+    width: auto;
+    min-width: 88px;
+  }
+
+  .auth-back-box > button > span:last-child {
+    font-size: 18px !important;
+  }
+
+  .auth-back-box > button > span:first-child {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .auth-form {
+    position: relative;
+    display: flex;
+    width: min(640px, calc(100% - 48px));
+    min-width: 0;
+    margin: 16px auto 0;
+    padding-bottom: max(32px, env(safe-area-inset-bottom));
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .auth-form--standalone {
+    margin-top: 24px;
+  }
+
+  .auth-form [data-auth-compact-role] {
+    position: relative !important;
+    inset: auto !important;
+    order: var(--auth-compact-order);
+    width: 100% !important;
+    height: auto !important;
+    min-width: 0;
+    flex: none;
+    container-type: inline-size !important;
+  }
+
+  .auth-form [data-auth-compact-role="title"] {
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .auth-form [data-auth-compact-role="title"] h1 {
+    width: 100%;
+    white-space: normal !important;
+    font-size: clamp(30px, 8vw, 44px) !important;
+    line-height: 1.08 !important;
+    text-wrap: balance;
+  }
+
+  .auth-form [data-auth-compact-role="subtitle"] {
+    min-height: 32px;
+  }
+
+  .auth-form [data-auth-compact-role="subtitle"] p {
+    white-space: pre-line !important;
+    font-size: clamp(16px, 4.5vw, 20px) !important;
+    line-height: 1.35 !important;
+    text-wrap: balance;
+  }
+
+  .auth-form [data-auth-compact-role="subtitle"] > span {
+    min-width: 24px;
+  }
+
+  .auth-form [data-auth-compact-role="divider"] {
+    height: 2px !important;
+    margin: 4px 0 8px;
+  }
+
+  .auth-form [data-auth-compact-role="field"] {
+    height: 84px !important;
+    container-type: size !important;
+  }
+
+  .auth-form [data-auth-compact-role="field"] label {
+    gap: 12px !important;
+    border-width: 2px !important;
+    border-radius: 9999px !important;
+    padding: 10px 18px !important;
+  }
+
+  .auth-form [data-auth-compact-role="field"] label span {
+    font-size: 15px !important;
+  }
+
+  .auth-form [data-auth-compact-role="field"] input,
+  .auth-form [data-auth-compact-role="field"] input:-webkit-autofill,
+  .auth-form [data-auth-compact-role="field"] input:-webkit-autofill:hover,
+  .auth-form [data-auth-compact-role="field"] input:-webkit-autofill:focus {
+    font-size: 18px !important;
+    line-height: 24px !important;
+  }
+
+  .auth-form [data-auth-compact-role="field"] svg {
+    width: 24px !important;
+    height: 20px !important;
+  }
+
+  .auth-form [data-auth-compact-role="error"] {
+    min-height: 24px;
+    align-items: flex-start;
+    gap: 8px !important;
+    padding: 0 12px;
+  }
+
+  .auth-form [data-auth-compact-role="error"] img {
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+  }
+
+  .auth-form [data-auth-compact-role="error"] p {
+    min-width: 0;
+    white-space: normal !important;
+    font-size: 14px !important;
+    line-height: 1.35 !important;
+  }
+
+  .auth-form [data-auth-compact-role="action"] {
+    height: 60px !important;
+    margin-top: 4px;
+  }
+
+  .auth-form [data-auth-compact-role="action"] .button-component {
+    width: 100% !important;
+    height: 60px !important;
+    min-height: 48px;
+    aspect-ratio: auto !important;
+  }
+
+  .auth-form [data-auth-compact-role="action"] .button-component > span {
+    font-size: 20px !important;
+  }
+
+  .auth-form [data-auth-compact-role="secondary"] {
+    min-height: 44px;
+    align-items: center;
+    white-space: normal !important;
+    font-size: 16px !important;
+    line-height: 1.4 !important;
+  }
+
+  .auth-form [data-auth-compact-role="secondary"] p,
+  .auth-form [data-auth-compact-role="secondary"] button {
+    white-space: normal !important;
+    font-size: 16px !important;
+    line-height: 1.4 !important;
+  }
+
+  .auth-forgot-link {
+    display: flex;
+    justify-content: flex-end;
+    text-align: right;
+  }
+
+  .auth-account-link {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
 @keyframes team-shelf-scroll-right {
   from {
     transform: translateX(calc(var(--marquee-travel) * -1));

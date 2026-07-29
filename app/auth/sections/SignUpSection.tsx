@@ -141,13 +141,22 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
     }
 
     setErrors(nextErrors);
-    if (Object.keys(nextErrors).length > 0) return;
+    const firstInvalidField = (Object.keys(nextErrors) as FieldName[])[0];
+    if (firstInvalidField) {
+      refs[firstInvalidField].current?.focus();
+      return;
+    }
 
     router.push("/application");
   }
 
   return (
-    <form aria-labelledby="sign-up-title" noValidate onSubmit={handleSubmit}>
+    <form
+      className="auth-form auth-form--sign-up"
+      aria-labelledby="sign-up-title"
+      noValidate
+      onSubmit={handleSubmit}
+    >
       <DesignBox
         designWidth={AUTH_BACKGROUND_DESIGN_WIDTH}
         designHeight={AUTH_BACKGROUND_DESIGN_HEIGHT}
@@ -156,6 +165,8 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
         width={852}
         height={63}
         zIndex={40}
+        compactRole="title"
+        compactOrder={10}
         className="flex items-start justify-center text-center text-white"
       >
         <h1
@@ -175,6 +186,8 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
         width={733}
         height={34}
         zIndex={40}
+        compactRole="subtitle"
+        compactOrder={20}
         className="flex items-center text-[#F6C7FC]"
       >
         <span aria-hidden="true" className="h-[1.83px] w-[13%] bg-current" />
@@ -195,6 +208,8 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
         width={337}
         height={88}
         zIndex={40}
+        compactRole="field"
+        compactOrder={30}
       >
         <TextField
           ref={refs.firstName}
@@ -221,6 +236,8 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
         width={337}
         height={88}
         zIndex={40}
+        compactRole="field"
+        compactOrder={50}
       >
         <TextField
           ref={refs.lastName}
@@ -247,6 +264,8 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
         width={324}
         height={24}
         zIndex={45}
+        compactRole="error"
+        compactOrder={40}
       >
         <ErrorMessage message={errors.firstName} />
       </DesignBox>
@@ -259,6 +278,8 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
         width={324}
         height={24}
         zIndex={45}
+        compactRole="error"
+        compactOrder={60}
       >
         <ErrorMessage message={errors.lastName} />
       </DesignBox>
@@ -271,6 +292,8 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
         width={699}
         height={88}
         zIndex={40}
+        compactRole="field"
+        compactOrder={70}
       >
         <TextField
           ref={refs.email}
@@ -297,6 +320,8 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
         width={686}
         height={24}
         zIndex={45}
+        compactRole="error"
+        compactOrder={80}
       >
         <ErrorMessage message={errors.email} />
       </DesignBox>
@@ -309,6 +334,8 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
         width={699}
         height={88}
         zIndex={40}
+        compactRole="field"
+        compactOrder={90}
       >
         <TextField
           ref={refs.password}
@@ -336,6 +363,8 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
         width={686}
         height={24}
         zIndex={45}
+        compactRole="error"
+        compactOrder={100}
       >
         <ErrorMessage message={errors.password} />
       </DesignBox>
@@ -348,6 +377,8 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
         width={699}
         height={88}
         zIndex={40}
+        compactRole="field"
+        compactOrder={110}
       >
         <TextField
           ref={refs.confirmation}
@@ -381,6 +412,8 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
         width={686}
         height={24}
         zIndex={45}
+        compactRole="error"
+        compactOrder={120}
       >
         <ErrorMessage message={errors.confirmation} />
       </DesignBox>
@@ -393,6 +426,8 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
         width={203}
         height={72}
         zIndex={40}
+        compactRole="action"
+        compactOrder={130}
         className="flex items-start"
       >
         <Button
@@ -412,7 +447,9 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
         width={420}
         height={33}
         zIndex={40}
-        className="whitespace-nowrap font-figtree font-semibold leading-[normal]"
+        compactRole="secondary"
+        compactOrder={140}
+        className="auth-account-link whitespace-nowrap font-figtree font-semibold leading-[normal]"
       >
         <p className="m-0" style={{ fontSize: "81.521cqh" }}>
           <span className="text-[#F6C7FC]">Already have an account? </span>

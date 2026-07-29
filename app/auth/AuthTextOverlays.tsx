@@ -4,7 +4,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import DesignBox from "@/components/layout/DesignBox";
 import Button from "@/components/ui/Button";
-import TextField from "@/components/ui/TextField";
+import TextField, { type TextFieldHandle } from "@/components/ui/TextField";
 import { isValidEmail } from "@/components/ui/validation";
 import {
   AUTH_BACKGROUND_DESIGN_HEIGHT,
@@ -20,6 +20,7 @@ const CREDENTIAL_ERROR = "Email or password incorrect";
 
 export default function AuthTextOverlays({ onNavigate }: AuthSectionProps) {
   const router = useRouter();
+  const emailRef = React.useRef<TextFieldHandle>(null);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [emailError, setEmailError] = React.useState<string | null>(null);
@@ -48,6 +49,7 @@ export default function AuthTextOverlays({ onNavigate }: AuthSectionProps) {
     if (!isValidEmail(email)) {
       setEmailError(EMAIL_ERROR);
       setCredentialError(null);
+      emailRef.current?.focus();
       return;
     }
 
@@ -59,10 +61,16 @@ export default function AuthTextOverlays({ onNavigate }: AuthSectionProps) {
     }
 
     setCredentialError(CREDENTIAL_ERROR);
+    emailRef.current?.focus();
   }
 
   return (
-    <form aria-labelledby="auth-title" noValidate onSubmit={handleSubmit}>
+    <form
+      className="auth-form"
+      aria-labelledby="auth-title"
+      noValidate
+      onSubmit={handleSubmit}
+    >
       <DesignBox
         designWidth={AUTH_BACKGROUND_DESIGN_WIDTH}
         designHeight={AUTH_BACKGROUND_DESIGN_HEIGHT}
@@ -71,6 +79,8 @@ export default function AuthTextOverlays({ onNavigate }: AuthSectionProps) {
         width={852}
         height={77}
         zIndex={40}
+        compactRole="title"
+        compactOrder={10}
         className="flex items-start justify-center text-center text-white"
       >
         <h1
@@ -90,6 +100,8 @@ export default function AuthTextOverlays({ onNavigate }: AuthSectionProps) {
         width={733}
         height={40}
         zIndex={40}
+        compactRole="subtitle"
+        compactOrder={20}
         className="flex items-center text-[#F6C7FC]"
       >
         <span aria-hidden="true" className="h-[1.83px] w-[21.01%] bg-current" />
@@ -110,8 +122,11 @@ export default function AuthTextOverlays({ onNavigate }: AuthSectionProps) {
         width={699}
         height={98}
         zIndex={40}
+        compactRole="field"
+        compactOrder={30}
       >
         <TextField
+          ref={emailRef}
           name="Email"
           placeholder="Enter Email"
           type="email"
@@ -133,6 +148,8 @@ export default function AuthTextOverlays({ onNavigate }: AuthSectionProps) {
         width={430}
         height={28}
         zIndex={45}
+        compactRole="error"
+        compactOrder={40}
         className="font-figtree font-normal leading-[normal] text-[#FFDADA]"
       >
         <p
@@ -153,6 +170,8 @@ export default function AuthTextOverlays({ onNavigate }: AuthSectionProps) {
         width={699}
         height={98}
         zIndex={40}
+        compactRole="field"
+        compactOrder={50}
       >
         <TextField
           name="Password"
@@ -173,6 +192,8 @@ export default function AuthTextOverlays({ onNavigate }: AuthSectionProps) {
         width={470}
         height={29}
         zIndex={45}
+        compactRole="error"
+        compactOrder={60}
         className="flex items-center gap-[2cqw] font-figtree font-normal leading-[normal] text-[#FFDADA]"
       >
         <img
@@ -199,7 +220,9 @@ export default function AuthTextOverlays({ onNavigate }: AuthSectionProps) {
         width={219}
         height={33}
         zIndex={40}
-        className="whitespace-nowrap font-figtree font-medium leading-[normal] text-[#EAEFFF]"
+        compactRole="secondary"
+        compactOrder={70}
+        className="auth-forgot-link whitespace-nowrap font-figtree font-medium leading-[normal] text-[#EAEFFF]"
       >
         <button
           type="button"
@@ -219,6 +242,8 @@ export default function AuthTextOverlays({ onNavigate }: AuthSectionProps) {
         width={203}
         height={72.716}
         zIndex={40}
+        compactRole="action"
+        compactOrder={80}
         className="flex items-start"
       >
         <Button
@@ -238,7 +263,9 @@ export default function AuthTextOverlays({ onNavigate }: AuthSectionProps) {
         width={420}
         height={33}
         zIndex={40}
-        className="whitespace-nowrap font-figtree font-semibold leading-[normal]"
+        compactRole="secondary"
+        compactOrder={90}
+        className="auth-account-link whitespace-nowrap font-figtree font-semibold leading-[normal]"
       >
         <p className="m-0" style={{ fontSize: "81.521cqh" }}>
           <span className="text-[#F6C7FC]">Don&apos;t have an account? </span>

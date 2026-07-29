@@ -12,6 +12,8 @@ import EyeIcon from "@/components/ui/EyeIcon";
 export type TextFieldHandle = {
   /** Runs validation, updates the error message, returns whether the field is valid. */
   validate: () => boolean;
+  /** Moves keyboard focus to the underlying input. */
+  focus: () => void;
 };
 
 type TextFieldType = "text" | "email" | "password" | "number" | "tel";
@@ -97,6 +99,7 @@ function TextField(
   const [internalValue, setInternalValue] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
   const [showPassword, setShowPassword] = React.useState(false);
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   const value = controlledValue ?? internalValue;
   const isPassword = type === "password";
@@ -144,7 +147,10 @@ function TextField(
     return message === null;
   }
 
-  React.useImperativeHandle(ref, () => ({ validate }));
+  React.useImperativeHandle(ref, () => ({
+    validate,
+    focus: () => inputRef.current?.focus(),
+  }));
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const next =
@@ -250,6 +256,7 @@ function TextField(
           )}
 
           <input
+            ref={inputRef}
             id={fieldId}
             name={name}
             type={inputType}
