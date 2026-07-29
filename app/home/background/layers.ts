@@ -296,6 +296,24 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
       height: 387,
     },
   },
+  {
+    id: "first-stump-rocks",
+    src: "/home/background/lower-rocks-a.svg",
+    left: 449.0398,
+    top: 1880.292,
+    width: 180.2213,
+    height: 68.8628,
+    zIndex: 6,
+  },
+  {
+    id: "third-stump-rocks",
+    src: "/home/background/lower-rocks-b.svg",
+    left: 434.1803,
+    top: 2283.7373,
+    width: 151.0375,
+    height: 48.5531,
+    zIndex: 6,
+  },
   // Additional foreground details from the Figma `NEW` group.
   // Isolated exports avoid inheriting the landing frame's background or clipping.
   {
