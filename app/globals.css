@@ -317,7 +317,8 @@ body {
   }
 
   .auth-form [data-auth-compact-role="secondary"] p,
-  .auth-form [data-auth-compact-role="secondary"] button {
+  .auth-form [data-auth-compact-role="secondary"] button,
+  .auth-form [data-auth-compact-role="secondary"] a {
     white-space: normal !important;
     font-size: 16px !important;
     line-height: 1.4 !important;
