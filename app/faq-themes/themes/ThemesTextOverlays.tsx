@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { toScale, toStageHeight, toStageWidth, toStageX, toStageY } from "../faq/faqStage";
 
-const THEMES = [
+export const THEMES = [
   {
     title: "Artificial Intelligence for Social Impact",
     description:
@@ -82,7 +82,66 @@ const THEME_CARD_INNER_GAP = 46.8606;
 const THEME_TEXT_GAP = 7.53;
 const THEME_TITLE_GLOW = "0 0 10px rgba(255,255,255,.5)";
 const THEME_REVEAL_OFFSET = 42;
-const THEME_REVEAL_VIEWPORT_RATIO = 0.7;
+const THEME_REVEAL_VIEWPORT_RATIO_DESKTOP = 0.7;
+const THEME_REVEAL_VIEWPORT_RATIO_MOBILE = 0.82;
+
+function useThemeReveal(viewportRatio: number) {
+  const cardRefs = useRef<Array<HTMLElement | null>>([]);
+  const [revealed, setRevealed] = useState<boolean[]>(() => THEMES.map(() => false));
+
+  useEffect(() => {
+    let frameId = 0;
+
+    const revealVisibleCards = () => {
+      frameId = 0;
+      const revealThreshold = window.innerHeight * viewportRatio;
+
+      setRevealed((current) => {
+        let changed = false;
+        const next = [...current];
+
+        cardRefs.current.forEach((card, index) => {
+          if (!card || next[index]) {
+            return;
+          }
+
+          const rect = card.getBoundingClientRect();
+          const cardMidpoint = rect.top + rect.height / 2;
+
+          if (cardMidpoint <= revealThreshold) {
+            next[index] = true;
+            changed = true;
+          }
+        });
+
+        return changed ? next : current;
+      });
+    };
+
+    const scheduleRevealCheck = () => {
+      if (frameId) {
+        return;
+      }
+
+      frameId = window.requestAnimationFrame(revealVisibleCards);
+    };
+
+    scheduleRevealCheck();
+    window.addEventListener("scroll", scheduleRevealCheck, { passive: true });
+    window.addEventListener("resize", scheduleRevealCheck);
+
+    return () => {
+      if (frameId) {
+        window.cancelAnimationFrame(frameId);
+      }
+
+      window.removeEventListener("scroll", scheduleRevealCheck);
+      window.removeEventListener("resize", scheduleRevealCheck);
+    };
+  }, [viewportRatio]);
+
+  return { cardRefs, revealed };
+}
 
 function ThemeCard({
   theme,
@@ -170,62 +229,12 @@ function ThemeCard({
 }
 
 export default function ThemesTextOverlays() {
-  const cardRefs = useRef<Array<HTMLElement | null>>([]);
-  const [revealed, setRevealed] = useState<boolean[]>(() => THEMES.map(() => false));
-
-  useEffect(() => {
-    let frameId = 0;
-
-    const revealVisibleCards = () => {
-      frameId = 0;
-      const revealThreshold = window.innerHeight * THEME_REVEAL_VIEWPORT_RATIO;
-
-      setRevealed((current) => {
-        let changed = false;
-        const next = [...current];
-
-        cardRefs.current.forEach((card, index) => {
-          if (!card || next[index]) {
-            return;
-          }
-
-          const rect = card.getBoundingClientRect();
-          const cardMidpoint = rect.top + rect.height / 2;
-
-          if (cardMidpoint <= revealThreshold) {
-            next[index] = true;
-            changed = true;
-          }
-        });
-
-        return changed ? next : current;
-      });
-    };
-
-    const scheduleRevealCheck = () => {
-      if (frameId) {
-        return;
-      }
-
-      frameId = window.requestAnimationFrame(revealVisibleCards);
-    };
-
-    scheduleRevealCheck();
-    window.addEventListener("scroll", scheduleRevealCheck, { passive: true });
-    window.addEventListener("resize", scheduleRevealCheck);
-
-    return () => {
-      if (frameId) {
-        window.cancelAnimationFrame(frameId);
-      }
-
-      window.removeEventListener("scroll", scheduleRevealCheck);
-      window.removeEventListener("resize", scheduleRevealCheck);
-    };
-  }, []);
+  const { cardRefs, revealed } = useThemeReveal(
+    THEME_REVEAL_VIEWPORT_RATIO_DESKTOP,
+  );
 
   return (
-    <section aria-label="Hackathon themes">
+    <section aria-label="Hackathon themes" className="hidden md:block">
       {THEMES.map((theme, index) => (
         <ThemeCard
           key={theme.title}
@@ -236,6 +245,65 @@ export default function ThemesTextOverlays() {
           }}
         />
       ))}
+    </section>
+  );
+}
+
+export function MobileThemesTextOverlays() {
+  const { cardRefs, revealed } = useThemeReveal(THEME_REVEAL_VIEWPORT_RATIO_MOBILE);
+
+  return (
+    <section
+      aria-label="Hackathon themes"
+      className="absolute inset-x-0 top-[52.6%] px-6 md:hidden"
+    >
+      <div className="mx-auto w-full max-w-[22.75rem]">
+        {THEMES.map((theme, index) => {
+          return (
+            <article
+              key={theme.title}
+              ref={(node) => {
+                cardRefs.current[index] = node;
+              }}
+              className="mb-9 rounded-[1.65rem] border border-white/10 px-6 py-5 text-white shadow-[inset_0_1px_0_rgba(255,255,255,.08),0_18px_36px_rgba(0,0,0,.18)] last:mb-0"
+              style={{
+                background: `rgba(82, 89, 189, ${Math.min(theme.opacity + 0.12, 0.92)})`,
+                opacity: revealed[index] ? 1 : 0,
+                filter: revealed[index] ? "blur(0px)" : "blur(8px)",
+                transform: revealed[index]
+                  ? "translate3d(0, 0, 0) scale(1)"
+                  : "translate3d(0, 28px, 0) scale(.985)",
+                transitionProperty: "opacity, transform, filter",
+                transitionDuration: "700ms",
+                transitionTimingFunction: "ease-out",
+                willChange: "opacity, transform, filter",
+              }}
+            >
+              <div className="flex items-start gap-4">
+                <div className="grid h-[3.25rem] w-[3.25rem] shrink-0 place-items-center">
+                  <img
+                    src={theme.iconSrc}
+                    alt=""
+                    draggable="false"
+                    className="h-full w-full select-none object-contain"
+                  />
+                </div>
+
+                <h3
+                  className="m-0 min-w-0 flex-1 font-bold text-[1.3rem] leading-[1.22]"
+                  style={{ textShadow: THEME_TITLE_GLOW }}
+                >
+                  {theme.title}
+                </h3>
+              </div>
+
+              <p className="m-0 mt-4 text-[1rem] leading-[1.55] text-white/92">
+                {theme.description}
+              </p>
+            </article>
+          );
+        })}
+      </div>
     </section>
   );
 }

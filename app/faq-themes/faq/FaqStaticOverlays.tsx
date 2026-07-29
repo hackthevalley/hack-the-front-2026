@@ -2,13 +2,21 @@
 
 import Button from "@/components/ui/Button";
 import { toScale, toStageWidth, toStageX, toStageY } from "./faqStage";
-import ThemesTextOverlays from "../themes/ThemesTextOverlays";
+import ThemesTextOverlays, {
+  MobileThemesTextOverlays,
+} from "../themes/ThemesTextOverlays";
 
 export default function FaqStaticOverlays() {
   return (
     <>
       <div
-        className="absolute flex items-center justify-between text-white"
+        id="themes"
+        aria-hidden="true"
+        className="absolute inset-x-0 top-[47.2%] h-px md:top-[45.0418%]"
+      />
+
+      <div
+        className="absolute hidden items-center justify-between text-white md:flex"
         style={{
           left: toStageX(322),
           top: toStageY(1345),
@@ -49,7 +57,7 @@ export default function FaqStaticOverlays() {
       </div>
 
       <h2
-        className="pointer-events-auto absolute m-0 select-text font-vcr font-normal leading-none text-white"
+        className="pointer-events-auto absolute m-0 hidden select-text font-vcr font-normal leading-none text-white md:block"
         style={{
           left: toStageX(629),
           top: toStageY(1569.708),
@@ -63,7 +71,7 @@ export default function FaqStaticOverlays() {
         Themes
       </h2>
       <p
-        className="pointer-events-auto absolute m-0 select-text text-white"
+        className="pointer-events-auto absolute m-0 hidden select-text text-white md:block"
         style={{
           left: toStageX(593.5),
           top: toStageY(1676.7119),
@@ -75,7 +83,23 @@ export default function FaqStaticOverlays() {
         Spark your build with purpose.
       </p>
 
+      <div className="absolute inset-x-0 top-[46.4%] px-5 text-center text-white md:hidden">
+        <h2
+          className="m-0 select-text font-vcr text-[3rem] font-normal leading-none"
+          style={{
+            textShadow:
+              "0 0 8px rgba(255,255,255,.9), 0 0 24px rgba(202,210,255,.48)",
+          }}
+        >
+          Themes
+        </h2>
+        <p className="m-0 mt-3 select-text text-[1rem] leading-6 text-white/92">
+          Spark your build with purpose.
+        </p>
+      </div>
+
       <ThemesTextOverlays />
+      <MobileThemesTextOverlays />
     </>
   );
 }

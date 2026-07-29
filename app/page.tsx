@@ -1,9 +1,9 @@
-import HomeNavbar from "@/components/layout/HomeNavbar";
-import Button from "@/components/ui/Button";
+import NewHomeNavBar from "@/components/layout/NewHomeNavBar";
 import {
   HOME_BACKGROUND_DESIGN_HEIGHT,
   HOME_BACKGROUND_DESIGN_WIDTH,
 } from "./home/background/layers";
+import DesktopHomeSection from "./home/DesktopHomeSection";
 import FaqThemesContentLayer from "./faq-themes/FaqThemesContentLayer";
 import FaqThemesBackground from "./faq-themes/background/FaqThemesBackground";
 import {
@@ -11,8 +11,7 @@ import {
   FAQ_THEMES_DESIGN_WIDTH,
 } from "./faq-themes/background/layers";
 import FaqTitleOverlay from "./faq-themes/faq/FaqTitleOverlay";
-import HomeBackground from "./home/background/HomeBackground";
-import HomeTextOverlays from "./home/HomeTextOverlays";
+import MobileHomeSection from "./home/MobileHomeSection";
 import HomeToFaqTransition from "./transitions/home-to-faq/HomeToFaqTransition";
 
 export default function Home() {
@@ -20,65 +19,36 @@ export default function Home() {
 
   return (
     <main className="relative w-full overflow-x-hidden bg-[#040142]">
+      <NewHomeNavBar />
       <HomeToFaqTransition className="pointer-events-none z-30" />
 
       <div className="relative">
-        <section aria-labelledby="home-title">
-          <HomeBackground>
-            <div className="pointer-events-none absolute left-0 top-0 z-[9] h-[10.87%] w-full bg-[rgba(14,22,72,0.35)] blur-[50px]" />
-
-            <div className="absolute left-0 top-0 z-20 w-full">
-              <HomeNavbar />
-            </div>
-
-            <div
-              className="absolute z-20 flex flex-col items-start"
-              style={{
-                left: "7.61%",
-                top: "7.12%",
-                width: "46.43%",
-                height: "9.55%",
-                containerType: "size",
-              }}
-            >
-              <h1
-                id="home-title"
-                className="m-0 w-full font-figtree font-bold leading-[1.05] text-white"
-                style={{
-                  fontSize: "11.4cqw",
-                  textShadow:
-                    "0 0 24px rgba(255, 140, 180, 0.55), 0 0 48px rgba(223, 99, 220, 0.35)",
-                }}
-              >
-                Hack the Valley 11
-              </h1>
-              <p
-                className="m-0 mt-[2.3cqh] w-full font-figtree font-medium leading-normal text-white"
-                style={{
-                  fontSize: "2.85cqw",
-                  textShadow: "0 0 12px rgba(255, 140, 180, 0.35)",
-                }}
-              >
-                October 16-18, 2026 • In-person event
-              </p>
-              <div id="apply" className="mt-auto" style={{ width: "29.34%" }}>
-                <Button text="Apply Now" width="100%" />
-              </div>
-            </div>
-
-            <HomeTextOverlays />
-          </HomeBackground>
-        </section>
+        <MobileHomeSection />
+        <DesktopHomeSection />
       </div>
 
-      <section id="faq-themes" aria-label="FAQ and themes" className="relative">
+      <section id="faq" aria-label="FAQ and themes" className="relative">
         <FaqThemesBackground>
           <FaqThemesContentLayer />
         </FaqThemesBackground>
 
         <div className="pointer-events-none absolute inset-0 z-40">
+          <div className="absolute inset-x-0 top-[2.2%] flex justify-center md:hidden">
+            <h1
+              data-nav-target="faq"
+              className="m-0 select-text font-vcr leading-none text-white"
+              style={{
+                fontSize: "clamp(2.5rem, 12vw, 3.6rem)",
+                textShadow:
+                  "0 0 8px rgba(255,255,255,.9), 0 0 24px rgba(202,210,255,.48)",
+              }}
+            >
+              FAQ
+            </h1>
+          </div>
+
           <div
-            className="relative left-1/2 -translate-x-1/2"
+            className="relative left-1/2 hidden -translate-x-1/2 md:block"
             style={{
               width: faqStageWidth,
               aspectRatio: `${FAQ_THEMES_DESIGN_WIDTH} / ${FAQ_THEMES_DESIGN_HEIGHT}`,
