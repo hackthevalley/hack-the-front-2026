@@ -42,16 +42,19 @@ export default function ChangePasswordForm() {
 
     if (!passwordIsValid) {
       setFormError(PASSWORD_ERROR);
+      newPasswordRef.current?.focus();
       return;
     }
 
     if (!confirmationIsValid) {
       setFormError(CONFIRMATION_ERROR);
+      confirmationRef.current?.focus();
       return;
     }
 
     if (newPassword !== confirmation) {
       setFormError(MISMATCH_ERROR);
+      confirmationRef.current?.focus();
       return;
     }
 
@@ -60,7 +63,12 @@ export default function ChangePasswordForm() {
   }
 
   return (
-    <form aria-labelledby="change-password-title" noValidate onSubmit={handleSubmit}>
+    <form
+      className="auth-form auth-form--standalone"
+      aria-labelledby="change-password-title"
+      noValidate
+      onSubmit={handleSubmit}
+    >
       <DesignBox
         designWidth={AUTH_BACKGROUND_DESIGN_WIDTH}
         designHeight={AUTH_BACKGROUND_DESIGN_HEIGHT}
@@ -69,6 +77,8 @@ export default function ChangePasswordForm() {
         width={852}
         height={63}
         zIndex={40}
+        compactRole="title"
+        compactOrder={10}
         className="flex items-start justify-center text-center text-white"
       >
         <h1
@@ -88,6 +98,8 @@ export default function ChangePasswordForm() {
         width={750}
         height={3}
         zIndex={40}
+        compactRole="divider"
+        compactOrder={20}
         className="bg-[#937EC5]"
       >
         <span aria-hidden="true" />
@@ -101,6 +113,8 @@ export default function ChangePasswordForm() {
         width={699}
         height={98}
         zIndex={40}
+        compactRole="field"
+        compactOrder={30}
       >
         <TextField
           ref={newPasswordRef}
@@ -129,6 +143,8 @@ export default function ChangePasswordForm() {
         width={699}
         height={98}
         zIndex={40}
+        compactRole="field"
+        compactOrder={40}
       >
         <TextField
           ref={confirmationRef}
@@ -153,6 +169,8 @@ export default function ChangePasswordForm() {
         width={664}
         height={24}
         zIndex={45}
+        compactRole="error"
+        compactOrder={50}
         className="flex items-center gap-[0.603cqw] font-figtree font-normal leading-[normal] text-[#FFDADA]"
       >
         <img
@@ -179,6 +197,8 @@ export default function ChangePasswordForm() {
         width={249}
         height={72}
         zIndex={40}
+        compactRole="action"
+        compactOrder={60}
         className="flex items-start"
       >
         <Button

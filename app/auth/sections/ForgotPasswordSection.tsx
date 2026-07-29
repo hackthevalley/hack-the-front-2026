@@ -3,7 +3,7 @@
 import * as React from "react";
 import DesignBox from "@/components/layout/DesignBox";
 import Button from "@/components/ui/Button";
-import TextField from "@/components/ui/TextField";
+import TextField, { type TextFieldHandle } from "@/components/ui/TextField";
 import { isValidEmail } from "@/components/ui/validation";
 import {
   AUTH_BACKGROUND_DESIGN_HEIGHT,
@@ -14,6 +14,7 @@ const TITLE_GLOW = "0 0 16.6px #FEE9D3";
 const EMAIL_ERROR = "Please enter a valid email.";
 
 export default function ForgotPasswordSection() {
+  const emailRef = React.useRef<TextFieldHandle>(null);
   const [email, setEmail] = React.useState("");
   const [emailError, setEmailError] = React.useState<string | null>(null);
   const [submitted, setSubmitted] = React.useState(false);
@@ -33,6 +34,7 @@ export default function ForgotPasswordSection() {
     if (!isValidEmail(email)) {
       setEmailError(EMAIL_ERROR);
       setSubmitted(false);
+      emailRef.current?.focus();
       return;
     }
 
@@ -41,7 +43,12 @@ export default function ForgotPasswordSection() {
   }
 
   return (
-    <form aria-labelledby="forgot-password-title" noValidate onSubmit={handleSubmit}>
+    <form
+      className="auth-form"
+      aria-labelledby="forgot-password-title"
+      noValidate
+      onSubmit={handleSubmit}
+    >
       <DesignBox
         designWidth={AUTH_BACKGROUND_DESIGN_WIDTH}
         designHeight={AUTH_BACKGROUND_DESIGN_HEIGHT}
@@ -50,6 +57,8 @@ export default function ForgotPasswordSection() {
         width={852}
         height={63}
         zIndex={40}
+        compactRole="title"
+        compactOrder={10}
         className="flex items-start justify-center text-center text-white"
       >
         <h1
@@ -69,6 +78,8 @@ export default function ForgotPasswordSection() {
         width={772}
         height={75}
         zIndex={40}
+        compactRole="subtitle"
+        compactOrder={20}
         className="flex items-start justify-center text-center font-figtree font-semibold leading-[normal] text-[#F6C7FC]"
       >
         <p
@@ -90,6 +101,8 @@ export default function ForgotPasswordSection() {
         width={750}
         height={3}
         zIndex={40}
+        compactRole="divider"
+        compactOrder={30}
         className="bg-[#8DA8FF]"
       >
         <span aria-hidden="true" />
@@ -103,8 +116,11 @@ export default function ForgotPasswordSection() {
         width={699}
         height={98}
         zIndex={40}
+        compactRole="field"
+        compactOrder={40}
       >
         <TextField
+          ref={emailRef}
           name="Email"
           placeholder="Enter Email"
           type="email"
@@ -128,6 +144,8 @@ export default function ForgotPasswordSection() {
         width={420}
         height={24}
         zIndex={45}
+        compactRole="error"
+        compactOrder={50}
         className="flex items-center gap-[0.952cqw] font-figtree font-normal leading-[normal] text-[#FFDADA]"
       >
         <img
@@ -154,6 +172,8 @@ export default function ForgotPasswordSection() {
         width={219}
         height={72}
         zIndex={40}
+        compactRole="action"
+        compactOrder={60}
         className="flex items-start"
       >
         <Button

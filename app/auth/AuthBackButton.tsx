@@ -28,6 +28,9 @@ export default function AuthBackButton({
       width={133}
       height={45}
       zIndex={50}
+      compactRole="secondary"
+      compactOrder={0}
+      className="auth-back-box"
     >
       <Button
         text="Back"

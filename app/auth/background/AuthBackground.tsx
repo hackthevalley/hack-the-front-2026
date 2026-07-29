@@ -11,19 +11,26 @@ type AuthBackgroundProps = {
 };
 
 export default function AuthBackground({ children }: AuthBackgroundProps) {
-  const stageWidth = `max(100vw, calc(100dvh * ${AUTH_BACKGROUND_DESIGN_WIDTH} / ${AUTH_BACKGROUND_DESIGN_HEIGHT}))`;
+  const backgroundStageStyle: CSSProperties = {
+    width: `max(100vw, calc(100dvh * ${AUTH_BACKGROUND_DESIGN_WIDTH} / ${AUTH_BACKGROUND_DESIGN_HEIGHT}))`,
+    aspectRatio: `${AUTH_BACKGROUND_DESIGN_WIDTH} / ${AUTH_BACKGROUND_DESIGN_HEIGHT}`,
+  };
+  const contentStageStyle: CSSProperties = {
+    width: `min(100vw, calc(100dvh * ${AUTH_BACKGROUND_DESIGN_WIDTH} / ${AUTH_BACKGROUND_DESIGN_HEIGHT}))`,
+    aspectRatio: `${AUTH_BACKGROUND_DESIGN_WIDTH} / ${AUTH_BACKGROUND_DESIGN_HEIGHT}`,
+  };
 
   return (
-    <div className="relative h-[100dvh] w-full overflow-hidden bg-[#0a0324]">
+    <div className="auth-viewport relative h-[100dvh] w-full overflow-hidden bg-[#0a0324]">
       <div
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        className="auth-background-stage absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
         style={{
-          width: stageWidth,
-          aspectRatio: `${AUTH_BACKGROUND_DESIGN_WIDTH} / ${AUTH_BACKGROUND_DESIGN_HEIGHT}`,
+          ...backgroundStageStyle,
           background: AUTH_BACKGROUND_GRADIENT,
         }}
+        aria-hidden="true"
       >
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <div className="pointer-events-none absolute inset-0">
           {authBackgroundLayers.map((layer) => {
             const bleed = layer.bleed;
             const imageStyle: CSSProperties | undefined = bleed
@@ -65,8 +72,21 @@ export default function AuthBackground({ children }: AuthBackgroundProps) {
             );
           })}
         </div>
+      </div>
 
-        <div className="absolute inset-0 z-30">{children}</div>
+      <div
+        aria-hidden="true"
+        className="auth-compact-scrim pointer-events-none absolute inset-0 z-20"
+      />
+
+      <div
+        className="auth-content-stage absolute left-1/2 top-1/2 z-30"
+        style={{
+          ...contentStageStyle,
+          transform: "translate(-50%, -50%)",
+        }}
+      >
+        {children}
       </div>
     </div>
   );
