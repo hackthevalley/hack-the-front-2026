@@ -187,7 +187,7 @@ function TextField(
   // Keep the minimum at 16px: anything smaller makes iOS Safari zoom the page
   // when the field is focused on mobile.
   const inputSizeClass = isAuthTheme
-    ? "text-[max(16px,27.451cqh)]"
+    ? ""
     : "text-[clamp(16px,1.2vw,21px)]";
 
   return (

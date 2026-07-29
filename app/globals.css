@@ -63,6 +63,11 @@ body {
   outline: none;
 }
 
+.auth-autofill-input {
+  --auth-input-font-size: clamp(16px, 1.6vw, 24px);
+  font-size: var(--auth-input-font-size);
+}
+
 /* Chrome/Safari paint their own opaque background and typography while an
  * autofill suggestion is previewed or selected. Clip that browser paint to
  * the glyphs so the auth field remains transparent, then restate the exact
@@ -78,7 +83,7 @@ body {
   -webkit-text-fill-color: #eaefff !important;
   caret-color: #eaefff !important;
   font-family: var(--font-figtree-family), sans-serif !important;
-  font-size: max(16px, 27.451cqh) !important;
+  font-size: var(--auth-input-font-size) !important;
   font-weight: 400 !important;
   line-height: clamp(30px, 2.6vw, 44px) !important;
   letter-spacing: normal !important;
@@ -91,7 +96,7 @@ body {
 .auth-autofill-input:-webkit-autofill::first-line {
   color: #eaefff !important;
   font-family: inherit !important;
-  font-size: inherit !important;
+  font-size: var(--auth-input-font-size) !important;
   font-weight: inherit !important;
   line-height: inherit !important;
   letter-spacing: inherit !important;
