@@ -15,6 +15,7 @@ function getInitialView(view: string | string[] | undefined): AuthView {
 
 export default async function AuthPage({ searchParams }: AuthPageProps) {
   const { view } = await searchParams;
+  const initialView = getInitialView(view);
 
-  return <AuthFlow initialView={getInitialView(view)} />;
+  return <AuthFlow key={initialView} initialView={initialView} />;
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import DesignBox from "@/components/layout/DesignBox";
 import Button from "@/components/ui/Button";
@@ -10,7 +11,6 @@ import {
   AUTH_BACKGROUND_DESIGN_HEIGHT,
   AUTH_BACKGROUND_DESIGN_WIDTH,
 } from "./background/layers";
-import type { AuthSectionProps } from "./types";
 
 const TITLE_GLOW = "0 0 16.6px #FEE9D3";
 const DEMO_EMAIL = "hacker@hackthevalley.io";
@@ -18,7 +18,7 @@ const DEMO_PASSWORD = "Password1";
 const EMAIL_ERROR = "Please enter a valid email.";
 const CREDENTIAL_ERROR = "Email or password incorrect";
 
-export default function AuthTextOverlays({ onNavigate }: AuthSectionProps) {
+export default function AuthTextOverlays() {
   const router = useRouter();
   const emailRef = React.useRef<TextFieldHandle>(null);
   const [email, setEmail] = React.useState("");
@@ -224,14 +224,13 @@ export default function AuthTextOverlays({ onNavigate }: AuthSectionProps) {
         compactOrder={70}
         className="auth-forgot-link whitespace-nowrap font-figtree font-medium leading-[normal] text-[#EAEFFF]"
       >
-        <button
-          type="button"
-          onClick={() => onNavigate("forgot-password")}
+        <Link
+          href="/auth?view=forgot-password"
           className="m-0 cursor-pointer border-0 bg-transparent p-0 text-inherit transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current"
           style={{ fontSize: "81.521cqh" }}
         >
           Forgot Password?
-        </button>
+        </Link>
       </DesignBox>
 
       <DesignBox
@@ -269,13 +268,12 @@ export default function AuthTextOverlays({ onNavigate }: AuthSectionProps) {
       >
         <p className="m-0" style={{ fontSize: "81.521cqh" }}>
           <span className="text-[#F6C7FC]">Don&apos;t have an account? </span>
-          <button
-            type="button"
-            onClick={() => onNavigate("sign-up")}
+          <Link
+            href="/auth?view=sign-up"
             className="cursor-pointer border-0 bg-transparent p-0 font-inherit text-[#EAEFFF] transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current"
           >
             Sign up.
-          </button>
+          </Link>
         </p>
       </DesignBox>
     </form>
