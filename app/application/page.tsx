@@ -27,6 +27,36 @@ import {
 import type { SectionHandle } from "./sections/types";
 
 const AUTOSAVE_TOAST_ID = "application-autosave";
+const APPLICATION_STATUSES = new Set(["NOT_APPLIED", "APPLYING"]);
+
+type UserResponse = {
+  application_status: string | null;
+};
+
+type RegistrationTimeRange = {
+  start_at: string;
+  end_at: string;
+};
+
+function canAccessApplication(
+  applicationStatus: string | null,
+  registration: RegistrationTimeRange,
+): boolean {
+  // Walk-in applications are intentionally allowed outside the normal window.
+  if (applicationStatus === "WALK_IN") return true;
+  if (!APPLICATION_STATUSES.has(applicationStatus ?? "")) return false;
+
+  const now = Date.now();
+  const start = new Date(registration.start_at).getTime();
+  const end = new Date(registration.end_at).getTime();
+
+  return (
+    Number.isFinite(start) &&
+    Number.isFinite(end) &&
+    now > start &&
+    now < end
+  );
+}
 
 export default function ApplicationPage() {
   const router = useRouter();
@@ -73,6 +103,40 @@ export default function ApplicationPage() {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
         };
+        const [userResponse, registrationResponse] = await Promise.all([
+          fetch(apiUrl("/api/account/me"), {
+            headers,
+            signal: requestSignal,
+          }),
+          fetch(apiUrl("/api/forms/registration-timerange"), {
+            headers,
+            signal: requestSignal,
+          }),
+        ]);
+
+        if (
+          userResponse.status === 401 ||
+          userResponse.status === 403 ||
+          registrationResponse.status === 401 ||
+          registrationResponse.status === 403
+        ) {
+          logout();
+          return;
+        }
+
+        if (!userResponse.ok || !registrationResponse.ok) {
+          throw new Error("Unable to verify application access");
+        }
+
+        const user = (await userResponse.json()) as UserResponse;
+        const registration =
+          (await registrationResponse.json()) as RegistrationTimeRange;
+
+        if (!canAccessApplication(user.application_status, registration)) {
+          router.replace("/dashboard");
+          return;
+        }
+
         const [questionsResponse, applicationResponse] = await Promise.all([
           fetch(apiUrl("/api/forms/questions"), {
             headers,
@@ -124,7 +188,7 @@ export default function ApplicationPage() {
 
     void loadApplication();
     return () => controller.abort();
-  }, [logout, token]);
+  }, [logout, router, token]);
 
   React.useEffect(() => {
     if (!isLoadingApplication) return;
