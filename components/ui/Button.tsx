@@ -1,10 +1,6 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties } from "react";
-import { Figtree, Inter } from "next/font/google";
-
-const figtree = Figtree({ subsets: ["latin"], weight: ["400", "600"] });
-const inter = Inter({ subsets: ["latin"], weight: ["600"] });
+import type { CSSProperties } from "react";
 
 type ButtonProps = {
   className?: string;
@@ -278,7 +274,7 @@ export default function Button({
         <span
           className={
             directionTextClassName ??
-            `${figtree.className} font-semibold leading-[normal]`
+            "font-figtree font-semibold leading-[normal]"
           }
           style={{
             fontSize: directionTextClassName ? undefined : toCssSize(fontSize),
@@ -293,12 +289,6 @@ export default function Button({
 
   const isDisabled = buttonType === "disabled";
   const isCompact = artworkVariant === "compact";
-
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    const raf = requestAnimationFrame(() => setReady(true));
-    return () => cancelAnimationFrame(raf);
-  }, []);
 
   const visibleLayers = LAYERS.filter(
     (layer) => !layer.disabledOnly || isDisabled,
@@ -319,6 +309,7 @@ export default function Button({
         isDisabled ? "cursor-default" : "cursor-pointer"
       } ${className}`}
       style={{
+        containerType: "inline-size",
         width: resolvedWidth,
         aspectRatio:
           aspectRatio ??
@@ -334,8 +325,6 @@ export default function Button({
         boxShadow: isCompact
           ? "inset 0 2px 3.7px #fff"
           : `inset 0 ${pxToCqw(INNER_SHADOW_OFFSET_Y)} ${pxToCqw(INNER_SHADOW_BLUR)} #FFFFFF`,
-        opacity: ready ? 1 : 0,
-        transition: "opacity 0.15s ease",
       }}
     >
       {isCompact ? (
@@ -398,7 +387,7 @@ export default function Button({
       )}
 
       <span
-        className={`${isCompact ? inter.className : figtree.className} pointer-events-none absolute inset-0 z-[1] flex select-none items-center justify-center whitespace-nowrap font-semibold`}
+        className={`${isCompact ? "font-inter" : "font-figtree"} pointer-events-none absolute inset-0 z-[1] flex select-none items-center justify-center whitespace-nowrap font-semibold`}
         style={{
           lineHeight: isCompact ? "normal" : "100%",
           letterSpacing: "0%",
@@ -416,7 +405,6 @@ export default function Button({
 
       <style jsx>{`
         .button-component {
-          container-type: inline-size;
           filter: none;
           transform: none;
           transition:

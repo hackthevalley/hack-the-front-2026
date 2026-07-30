@@ -215,6 +215,12 @@ export default function Dashboard() {
     status === "applying" || status === "not-submitted";
 
   useEffect(() => {
+    if (status === "apply" || status === "applying") {
+      router.prefetch("/application");
+    }
+  }, [router, status]);
+
+  useEffect(() => {
     if (!token) return;
 
     const controller = new AbortController();

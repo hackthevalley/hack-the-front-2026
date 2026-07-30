@@ -74,6 +74,8 @@ function MobileSceneLayer({ layerId }: { layerId: string }) {
         <img
           src={layer.src}
           alt=""
+          loading="lazy"
+          decoding="async"
           draggable="false"
           className="absolute max-w-none select-none"
           style={{
@@ -87,6 +89,8 @@ function MobileSceneLayer({ layerId }: { layerId: string }) {
         <img
           src={layer.src}
           alt=""
+          loading="lazy"
+          decoding="async"
           draggable="false"
           className={
             layer.preserveAspectRatio

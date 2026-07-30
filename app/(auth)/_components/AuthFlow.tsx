@@ -40,6 +40,14 @@ export default function AuthFlow({ initialView = "login" }: AuthFlowProps) {
   const activeView = AUTH_VIEWS[view];
   const ActiveSection = activeView.Section;
 
+  React.useEffect(() => {
+    router.prefetch("/");
+    router.prefetch("/login");
+    router.prefetch("/signup");
+    router.prefetch("/forgot-password");
+    router.prefetch("/dashboard");
+  }, [router]);
+
   function handleNavigate(nextView: AuthView) {
     setView(nextView);
     router.push(AUTH_VIEWS[nextView].path);

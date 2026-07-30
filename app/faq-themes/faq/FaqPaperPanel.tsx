@@ -44,6 +44,8 @@ function PaperAsset() {
       <img
         src="/faq-themes/faq/paper.png"
         alt=""
+        loading="lazy"
+        decoding="async"
         draggable="false"
         className="absolute max-w-none select-none"
         style={{
@@ -72,6 +74,8 @@ function Stamp({
     <img
       src="/faq-themes/faq/stamp.png"
       alt=""
+      loading="lazy"
+      decoding="async"
       draggable="false"
       className="absolute select-none"
       style={{
