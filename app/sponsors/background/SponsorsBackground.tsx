@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import MobileSponsorsContent from "../MobileSponsorsContent";
 import {
   SPONSORS_BACKGROUND_LAYER,
   SPONSORS_DESIGN_HEIGHT,
@@ -28,7 +29,7 @@ export default function SponsorsBackground({
       }}
     >
       <div
-        className="relative left-1/2 -translate-x-1/2 overflow-visible"
+        className="relative left-1/2 -translate-x-1/2 overflow-visible max-md:!w-full max-md:!aspect-auto"
         style={{
           width: resolvedStageWidth,
           aspectRatio: `${SPONSORS_DESIGN_WIDTH} / ${SPONSORS_DESIGN_HEIGHT}`,
@@ -37,7 +38,7 @@ export default function SponsorsBackground({
           containerType: "inline-size",
         }}
       >
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 hidden overflow-hidden md:block">
           <div
             aria-hidden="true"
             className="absolute"
@@ -81,7 +82,8 @@ export default function SponsorsBackground({
           </div>
         </div>
 
-        {children}
+        <MobileSponsorsContent />
+        <div className="hidden md:contents">{children}</div>
       </div>
     </div>
   );
