@@ -1,10 +1,10 @@
-import Button from "@/components/ui/Button";
 import DesignBox from "@/components/layout/DesignBox";
 import {
   HOME_BACKGROUND_DESIGN_HEIGHT,
   HOME_BACKGROUND_DESIGN_WIDTH,
   homeBackgroundLayers,
 } from "./background/layers";
+import HomeApplyButton from "./HomeApplyButton";
 
 const HOME_BACKGROUND_GRADIENT =
   "linear-gradient(181deg, #040142 9.13%, #DF63DC 25%)";
@@ -261,11 +261,7 @@ export default function MobileHomeSection() {
             data-nav-target="apply"
             className="pointer-events-auto mt-7 w-full max-w-[11.35rem]"
           >
-            <Button
-              text="Apply Now"
-              width="100%"
-              href="/login"
-            />
+            <HomeApplyButton />
           </div>
         </div>
       </div>
