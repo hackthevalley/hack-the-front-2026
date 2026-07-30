@@ -83,6 +83,15 @@ export default function ApplicationPage() {
   const lastUploadedResumeRef = React.useRef<File | null>(null);
   const saveQueueRef = React.useRef<Promise<void>>(Promise.resolve());
 
+  React.useEffect(() => {
+    // A freshly-shown step hasn't been validated yet, so it shouldn't
+    // inherit the previous step's error flags — some steps have no left
+    // form at all (leftId undefined) and so can never call
+    // onValidityChange(false) themselves to clear a stale leftSectionHasErrors.
+    setSectionHasErrors(false);
+    setLeftSectionHasErrors(false);
+  }, [stepIndex]);
+
   const step = SECTIONS[stepIndex];
   const ActiveLeft = step.Left;
   const ActiveRight = step.Right;
