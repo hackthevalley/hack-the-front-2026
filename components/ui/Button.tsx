@@ -23,6 +23,8 @@ type ButtonProps = {
   directionIconRotation?: number;
   /** Uses Next.js client navigation and automatic route prefetching. */
   href?: string;
+  /** Native button behavior. Form actions should explicitly use "submit". */
+  htmlType?: "button" | "submit";
   onClick?: () => void;
   width?: number | string;
   /** Overrides the default button artwork ratio for compact design variants. */
@@ -191,6 +193,7 @@ export default function Button({
   directionGap = 8,
   directionIconRotation,
   href,
+  htmlType = "button",
   onClick,
   className = "",
   width,
@@ -420,7 +423,7 @@ export default function Button({
 
   return (
     <button
-      type="button"
+      type={htmlType}
       onClick={!isDisabled ? onClick : undefined}
       disabled={isDisabled}
       className={rootClassName}

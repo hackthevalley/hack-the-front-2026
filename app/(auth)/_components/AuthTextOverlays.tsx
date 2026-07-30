@@ -299,6 +299,7 @@ export default function AuthTextOverlays() {
         <Button
           text={isSubmitting ? "Logging In..." : "Log In"}
           buttonType={canSubmit ? "primary" : "disabled"}
+          htmlType="submit"
           width="100%"
           fontSize={24}
           className="h-full"
