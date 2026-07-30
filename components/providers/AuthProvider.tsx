@@ -70,6 +70,7 @@ export default function AuthProvider({
 
       const response = await fetch(apiUrl("/api/account/tokens"), {
         method: "POST",
+        signal: AbortSignal.timeout(10_000),
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${currentToken}`,
@@ -106,19 +107,22 @@ export default function AuthProvider({
   React.useEffect(() => {
     let cancelled = false;
 
-    async function initializeAuth() {
-      if (!localStorage.getItem(ACCESS_TOKEN_KEY)) {
+    function initializeAuth() {
+      const storedToken = localStorage.getItem(ACCESS_TOKEN_KEY);
+      if (!storedToken) {
         if (!cancelled) setIsAuthReady(true);
         return;
       }
 
-      try {
-        await refreshToken();
-      } catch {
-        if (!cancelled) setToken(null);
-      } finally {
-        if (!cancelled) setIsAuthReady(true);
-      }
+      // Restore synchronously so protected pages can perform their own
+      // authenticated load without waiting on a refresh request that may have
+      // been suspended when a browser tab was closed and restored.
+      setToken(storedToken);
+      setIsAuthReady(true);
+      void refreshToken().catch(() => {
+        // A network failure should not deadlock route rendering. The protected
+        // page request will independently validate the stored token.
+      });
     }
 
     function handleStorage(event: StorageEvent) {
@@ -128,7 +132,7 @@ export default function AuthProvider({
       }
     }
 
-    void initializeAuth();
+    initializeAuth();
     window.addEventListener("storage", handleStorage);
     return () => {
       cancelled = true;

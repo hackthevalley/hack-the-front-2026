@@ -31,11 +31,18 @@ export default function AuthRouteGuard({
     }
   }, [router, shouldRedirectToDashboard, shouldRedirectToLogin]);
 
-  if (
-    !isAuthReady ||
-    shouldRedirectToLogin ||
-    shouldRedirectToDashboard
-  ) {
+  if (!isAuthReady) {
+    return (
+      <main
+        role="status"
+        className="flex min-h-screen items-center justify-center bg-[#0a0324] font-figtree text-white"
+      >
+        Loading...
+      </main>
+    );
+  }
+
+  if (shouldRedirectToLogin || shouldRedirectToDashboard) {
     return null;
   }
 

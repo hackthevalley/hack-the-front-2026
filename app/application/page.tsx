@@ -56,6 +56,10 @@ export default function ApplicationPage() {
     if (!token) return;
 
     const controller = new AbortController();
+    const requestSignal = AbortSignal.any([
+      controller.signal,
+      AbortSignal.timeout(10_000),
+    ]);
 
     async function loadApplication() {
       setIsLoadingApplication(true);
@@ -69,11 +73,11 @@ export default function ApplicationPage() {
         const [questionsResponse, applicationResponse] = await Promise.all([
           fetch(apiUrl("/api/forms/questions"), {
             headers,
-            signal: controller.signal,
+            signal: requestSignal,
           }),
           fetch(apiUrl("/api/forms/application"), {
             headers,
-            signal: controller.signal,
+            signal: requestSignal,
           }),
         ]);
 
@@ -118,6 +122,19 @@ export default function ApplicationPage() {
     void loadApplication();
     return () => controller.abort();
   }, [logout, token]);
+
+  React.useEffect(() => {
+    if (!isLoadingApplication) return;
+
+    const timeoutId = window.setTimeout(() => {
+      setLoadError(
+        "We couldn't load your application. Please refresh and try again.",
+      );
+      setIsLoadingApplication(false);
+    }, 12_000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [isLoadingApplication]);
 
   React.useEffect(() => {
     if (isLoadingApplication || loadError || !token || questions.length === 0) {
