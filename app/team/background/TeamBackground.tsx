@@ -13,12 +13,12 @@ type TeamBackgroundProps = {
 
 export default function TeamBackground({ children }: TeamBackgroundProps) {
   return (
-    <div className="relative w-full overflow-hidden">
+    <div className="relative w-full overflow-hidden bg-[#040A15]">
       <div
         className="team-shelf-canvas relative"
         style={{
           aspectRatio: `${TEAM_DESIGN_WIDTH} / ${TEAM_DESIGN_HEIGHT}`,
-          background: "#040815",
+          background: "#040A15",
         }}
       >
       <div
