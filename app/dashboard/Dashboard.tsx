@@ -1,18 +1,36 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import PortalBackButton from "@/components/layout/PortalBackButton";
 import PortalContentStage from "@/components/layout/PortalContentStage";
 import PortalNavbar from "@/components/layout/PortalNavbar";
 import { useAuth } from "@/components/providers/AuthProvider";
 import Button from "@/components/ui/Button";
+import { apiUrl } from "@/lib/auth";
 
-export type DashboardStatus =
+type DashboardStatus =
   | "apply"
   | "pending"
   | "not-submitted"
   | "accepted"
-  | "declined";
+  | "declined"
+  | "loading"
+  | "unavailable";
+
+type UserResponse = {
+  application_status: string | null;
+};
+
+type RegistrationTimeRange = {
+  start_at: string;
+  end_at: string;
+};
+
+type DashboardData = {
+  deadline: string;
+  status: DashboardStatus;
+};
 
 const STATUS_DETAILS: Record<
   DashboardStatus,
@@ -59,7 +77,67 @@ const STATUS_DETAILS: Record<
     disabled: true,
     potionClass: "",
   },
+  loading: {
+    title: "Loading...",
+    titleColor: "#d1d5db",
+    action: "Loading",
+    disabled: true,
+    potionClass: "grayscale",
+  },
+  unavailable: {
+    title: "Unavailable",
+    titleColor: "#ff6068",
+    action: "Try Again Later",
+    disabled: true,
+    potionClass: "grayscale",
+  },
 };
+
+const PENDING_STATUSES = new Set([
+  "APPLIED",
+  "UNDER_REVIEW",
+  "WAITLISTED",
+  "WALK_IN_SUBMITTED",
+]);
+const ACCEPTED_STATUSES = new Set([
+  "ACCEPTED",
+  "ACCEPTED_INVITE",
+  "SCANNED_IN",
+]);
+const DECLINED_STATUSES = new Set(["REJECTED", "REJECTED_INVITE"]);
+
+function resolveDashboardStatus(
+  applicationStatus: string | null,
+  registration: RegistrationTimeRange,
+): DashboardStatus {
+  if (PENDING_STATUSES.has(applicationStatus ?? "")) return "pending";
+  if (ACCEPTED_STATUSES.has(applicationStatus ?? "")) return "accepted";
+  if (DECLINED_STATUSES.has(applicationStatus ?? "")) return "declined";
+  if (applicationStatus === "WALK_IN") return "apply";
+
+  const now = Date.now();
+  const start = new Date(registration.start_at).getTime();
+  const end = new Date(registration.end_at).getTime();
+  const registrationIsOpen =
+    Number.isFinite(start) &&
+    Number.isFinite(end) &&
+    now > start &&
+    now < end;
+
+  return registrationIsOpen ? "apply" : "not-submitted";
+}
+
+function formatDeadline(value: string): string {
+  const deadline = new Date(value);
+  if (Number.isNaN(deadline.getTime())) return "Unavailable";
+
+  return new Intl.DateTimeFormat("en-CA", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  }).format(deadline);
+}
 
 type ArtProps = {
   src: string;
@@ -78,11 +156,77 @@ function Art({ src, className }: ArtProps) {
   );
 }
 
-export default function Dashboard({ status }: { status: DashboardStatus }) {
+export default function Dashboard() {
   const router = useRouter();
-  const { logout } = useAuth();
+  const { logout, token } = useAuth();
+  const [dashboardData, setDashboardData] = useState<DashboardData>({
+    deadline: "Loading...",
+    status: "loading",
+  });
+  const status = dashboardData.status;
   const current = STATUS_DETAILS[status];
   const isNotSubmitted = status === "not-submitted";
+
+  useEffect(() => {
+    if (!token) return;
+
+    const controller = new AbortController();
+
+    async function loadDashboard() {
+      try {
+        const headers = {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        };
+        const [userResponse, registrationResponse] = await Promise.all([
+          fetch(apiUrl("/api/account/me"), {
+            headers,
+            signal: controller.signal,
+          }),
+          fetch(apiUrl("/api/forms/registration-timerange"), {
+            headers,
+            signal: controller.signal,
+          }),
+        ]);
+
+        if (
+          userResponse.status === 401 ||
+          userResponse.status === 403 ||
+          registrationResponse.status === 401 ||
+          registrationResponse.status === 403
+        ) {
+          logout();
+          router.replace("/login");
+          return;
+        }
+
+        if (!userResponse.ok || !registrationResponse.ok) {
+          throw new Error("Unable to load dashboard");
+        }
+
+        const user = (await userResponse.json()) as UserResponse;
+        const registration =
+          (await registrationResponse.json()) as RegistrationTimeRange;
+
+        setDashboardData({
+          deadline: formatDeadline(registration.end_at),
+          status: resolveDashboardStatus(
+            user.application_status,
+            registration,
+          ),
+        });
+      } catch (error) {
+        if (error instanceof Error && error.name === "AbortError") return;
+        setDashboardData({
+          deadline: "Unavailable",
+          status: "unavailable",
+        });
+      }
+    }
+
+    void loadDashboard();
+    return () => controller.abort();
+  }, [logout, router, token]);
 
   return (
     <main className="relative h-dvh min-h-[520px] overflow-hidden bg-[radial-gradient(circle_at_50%_55%,#171b70_0%,#0d0a46_42%,#07021d_100%)] text-white">
@@ -263,7 +407,7 @@ export default function Dashboard({ status }: { status: DashboardStatus }) {
             {current.title}
           </p>
           <p className="absolute left-[61.2%] top-[54.26%] w-[38.89%] -translate-x-1/2 whitespace-nowrap text-center font-figtree text-[clamp(10px,1.06vw,16px)] leading-[1.2] text-[#cecece]">
-            Application deadline: September XXXX
+            Application deadline: {dashboardData.deadline}
           </p>
           <div className="absolute left-[44.41%] top-[66.93%] h-[18.67%] w-[33.57%]">
             <Button
