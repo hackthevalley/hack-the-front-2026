@@ -246,8 +246,45 @@ function DashboardAvatar({
       : undefined;
   const isFigmaOwlHat =
     avatar?.key === "owl" && accessory?.key === "hat";
+  const underTreeClass =
+    avatar?.key === "raccoon"
+      ? "left-[42.06%] top-[69.96%] w-[16.2%]"
+      : avatar?.key === "bear"
+        ? "left-[59.92%] top-[67.62%] w-[16.73%]"
+        : null;
 
   if (!avatar) return null;
+
+  if (underTreeClass) {
+    return (
+      <div
+        className={`pointer-events-none absolute z-10 aspect-square select-none ${underTreeClass}`}
+      >
+        <img
+          src={avatar.src}
+          alt={`${avatar.label} avatar`}
+          draggable="false"
+          className="absolute inset-0 size-full max-w-none object-contain"
+        />
+        {accessory && placement && (
+          <img
+            src={accessory.src}
+            alt={`${accessory.label} accessory`}
+            draggable="false"
+            className="absolute h-auto max-w-none object-contain"
+            style={{
+              left: `${placement.left}%`,
+              top: `${placement.top}%`,
+              width: `${placement.width}%`,
+              transform: placement.rotate
+                ? `rotate(${placement.rotate}deg)`
+                : undefined,
+            }}
+          />
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="pointer-events-none absolute left-[78.64%] top-[42.87%] z-10 aspect-[335.84/345.63] w-[22.21%] select-none">
