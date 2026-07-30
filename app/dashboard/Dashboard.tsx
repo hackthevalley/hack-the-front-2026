@@ -278,7 +278,7 @@ export default function Dashboard({ status }: { status: DashboardStatus }) {
 
       <PortalContentStage>
         <PortalNavbar />
-        <PortalBackButton href="/login" />
+        <PortalBackButton href="/" />
       </PortalContentStage>
     </main>
   );

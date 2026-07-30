@@ -1,3 +1,4 @@
+import AuthRouteGuard from "@/components/providers/AuthRouteGuard";
 import Dashboard, { type DashboardStatus } from "./Dashboard";
 
 const VALID_STATUSES = new Set<DashboardStatus>([
@@ -19,5 +20,9 @@ export default async function DashboardPage({
       ? (requestedStatus as DashboardStatus)
       : "apply";
 
-  return <Dashboard status={status} />;
+  return (
+    <AuthRouteGuard requireAuth>
+      <Dashboard status={status} />
+    </AuthRouteGuard>
+  );
 }

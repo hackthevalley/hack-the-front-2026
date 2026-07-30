@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import AuthRouteGuard from "@/components/providers/AuthRouteGuard";
 import AuthFlow from "../_components/AuthFlow";
 
 export const metadata: Metadata = {
@@ -6,5 +7,9 @@ export const metadata: Metadata = {
 };
 
 export default function LoginPage() {
-  return <AuthFlow initialView="login" />;
+  return (
+    <AuthRouteGuard redirectAuthenticated>
+      <AuthFlow initialView="login" />
+    </AuthRouteGuard>
+  );
 }

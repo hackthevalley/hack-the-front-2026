@@ -12,6 +12,7 @@ const REFRESH_RETRY_MS = 60 * 1000;
 
 type AuthContextValue = {
   token: string | null;
+  isAuthReady: boolean;
   isAuthenticated: boolean;
   login: (accessToken: string) => void;
   logout: () => void;
@@ -42,6 +43,7 @@ export default function AuthProvider({
   children: React.ReactNode;
 }) {
   const [token, setToken] = React.useState<string | null>(null);
+  const [isAuthReady, setIsAuthReady] = React.useState(false);
   const refreshPromiseRef = React.useRef<Promise<string | null> | null>(null);
 
   const logout = React.useCallback(() => {
@@ -102,17 +104,37 @@ export default function AuthProvider({
   }, [login, logout]);
 
   React.useEffect(() => {
-    setToken(localStorage.getItem(ACCESS_TOKEN_KEY));
+    let cancelled = false;
+
+    async function initializeAuth() {
+      if (!localStorage.getItem(ACCESS_TOKEN_KEY)) {
+        if (!cancelled) setIsAuthReady(true);
+        return;
+      }
+
+      try {
+        await refreshToken();
+      } catch {
+        if (!cancelled) setToken(null);
+      } finally {
+        if (!cancelled) setIsAuthReady(true);
+      }
+    }
 
     function handleStorage(event: StorageEvent) {
       if (event.key === ACCESS_TOKEN_KEY) {
         setToken(event.newValue);
+        setIsAuthReady(true);
       }
     }
 
+    void initializeAuth();
     window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
-  }, []);
+    return () => {
+      cancelled = true;
+      window.removeEventListener("storage", handleStorage);
+    };
+  }, [refreshToken]);
 
   React.useEffect(() => {
     if (!token) return;
@@ -154,12 +176,13 @@ export default function AuthProvider({
   const value = React.useMemo<AuthContextValue>(
     () => ({
       token,
+      isAuthReady,
       isAuthenticated: token !== null,
       login,
       logout,
       refreshToken,
     }),
-    [login, logout, refreshToken, token],
+    [isAuthReady, login, logout, refreshToken, token],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
