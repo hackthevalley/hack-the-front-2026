@@ -13,6 +13,8 @@ type FileUploadProps = {
   placeholder?: string;
   required?: boolean;
   accept?: string;
+  maxSizeBytes?: number;
+  existingFileName?: string;
   value?: File | null;
   onChange?: (file: File | null) => void;
   onValidityChange?: (hasError: boolean) => void;
@@ -44,6 +46,8 @@ function FileUpload(
     placeholder = "Attach File",
     required = false,
     accept,
+    maxSizeBytes,
+    existingFileName,
     value,
     onChange,
     onValidityChange,
@@ -59,8 +63,37 @@ function FileUpload(
   const fieldId = React.useId();
   const errorId = `${fieldId}-error`;
 
+  function fileError(candidate: File | null): string | null {
+    if (required && !candidate && !existingFileName) {
+      return `${name} is required.`;
+    }
+    if (!candidate) return null;
+
+    if (maxSizeBytes && candidate.size > maxSizeBytes) {
+      return `File must be ${Math.floor(maxSizeBytes / 1024 / 1024)} MB or smaller.`;
+    }
+
+    if (accept) {
+      const acceptedTypes = accept
+        .split(",")
+        .map((type) => type.trim().toLowerCase());
+      const extension = `.${candidate.name.split(".").pop()?.toLowerCase() ?? ""}`;
+      const mimeType = candidate.type.toLowerCase();
+      const isAccepted = acceptedTypes.some(
+        (type) =>
+          type === extension ||
+          type === mimeType ||
+          (type.endsWith("/*") &&
+            mimeType.startsWith(type.slice(0, type.length - 1))),
+      );
+      if (!isAccepted) return "Please choose a supported file type.";
+    }
+
+    return null;
+  }
+
   function validate(): boolean {
-    const message = required && !file ? `${name} is required.` : null;
+    const message = fileError(file);
     setError(message);
     onValidityChange?.(message !== null);
     return message === null;
@@ -70,10 +103,20 @@ function FileUpload(
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const next = event.target.files?.[0] ?? null;
+    const message = fileError(next);
+    setError(message);
+    onValidityChange?.(message !== null);
+
+    if (message) {
+      event.target.value = "";
+      setInternalFile(null);
+      return;
+    }
+
     setInternalFile(next);
     onChange?.(next);
 
-    if (error && next) {
+    if (error) {
       setError(null);
       onValidityChange?.(false);
     }
@@ -92,7 +135,7 @@ function FileUpload(
         <span className="relative z-10 flex flex-col items-center gap-2 text-white/40">
           <UploadIcon className="h-5 w-5" />
           <span className="text-[clamp(14px,1.1vw,18px)]">
-            {file ? file.name : placeholder}
+            {file?.name || existingFileName || placeholder}
           </span>
         </span>
 

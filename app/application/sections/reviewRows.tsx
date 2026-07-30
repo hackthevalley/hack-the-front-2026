@@ -106,7 +106,11 @@ export const RIGHT_GROUPS: SummaryGroup[] = [
     title: "Portfolio",
     rows: [
       { label: "Portfolio", get: (d) => d.portfolio.portfolio || "—" },
-      { label: "Resume", get: (d) => d.portfolio.resume?.name || "—" },
+      {
+        label: "Resume",
+        get: (d) =>
+          d.portfolio.resume?.name || d.portfolio.savedResumeName || "—",
+      },
     ],
   },
   {

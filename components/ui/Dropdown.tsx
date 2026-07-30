@@ -84,6 +84,7 @@ function Dropdown(
   const [internalValue, setInternalValue] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
   const [open, setOpen] = React.useState(false);
+  const [activeIndex, setActiveIndex] = React.useState(0);
 
   const value = controlledValue ?? internalValue;
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -161,6 +162,7 @@ function Dropdown(
     setInternalValue(option);
     onChange?.(option);
     setOpen(false);
+    triggerRef.current?.focus();
 
     if (error && !computeError(option)) {
       setError(null);
@@ -170,10 +172,59 @@ function Dropdown(
 
   function handleKeyDown(event: React.KeyboardEvent) {
     if (event.key === "Escape") {
+      event.preventDefault();
       setOpen(false);
       validate();
+      triggerRef.current?.focus();
+      return;
+    }
+
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      if (!open) {
+        const selectedIndex = options.indexOf(value);
+        setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
+        setOpen(true);
+        return;
+      }
+      setActiveIndex((current) => {
+        const direction = event.key === "ArrowDown" ? 1 : -1;
+        return (current + direction + options.length) % options.length;
+      });
+      return;
+    }
+
+    if (open && event.key === "Home") {
+      event.preventDefault();
+      setActiveIndex(0);
+      return;
+    }
+
+    if (open && event.key === "End") {
+      event.preventDefault();
+      setActiveIndex(options.length - 1);
+      return;
+    }
+
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      if (open) {
+        const option = options[activeIndex];
+        if (option) selectOption(option);
+      } else {
+        const selectedIndex = options.indexOf(value);
+        setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
+        setOpen(true);
+      }
     }
   }
+
+  React.useEffect(() => {
+    if (!open) return;
+    document
+      .getElementById(`${listId}-option-${activeIndex}`)
+      ?.scrollIntoView({ block: "nearest" });
+  }, [activeIndex, listId, open]);
 
   // Keep the minimum at 16px: anything smaller makes iOS Safari zoom the page
   // when the field is focused on mobile.
@@ -190,12 +241,20 @@ function Dropdown(
           ref={triggerRef}
           id={fieldId}
           type="button"
+          role="combobox"
           aria-haspopup="listbox"
           aria-expanded={open}
           aria-controls={listId}
+          aria-activedescendant={
+            open ? `${listId}-option-${activeIndex}` : undefined
+          }
           aria-invalid={error !== null}
           aria-describedby={error ? errorId : undefined}
-          onClick={() => setOpen((prev) => !prev)}
+          onClick={() => {
+            const selectedIndex = options.indexOf(value);
+            setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
+            setOpen((prev) => !prev);
+          }}
           onBlur={() => {
             if (!open) validate();
           }}
@@ -244,6 +303,7 @@ function Dropdown(
               id={listId}
               role="listbox"
               aria-labelledby={fieldId}
+              onKeyDown={handleKeyDown}
               className="fixed z-20 max-h-60 overflow-y-auto rounded-[10px] border-2 border-transparent p-1.5 shadow-[0px_4px_10px_rgba(0,0,0,0.35)]"
               style={{
                 background: BORDER_GRADIENT_BACKGROUND,
@@ -252,11 +312,14 @@ function Dropdown(
                 width: listRect.width,
               }}
             >
-              {options.map((option) => (
+              {options.map((option, index) => (
                 <li
                   key={option}
+                  id={`${listId}-option-${index}`}
                   role="option"
                   aria-selected={option === value}
+                  data-active={index === activeIndex}
+                  onMouseEnter={() => setActiveIndex(index)}
                   onMouseDown={(event) => {
                     // Prevent the trigger from blurring before the click
                     // registers, which would close the list first and drop it.
@@ -268,6 +331,7 @@ function Dropdown(
                     transition-colors duration-200 ease-out
                     ${inputSizeClass}
                     ${option === value ? "bg-white/15 text-white" : "text-white/80"}
+                    ${index === activeIndex ? "bg-white/10 text-white outline-none ring-1 ring-white/50" : ""}
                     hover:bg-white/10 hover:text-white
                   `}
                 >

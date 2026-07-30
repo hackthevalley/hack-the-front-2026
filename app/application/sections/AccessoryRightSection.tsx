@@ -90,10 +90,8 @@ const AccessoryRightSection = React.forwardRef<
               left: `${placement.left}%`,
               top: `${placement.top}%`,
               width: `${placement.width}%`,
-              transform: placement.rotate
-                ? `rotate(${placement.rotate}deg)`
-                : undefined,
-            }}
+              "--accessory-rotate": `${placement.rotate ?? 0}deg`,
+            } as React.CSSProperties}
           />
         )}
       </AvatarFrame>

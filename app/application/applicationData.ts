@@ -7,6 +7,7 @@ import {
 export type BackendQuestion = {
   label: string;
   question_id: string;
+  required?: boolean;
 };
 
 export type BackendAnswer = {

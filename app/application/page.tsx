@@ -75,6 +75,7 @@ export default function ApplicationPage() {
   const [isLoadingApplication, setIsLoadingApplication] = React.useState(true);
   const [loadError, setLoadError] = React.useState<string | null>(null);
   const [questions, setQuestions] = React.useState<BackendQuestion[]>([]);
+  const [hasSavedResume, setHasSavedResume] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const sectionRef = React.useRef<SectionHandle>(null);
   const leftSectionRef = React.useRef<SectionHandle>(null);
@@ -175,9 +176,12 @@ export default function ApplicationPage() {
           questions,
           application.form_answers,
         );
+        hydrated.portfolio.savedResumeName =
+          application.form_answersfile ?? "";
 
         setQuestions(questions);
         setFormData(hydrated);
+        setHasSavedResume(Boolean(application.form_answersfile));
         lastSavedAnswersRef.current = JSON.stringify(
           serializeApplicationAnswers(hydrated, questions),
         );
@@ -285,7 +289,10 @@ export default function ApplicationPage() {
         }
 
         if (answersChanged) lastSavedAnswersRef.current = answersSnapshot;
-        if (resumeChanged) lastUploadedResumeRef.current = resume;
+        if (resumeChanged) {
+          lastUploadedResumeRef.current = resume;
+          setHasSavedResume(true);
+        }
         toast.success("Saved", {
           id: AUTOSAVE_TOAST_ID,
           duration: 250,
@@ -313,6 +320,29 @@ export default function ApplicationPage() {
 
   async function submitApplication() {
     if (!token || isSubmitting) return;
+
+    const answerByQuestionId = new Map(
+      serializeApplicationAnswers(formData, questions).map((answer) => [
+        answer.question_id,
+        answer.answer.trim(),
+      ]),
+    );
+    const missingQuestion = questions.find((question) => {
+      if (!question.required) return false;
+      if (question.label.toLowerCase().includes("resume")) {
+        return !formData.portfolio.resume && !hasSavedResume;
+      }
+      const answer = answerByQuestionId.get(question.question_id);
+      return !answer || answer.toLowerCase() === "false";
+    });
+
+    if (missingQuestion) {
+      toast.error(`Please complete: ${missingQuestion.label}`, {
+        id: AUTOSAVE_TOAST_ID,
+        duration: 2500,
+      });
+      return;
+    }
 
     setIsSubmitting(true);
     toast.loading("Submitting application...", {
@@ -367,7 +397,10 @@ export default function ApplicationPage() {
       }
 
       lastSavedAnswersRef.current = answersSnapshot;
-      if (resume) lastUploadedResumeRef.current = resume;
+      if (resume) {
+        lastUploadedResumeRef.current = resume;
+        setHasSavedResume(true);
+      }
 
       const submissionResponse = await fetch(
         apiUrl("/api/forms/submission"),
