@@ -18,6 +18,8 @@ import {
 const TITLE_GLOW = "0 0 16.6px #FEE9D3";
 const EMAIL_ERROR = "Please enter a valid email.";
 const CREDENTIAL_ERROR = "Email or password incorrect";
+const INACTIVE_ACCOUNT_ERROR =
+  "Account not verified. Check your email for a new activation link.";
 const LOGIN_ERROR = "Unable to log in. Please try again.";
 
 export default function AuthTextOverlays() {
@@ -75,8 +77,19 @@ export default function AuthTextOverlays() {
       });
 
       if (!response.ok) {
+        const errorBody = (await response.json().catch(() => null)) as {
+          detail?: unknown;
+        } | null;
+        const isInactiveAccount =
+          response.status === 403 &&
+          errorBody?.detail === "Account is not activated";
+
         setCredentialError(
-          response.status === 401 ? CREDENTIAL_ERROR : LOGIN_ERROR,
+          isInactiveAccount
+            ? INACTIVE_ACCOUNT_ERROR
+            : response.status === 401
+              ? CREDENTIAL_ERROR
+              : LOGIN_ERROR,
         );
         emailRef.current?.focus();
         return;
