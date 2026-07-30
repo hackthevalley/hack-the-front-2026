@@ -1,0 +1,24 @@
+<svg width="198" height="96" viewBox="0 0 198 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="HTV Hi-fi Landing">
+<g id="NEW">
+<g id="rocks">
+<path id="Vector 336" d="M150.954 14.7243C192.166 17.0876 196.696 48.8649 192.646 64.3391C188.596 79.8134 53.9486 64.5019 65.321 51.319C76.6934 38.1361 109.741 12.361 150.954 14.7243Z" fill="url(#paint1_linear_1_3)"/>
+<path id="Vector 337" d="M46.3442 48.364C87.4591 50.7128 110.448 75.9522 84.2658 79.2262C58.0841 82.5003 24.1418 80.4216 7.99741 71.4271C-8.14693 62.4326 5.22929 46.0151 46.3442 48.364Z" fill="url(#paint2_linear_1_3)"/>
+</g>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_1_3" x1="674" y1="-100" x2="-523.029" y2="9859.27" gradientUnits="userSpaceOnUse">
+<stop stop-color="#040142"/>
+<stop offset="1" stop-color="#C066BE"/>
+</linearGradient>
+<linearGradient id="paint1_linear_1_3" x1="110.154" y1="93.2649" x2="162.164" y2="-19.5192" gradientUnits="userSpaceOnUse">
+<stop offset="0.00370806" stop-color="#192985"/>
+<stop offset="1" stop-color="#F6C7FC"/>
+</linearGradient>
+<linearGradient id="paint2_linear_1_3" x1="67.8369" y1="113.733" x2="80.9523" y2="50.781" gradientUnits="userSpaceOnUse">
+<stop offset="0.00370806" stop-color="#2136AE"/>
+<stop offset="1" stop-color="#F6C7FC"/>
+</linearGradient>
+</defs>
+</svg>
