@@ -11,7 +11,16 @@ import {
   FAQ_THEMES_DESIGN_WIDTH,
 } from "./faq-themes/background/layers";
 import FaqTitleOverlay from "./faq-themes/faq/FaqTitleOverlay";
+import SponsorsPanels from "./sponsors/SponsorsPanels";
 import MobileHomeSection from "./home/MobileHomeSection";
+import SponsorsBackground from "./sponsors/background/SponsorsBackground";
+import SponsorsForeground from "./sponsors/foreground/SponsorsForeground";
+import SponsorsTextOverlays from "./sponsors/SponsorsTextOverlays";
+import TeamOverlays from "./team/TeamOverlays";
+import TeamBackground from "./team/background/TeamBackground";
+import { teamMembers } from "./team/members";
+import SiteFooter from "./footer/SiteFooter";
+import FaqToSponsorsTransition from "./transitions/faq-to-sponsors/FaqToSponsorsTransition";
 import HomeToFaqTransition from "./transitions/home-to-faq/HomeToFaqTransition";
 
 export default function Home() {
@@ -59,6 +68,32 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <section
+        id="sponsors"
+        aria-labelledby="sponsors-title"
+        className="relative"
+        style={{ marginTop: "-2px" }}
+      >
+        <SponsorsBackground stageWidth={faqStageWidth}>
+          <FaqToSponsorsTransition className="pointer-events-none z-[2]" />
+          <SponsorsPanels />
+          <SponsorsTextOverlays />
+        </SponsorsBackground>
+      </section>
+
+      <section
+        id="team"
+        aria-label="Meet our team"
+        className="relative"
+        style={{ marginTop: "-2px" }}
+      >
+        <TeamBackground>
+          <TeamOverlays teamMembers={teamMembers} />
+        </TeamBackground>
+      </section>
+
+      <SiteFooter />
     </main>
   );
 }

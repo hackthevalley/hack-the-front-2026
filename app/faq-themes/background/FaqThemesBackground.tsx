@@ -19,50 +19,59 @@ type FaqThemesBackgroundProps = {
 function ScenePlane({ layers }: { layers: readonly FaqThemesSceneLayer[] }) {
   return (
     <>
-      {layers.map((layer) => (
-        <div
-          key={layer.id}
-          className="pointer-events-none absolute overflow-hidden"
-          aria-hidden="true"
-          data-figma-id={layer.figmaId}
-          data-figma-name={layer.figmaName}
-          style={{
-            left: `${(layer.left / FAQ_THEMES_DESIGN_WIDTH) * 100}%`,
-            top: `${(layer.top / FAQ_THEMES_DESIGN_HEIGHT) * 100}%`,
-            width: `${(layer.width / FAQ_THEMES_DESIGN_WIDTH) * 100}%`,
-            height: `${(layer.height / FAQ_THEMES_DESIGN_HEIGHT) * 100}%`,
-            zIndex: layer.zIndex,
-            transform: layer.rotation ? `rotate(${layer.rotation}deg)` : undefined,
-            transformOrigin: layer.rotation ? "center center" : undefined,
-          }}
-        >
-          {layer.visibleBounds ? (
-            <img
-              src={layer.src}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              draggable="false"
-              className="absolute max-w-none select-none"
-              style={{
-                left: `${-(layer.visibleBounds.left / layer.visibleBounds.width) * 100}%`,
-                top: `${-(layer.visibleBounds.top / layer.visibleBounds.height) * 100}%`,
-                width: `${(layer.visibleBounds.imageWidth / layer.visibleBounds.width) * 100}%`,
-                height: `${(layer.visibleBounds.imageHeight / layer.visibleBounds.height) * 100}%`,
-              }}
-            />
-          ) : (
-            <img
-              src={layer.src}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              draggable="false"
-              className="h-full w-full max-w-none select-none"
-            />
-          )}
-        </div>
-      ))}
+      {layers.map((layer) => {
+        const isDesktopOnlyTransitionPiece =
+          layer.id === "rectangle-296" || layer.id === "vector-485";
+
+        return (
+          <div
+            key={layer.id}
+            className={`pointer-events-none absolute overflow-hidden ${
+              isDesktopOnlyTransitionPiece ? "hidden md:block" : ""
+            }`}
+            aria-hidden="true"
+            data-figma-id={layer.figmaId}
+            data-figma-name={layer.figmaName}
+            style={{
+              left: `${(layer.left / FAQ_THEMES_DESIGN_WIDTH) * 100}%`,
+              top: `${(layer.top / FAQ_THEMES_DESIGN_HEIGHT) * 100}%`,
+              width: `${(layer.width / FAQ_THEMES_DESIGN_WIDTH) * 100}%`,
+              height: `${(layer.height / FAQ_THEMES_DESIGN_HEIGHT) * 100}%`,
+              zIndex: layer.zIndex,
+              transform: layer.rotation
+                ? `rotate(${layer.rotation}deg)`
+                : undefined,
+              transformOrigin: layer.rotation ? "center center" : undefined,
+            }}
+          >
+            {layer.visibleBounds ? (
+              <img
+                src={layer.src}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                draggable="false"
+                className="absolute max-w-none select-none"
+                style={{
+                  left: `${-(layer.visibleBounds.left / layer.visibleBounds.width) * 100}%`,
+                  top: `${-(layer.visibleBounds.top / layer.visibleBounds.height) * 100}%`,
+                  width: `${(layer.visibleBounds.imageWidth / layer.visibleBounds.width) * 100}%`,
+                  height: `${(layer.visibleBounds.imageHeight / layer.visibleBounds.height) * 100}%`,
+                }}
+              />
+            ) : (
+              <img
+                src={layer.src}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                draggable="false"
+                className="h-full w-full max-w-none select-none"
+              />
+            )}
+          </div>
+        );
+      })}
     </>
   );
 }

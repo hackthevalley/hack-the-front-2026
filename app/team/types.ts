@@ -3,6 +3,7 @@ export type TeamMember = {
   name: string;
   role: string;
   avatarSrc?: string;
+  linkedinUrl: string;
 };
 
 export type JarColor = "teal" | "pink";
