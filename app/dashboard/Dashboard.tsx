@@ -12,9 +12,14 @@ import { apiUrl } from "@/lib/auth";
 type DashboardStatus =
   | "apply"
   | "applying"
+  | "submitted"
   | "pending"
+  | "waitlisted"
   | "not-submitted"
   | "accepted"
+  | "rsvped"
+  | "scanned-in"
+  | "rejected"
   | "declined"
   | "loading"
   | "unavailable";
@@ -57,11 +62,25 @@ const STATUS_DETAILS: Record<
     disabled: false,
     potionClass: "",
   },
+  submitted: {
+    title: "Submitted",
+    titleColor: "#d1d5db",
+    action: "Applied",
+    disabled: true,
+    potionClass: "grayscale",
+  },
   pending: {
     title: "Pending",
     titleColor: "#d1d5db",
-    action: "Open",
-    disabled: false,
+    action: "Applied",
+    disabled: true,
+    potionClass: "grayscale",
+  },
+  waitlisted: {
+    title: "Waitlisted",
+    titleColor: "#d1d5db",
+    action: "Applied",
+    disabled: true,
     potionClass: "grayscale",
   },
   "not-submitted": {
@@ -74,14 +93,35 @@ const STATUS_DETAILS: Record<
   accepted: {
     title: "Accepted",
     titleColor: "#71e4bc",
-    action: "Application Closed",
+    action: "Applied",
+    disabled: true,
+    potionClass: "",
+  },
+  rsvped: {
+    title: "RSVPed",
+    titleColor: "#71e4bc",
+    action: "Applied",
+    disabled: true,
+    potionClass: "",
+  },
+  "scanned-in": {
+    title: "Scanned In",
+    titleColor: "#71e4bc",
+    action: "Applied",
+    disabled: true,
+    potionClass: "",
+  },
+  rejected: {
+    title: "Rejected",
+    titleColor: "#ff6068",
+    action: "Applied",
     disabled: true,
     potionClass: "",
   },
   declined: {
     title: "Declined",
     titleColor: "#ff6068",
-    action: "Application Closed",
+    action: "Applied",
     disabled: true,
     potionClass: "",
   },
@@ -101,26 +141,20 @@ const STATUS_DETAILS: Record<
   },
 };
 
-const PENDING_STATUSES = new Set([
-  "APPLIED",
-  "UNDER_REVIEW",
-  "WAITLISTED",
-  "WALK_IN_SUBMITTED",
-]);
-const ACCEPTED_STATUSES = new Set([
-  "ACCEPTED",
-  "ACCEPTED_INVITE",
-  "SCANNED_IN",
-]);
-const DECLINED_STATUSES = new Set(["REJECTED", "REJECTED_INVITE"]);
+const SUBMITTED_STATUSES = new Set(["APPLIED", "WALK_IN_SUBMITTED"]);
 
 function resolveDashboardStatus(
   applicationStatus: string | null,
   registration: RegistrationTimeRange,
 ): DashboardStatus {
-  if (PENDING_STATUSES.has(applicationStatus ?? "")) return "pending";
-  if (ACCEPTED_STATUSES.has(applicationStatus ?? "")) return "accepted";
-  if (DECLINED_STATUSES.has(applicationStatus ?? "")) return "declined";
+  if (SUBMITTED_STATUSES.has(applicationStatus ?? "")) return "submitted";
+  if (applicationStatus === "UNDER_REVIEW") return "pending";
+  if (applicationStatus === "WAITLISTED") return "waitlisted";
+  if (applicationStatus === "ACCEPTED") return "accepted";
+  if (applicationStatus === "ACCEPTED_INVITE") return "rsvped";
+  if (applicationStatus === "SCANNED_IN") return "scanned-in";
+  if (applicationStatus === "REJECTED") return "rejected";
+  if (applicationStatus === "REJECTED_INVITE") return "declined";
   if (applicationStatus === "WALK_IN") return "apply";
 
   const now = Date.now();
@@ -397,7 +431,7 @@ export default function Dashboard() {
           />
           <Art
             src={
-              status === "declined"
+              status === "declined" || status === "rejected"
                 ? "/dashboard/declined-potion.svg"
                 : "/dashboard/status-potion.svg"
             }
