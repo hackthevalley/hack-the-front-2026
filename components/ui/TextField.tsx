@@ -211,7 +211,7 @@ function TextField(
             isAuthTheme
               ? "h-full gap-[3.85cqw] rounded-[34.31cqh] border-[2.573cqh] border-white px-[3.85cqw] py-[11cqh]"
               : isApplicationTheme
-              ? "h-[47px] gap-2.5 rounded-[10px] border-0 px-5 py-2.5 shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
+              ? "h-11.75 gap-2.5 rounded-[10px] border-0 px-5 py-2.5 shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
               : "gap-3 rounded-[clamp(16px,1.6vw,24px)] border-2 border-white px-[clamp(16px,1.6vw,28px)] py-[clamp(12px,1.2vw,20px)] focus-within:border-[#F6C7FC] focus-within:shadow-[0_0_12px_2px_rgba(246,199,252,0.55)]"
           }
         `}
