@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import {
+  getPasswordValidationMessage,
   isValidEmail,
-  isValidPassword,
   isValidPhoneNumber,
   formatPhoneNumber,
 } from "@/components/ui/validation";
@@ -118,11 +118,11 @@ function TextField(
     if (type === "email" && !isValidEmail(trimmed)) {
       return errorMessages.invalid ?? "Please enter a valid email.";
     }
-    if (type === "password" && requireStrongPassword && !isValidPassword(val)) {
-      return (
-        errorMessages.invalid ??
-        "Password must be at least 8 characters with a capital letter and a number."
-      );
+    if (type === "password" && requireStrongPassword) {
+      const passwordMessage = getPasswordValidationMessage(val);
+      if (passwordMessage) {
+        return errorMessages.invalid ?? passwordMessage;
+      }
     }
     if (type === "number") {
       if (!/^\d+$/.test(trimmed)) {
