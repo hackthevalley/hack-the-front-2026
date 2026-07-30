@@ -8,6 +8,20 @@ import PortalNavbar from "@/components/layout/PortalNavbar";
 import { useAuth } from "@/components/providers/AuthProvider";
 import Button from "@/components/ui/Button";
 import { apiUrl } from "@/lib/auth";
+import {
+  hydrateApplicationAnswers,
+  type BackendApplicationResponse,
+  type BackendQuestion,
+} from "@/app/application/applicationData";
+import {
+  ACCESSORIES,
+  AVATARS,
+  getComboPlacement,
+} from "@/app/application/sections/avatarAssets";
+import type {
+  AccessoryKey,
+  AvatarKey,
+} from "@/app/application/sections/data";
 
 type DashboardStatus =
   | "apply"
@@ -34,6 +48,8 @@ type RegistrationTimeRange = {
 };
 
 type DashboardData = {
+  accessory: AccessoryKey | null;
+  avatar: AvatarKey | null;
   deadline: string;
   status: DashboardStatus;
 };
@@ -142,6 +158,17 @@ const STATUS_DETAILS: Record<
 };
 
 const SUBMITTED_STATUSES = new Set(["APPLIED", "WALK_IN_SUBMITTED"]);
+const NO_APPLICATION_STATUSES = new Set([
+  "ACCOUNT_INACTIVE",
+  "NOT_APPLIED",
+]);
+
+function hasApplication(applicationStatus: string | null): boolean {
+  return (
+    applicationStatus !== null &&
+    !NO_APPLICATION_STATUSES.has(applicationStatus)
+  );
+}
 
 function resolveDashboardStatus(
   applicationStatus: string | null,
@@ -202,10 +229,69 @@ function Art({ src, className }: ArtProps) {
   );
 }
 
+function DashboardAvatar({
+  accessoryKey,
+  avatarKey,
+}: {
+  accessoryKey: AccessoryKey | null;
+  avatarKey: AvatarKey;
+}) {
+  const avatar = AVATARS.find((option) => option.key === avatarKey);
+  const accessory = ACCESSORIES.find(
+    (option) => option.key === accessoryKey,
+  );
+  const placement =
+    avatar && accessory
+      ? getComboPlacement(avatar.key, accessory.key)
+      : undefined;
+  const isFigmaOwlHat =
+    avatar?.key === "owl" && accessory?.key === "hat";
+
+  if (!avatar) return null;
+
+  return (
+    <div className="pointer-events-none absolute left-[78.64%] top-[42.87%] z-10 aspect-[335.84/345.63] w-[22.21%] select-none">
+      <img
+        src={avatar.src}
+        alt={`${avatar.label} avatar`}
+        draggable="false"
+        className="absolute left-[23.64%] top-[25.8%] h-auto w-[76.36%] max-w-none object-contain"
+      />
+      {accessory && placement && (
+        <img
+          src={accessory.src}
+          alt={`${accessory.label} accessory`}
+          draggable="false"
+          className="absolute h-auto max-w-none object-contain"
+          style={
+            isFigmaOwlHat
+              ? {
+                  left: "13.09%",
+                  top: "12.72%",
+                  width: "66.61%",
+                  transform: "rotate(-35.07deg)",
+                }
+              : {
+                  left: `${23.64 + placement.left * 0.7636}%`,
+                  top: `${25.8 + placement.top * 0.7419}%`,
+                  width: `${placement.width * 0.7636}%`,
+                  transform: placement.rotate
+                    ? `rotate(${placement.rotate}deg)`
+                    : undefined,
+                }
+          }
+        />
+      )}
+    </div>
+  );
+}
+
 export default function Dashboard() {
   const router = useRouter();
   const { logout, token } = useAuth();
   const [dashboardData, setDashboardData] = useState<DashboardData>({
+    accessory: null,
+    avatar: null,
     deadline: "Loading...",
     status: "loading",
   });
@@ -260,8 +346,53 @@ export default function Dashboard() {
         const user = (await userResponse.json()) as UserResponse;
         const registration =
           (await registrationResponse.json()) as RegistrationTimeRange;
+        let avatar: AvatarKey | null = null;
+        let accessory: AccessoryKey | null = null;
+
+        if (hasApplication(user.application_status)) {
+          const [questionsResponse, applicationResponse] =
+            await Promise.all([
+              fetch(apiUrl("/api/forms/questions"), {
+                headers,
+                signal: controller.signal,
+              }),
+              fetch(apiUrl("/api/forms/application"), {
+                headers,
+                signal: controller.signal,
+              }),
+            ]);
+
+          if (
+            questionsResponse.status === 401 ||
+            questionsResponse.status === 403 ||
+            applicationResponse.status === 401 ||
+            applicationResponse.status === 403
+          ) {
+            logout();
+            router.replace("/login");
+            return;
+          }
+
+          if (questionsResponse.ok && applicationResponse.ok) {
+            const questions =
+              (await questionsResponse.json()) as BackendQuestion[];
+            const application =
+              (await applicationResponse.json()) as BackendApplicationResponse;
+            const hydrated = hydrateApplicationAnswers(
+              questions,
+              application.form_answers,
+            );
+            const savedAvatar = hydrated.customCharacter.character;
+            const savedAccessory = hydrated.customAccessory.accessory;
+
+            avatar = savedAvatar || null;
+            accessory = savedAccessory || null;
+          }
+        }
 
         setDashboardData({
+          accessory,
+          avatar,
           deadline: formatDeadline(registration.end_at),
           status: resolveDashboardStatus(
             user.application_status,
@@ -271,6 +402,8 @@ export default function Dashboard() {
       } catch (error) {
         if (error instanceof Error && error.name === "AbortError") return;
         setDashboardData({
+          accessory: null,
+          avatar: null,
           deadline: "Unavailable",
           status: "unavailable",
         });
@@ -473,6 +606,13 @@ export default function Dashboard() {
             />
           </div>
         </section>
+
+        {dashboardData.avatar && (
+          <DashboardAvatar
+            avatarKey={dashboardData.avatar}
+            accessoryKey={dashboardData.accessory}
+          />
+        )}
       </div>
 
       <PortalContentStage className="pointer-events-none">
