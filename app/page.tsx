@@ -19,6 +19,7 @@ import SponsorsTextOverlays from "./sponsors/SponsorsTextOverlays";
 import TeamOverlays from "./team/TeamOverlays";
 import TeamBackground from "./team/background/TeamBackground";
 import { teamMembers } from "./team/members";
+import SiteFooter from "./footer/SiteFooter";
 import FaqToSponsorsTransition from "./transitions/faq-to-sponsors/FaqToSponsorsTransition";
 import HomeToFaqTransition from "./transitions/home-to-faq/HomeToFaqTransition";
 
@@ -91,6 +92,8 @@ export default function Home() {
           <TeamOverlays teamMembers={teamMembers} />
         </TeamBackground>
       </section>
+
+      <SiteFooter />
     </main>
   );
 }
