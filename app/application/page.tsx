@@ -44,7 +44,12 @@ function canAccessApplication(
 ): boolean {
   // Walk-in applications are intentionally allowed outside the normal window.
   if (applicationStatus === "WALK_IN") return true;
-  if (!APPLICATION_STATUSES.has(applicationStatus ?? "")) return false;
+  if (
+    applicationStatus !== null &&
+    !APPLICATION_STATUSES.has(applicationStatus)
+  ) {
+    return false;
+  }
 
   const now = Date.now();
   const start = new Date(registration.start_at).getTime();
