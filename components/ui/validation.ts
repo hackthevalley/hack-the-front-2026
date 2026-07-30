@@ -5,9 +5,32 @@ export function isValidEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 }
 
-/** True when `value` is at least 8 chars with an uppercase letter and a digit. */
+export const PASSWORD_MIN_LENGTH = 8;
+export const PASSWORD_MAX_LENGTH = 128;
+
+/** Returns the first unmet password requirement, or `null` when valid. */
+export function getPasswordValidationMessage(value: string): string | null {
+  if (value.length < PASSWORD_MIN_LENGTH) {
+    return `Password must be at least ${PASSWORD_MIN_LENGTH} characters long.`;
+  }
+  if (value.length > PASSWORD_MAX_LENGTH) {
+    return `Password must be at most ${PASSWORD_MAX_LENGTH} characters long.`;
+  }
+  if (!/[A-Z]/.test(value)) {
+    return "Password must contain at least one uppercase letter.";
+  }
+  if (!/[a-z]/.test(value)) {
+    return "Password must contain at least one lowercase letter.";
+  }
+  if (!/\d/.test(value)) {
+    return "Password must contain at least one number.";
+  }
+  return null;
+}
+
+/** Mirrors the backend password policy. */
 export function isValidPassword(value: string): boolean {
-  return value.length >= 8 && /[A-Z]/.test(value) && /\d/.test(value);
+  return getPasswordValidationMessage(value) === null;
 }
 
 /** True when `value` contains exactly 10 digits (US phone number, formatting ignored). */

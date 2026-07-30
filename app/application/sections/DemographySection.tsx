@@ -71,10 +71,12 @@ const DemographySection = React.forwardRef<SectionHandle, SectionProps<Demograph
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Dropdown
             ref={raceEthnicityRef}
-            name="Race/Ethnicity"
+            name="Race/Ethnicity (Select all that apply)"
+            labelClassName="whitespace-nowrap"
             placeholder="Select race/ethnicity"
             options={RACE_ETHNICITY_OPTIONS}
             required
+            multiple
             value={value.raceEthnicity}
             onChange={(v) => set("raceEthnicity", v)}
             onValidityChange={(hasError) => setFieldError("raceEthnicity", hasError)}
