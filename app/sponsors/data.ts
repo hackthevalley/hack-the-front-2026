@@ -12,32 +12,53 @@ export type SponsorTier = {
   sponsors: Sponsor[];
 };
 
-function createPlaceholderSponsors(prefix: string, count: number): Sponsor[] {
-  return Array.from({ length: count }, (_, index) => ({
-    id: `${prefix.toLowerCase().replace(/\s+/g, "-")}-${index + 1}`,
-    name: `${prefix} ${index + 1}`,
-    placeholder: true,
-  }));
-}
-
-/**
- * Replace these placeholder entries with your real sponsor data.
- * You can freely add/remove items and the panel layout will adjust.
- */
 export const sponsorTiers: readonly SponsorTier[] = [
   {
     id: "gold",
     title: "Our Gold Tier Sponsors",
-    sponsors: createPlaceholderSponsors("Gold Sponsor", 3),
+    sponsors: [
+      {
+        id: "school-of-cities",
+        name: "School of Cities",
+        href: "https://schoolofcities.utoronto.ca/",
+        logoSrc: "/sponsors/logos/school-of-cities.svg",
+      },
+    ],
   },
   {
     id: "silver",
     title: "Our Silver Tier Sponsors",
-    sponsors: createPlaceholderSponsors("Silver Sponsor", 6),
+    sponsors: [
+      {
+        id: "pointclickcare",
+        name: "PointClickCare",
+        href: "https://pointclickcare.com/",
+        logoSrc: "/sponsors/logos/pointclickcare.svg",
+      },
+      {
+        id: "fidelity",
+        name: "Fidelity",
+        href: "https://www.fidelity.com/",
+        logoSrc: "/sponsors/logos/fidelity.svg",
+      },
+    ],
   },
   {
     id: "bronze",
     title: "Our Bronze Tier Sponsors",
-    sponsors: createPlaceholderSponsors("Bronze Sponsor", 6),
+    sponsors: [
+      {
+        id: "dell",
+        name: "Dell",
+        href: "https://www.dell.com/",
+        logoSrc: "/sponsors/logos/dell.svg",
+      },
+      {
+        id: "fdm",
+        name: "FDM",
+        href: "https://www.fdmgroup.com/",
+        logoSrc: "/sponsors/logos/fdm.svg",
+      },
+    ],
   },
 ] as const;

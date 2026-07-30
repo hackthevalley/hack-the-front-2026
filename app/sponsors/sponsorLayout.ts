@@ -13,7 +13,9 @@ export type TierVariant = {
   innerBottomInset: number;
   plaqueOffsetTop: number;
   contentTop: number;
-  cardColumns: readonly { left: number; width: number }[];
+  maxColumns: number;
+  cardWidth: number;
+  columnGap: number;
   cardHeight: number;
   rowGap: number;
 };
@@ -61,7 +63,9 @@ export const TIER_VARIANTS: Record<SponsorTier["id"], TierVariant> = {
     innerBottomInset: 40,
     plaqueOffsetTop: -14,
     contentTop: 86,
-    cardColumns: [{ left: 318, width: 877 }],
+    maxColumns: 1,
+    cardWidth: 877,
+    columnGap: 0,
     cardHeight: 175,
     rowGap: 14,
   },
@@ -79,10 +83,9 @@ export const TIER_VARIANTS: Record<SponsorTier["id"], TierVariant> = {
     innerBottomInset: 39,
     plaqueOffsetTop: -16,
     contentTop: 76,
-    cardColumns: [
-      { left: 318, width: 425 },
-      { left: 770, width: 425 },
-    ],
+    maxColumns: 2,
+    cardWidth: 425,
+    columnGap: 27,
     cardHeight: 144,
     rowGap: 12,
   },
@@ -100,11 +103,9 @@ export const TIER_VARIANTS: Record<SponsorTier["id"], TierVariant> = {
     innerBottomInset: 41,
     plaqueOffsetTop: -21,
     contentTop: 86,
-    cardColumns: [
-      { left: 317, width: 280 },
-      { left: 615, width: 281 },
-      { left: 914, width: 280 },
-    ],
+    maxColumns: 3,
+    cardWidth: 280,
+    columnGap: 18.5,
     cardHeight: 144,
     rowGap: 12,
   },
@@ -112,7 +113,7 @@ export const TIER_VARIANTS: Record<SponsorTier["id"], TierVariant> = {
 
 export function rowsForTier(tier: SponsorTier) {
   const variant = TIER_VARIANTS[tier.id];
-  return Math.max(1, Math.ceil(tier.sponsors.length / variant.cardColumns.length));
+  return Math.max(1, Math.ceil(tier.sponsors.length / variant.maxColumns));
 }
 
 export function getSponsorsLayout(tiers: readonly SponsorTier[] = sponsorTiers) {

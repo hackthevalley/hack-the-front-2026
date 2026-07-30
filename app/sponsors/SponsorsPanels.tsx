@@ -97,11 +97,13 @@ function SponsorCard({
     <a
       href={sponsor.href}
       target="_blank"
-      rel="noreferrer"
+      rel="noopener noreferrer"
       aria-label={sponsor.name}
-      className="absolute inset-0 flex items-center justify-center rounded-[20px] outline-none transition-transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#6A8CFF]"
+      className="group absolute inset-0 flex items-center justify-center rounded-[20px] outline-none transition-[box-shadow,background-color] duration-200 ease-out hover:bg-[#F7F5FF] hover:shadow-[inset_0_0_0_3px_rgba(168,66,229,0.35),0_8px_20px_rgba(8,14,45,0.22)] focus-visible:ring-4 focus-visible:ring-[#A842E5]"
     >
-      {content}
+      <span className="contents [&>img]:transition-opacity [&>img]:duration-200 group-hover:[&>img]:opacity-90">
+        {content}
+      </span>
     </a>
   ) : (
     <div className="absolute inset-0 flex items-center justify-center rounded-[20px]">
@@ -143,14 +145,22 @@ function SponsorTierPanel({
   const badgeLeft = PLAQUE_LEFT - BADGE_DIAMETER / 2;
   const badgeTop = plaqueTop - 15;
   const cards = tier.sponsors.map((sponsor, index) => {
-    const column = variant.cardColumns[index % variant.cardColumns.length];
-    const row = Math.floor(index / variant.cardColumns.length);
+    const row = Math.floor(index / variant.maxColumns);
+    const column = index % variant.maxColumns;
+    const sponsorsInRow = Math.min(
+      variant.maxColumns,
+      tier.sponsors.length - row * variant.maxColumns,
+    );
+    const rowWidth =
+      sponsorsInRow * variant.cardWidth +
+      (sponsorsInRow - 1) * variant.columnGap;
+    const rowLeft = PANEL_LEFT + (PANEL_WIDTH - rowWidth) / 2;
 
     return {
       sponsor,
-      left: column.left,
+      left: rowLeft + column * (variant.cardWidth + variant.columnGap),
       top: top + variant.contentTop + row * (variant.cardHeight + variant.rowGap),
-      width: column.width,
+      width: variant.cardWidth,
       height: variant.cardHeight,
     };
   });
