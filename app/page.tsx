@@ -16,6 +16,9 @@ import MobileHomeSection from "./home/MobileHomeSection";
 import SponsorsBackground from "./sponsors/background/SponsorsBackground";
 import SponsorsForeground from "./sponsors/foreground/SponsorsForeground";
 import SponsorsTextOverlays from "./sponsors/SponsorsTextOverlays";
+import TeamOverlays from "./team/TeamOverlays";
+import TeamBackground from "./team/background/TeamBackground";
+import { teamMembers } from "./team/members";
 import FaqToSponsorsTransition from "./transitions/faq-to-sponsors/FaqToSponsorsTransition";
 import HomeToFaqTransition from "./transitions/home-to-faq/HomeToFaqTransition";
 
@@ -76,6 +79,17 @@ export default function Home() {
           <SponsorsPanels />
           <SponsorsTextOverlays />
         </SponsorsBackground>
+      </section>
+
+      <section
+        id="team"
+        aria-label="Meet our team"
+        className="relative"
+        style={{ marginTop: "-2px" }}
+      >
+        <TeamBackground>
+          <TeamOverlays teamMembers={teamMembers} />
+        </TeamBackground>
       </section>
     </main>
   );
