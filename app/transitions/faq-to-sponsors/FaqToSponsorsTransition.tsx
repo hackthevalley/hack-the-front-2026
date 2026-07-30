@@ -59,12 +59,12 @@ export default function FaqToSponsorsTransition({
                 transform={`matrix(${layer.matrix.join(" ")})`}
               />
             </svg>
-            <img
+            {/* <img
               src={layer.src}
               alt=""
               draggable="false"
               className="h-full w-full max-w-none select-none"
-            />
+            /> */}
           </div>
         ))}
       </div>

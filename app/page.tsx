@@ -11,15 +11,8 @@ import {
   FAQ_THEMES_DESIGN_WIDTH,
 } from "./faq-themes/background/layers";
 import FaqTitleOverlay from "./faq-themes/faq/FaqTitleOverlay";
-import HomeBackground from "./home/background/HomeBackground";
-import HomeTextOverlays from "./home/HomeTextOverlays";
-import SponsorsBackground from "./sponsors/background/SponsorsBackground";
 import SponsorsPanels from "./sponsors/SponsorsPanels";
-import SponsorsTextOverlays from "./sponsors/SponsorsTextOverlays";
-import FaqToSponsorsTransition from "./transitions/faq-to-sponsors/FaqToSponsorsTransition";
 import MobileHomeSection from "./home/MobileHomeSection";
-import HomeBackground from "./home/background/HomeBackground";
-import HomeTextOverlays from "./home/HomeTextOverlays";
 import SponsorsBackground from "./sponsors/background/SponsorsBackground";
 import SponsorsForeground from "./sponsors/foreground/SponsorsForeground";
 import SponsorsTextOverlays from "./sponsors/SponsorsTextOverlays";
@@ -76,18 +69,11 @@ export default function Home() {
         id="sponsors"
         aria-labelledby="sponsors-title"
         className="relative"
-<<<<<<< HEAD
         style={{ marginTop: "-2px" }}
       >
         <SponsorsBackground stageWidth={faqStageWidth}>
           <FaqToSponsorsTransition className="pointer-events-none z-[2]" />
           <SponsorsPanels />
-=======
-      >
-        <SponsorsBackground stageWidth={faqStageWidth}>
-          <FaqToSponsorsTransition className="pointer-events-none z-[2]" />
-          <SponsorsForeground />
->>>>>>> b335296 (feat: FAQ -> Sponsor transition)
           <SponsorsTextOverlays />
         </SponsorsBackground>
       </section>
