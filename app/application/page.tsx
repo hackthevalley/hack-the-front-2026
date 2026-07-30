@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import LogoNavbar from "@/components/layout/LogoNavbar";
 import AuthRouteGuard from "@/components/providers/AuthRouteGuard";
@@ -28,6 +29,7 @@ import type { SectionHandle } from "./sections/types";
 const AUTOSAVE_TOAST_ID = "application-autosave";
 
 export default function ApplicationPage() {
+  const router = useRouter();
   const { logout, token } = useAuth();
   const [stepIndex, setStepIndex] = React.useState(0);
   const [furthestVisited, setFurthestVisited] = React.useState(0);
@@ -38,6 +40,7 @@ export default function ApplicationPage() {
   const [isLoadingApplication, setIsLoadingApplication] = React.useState(true);
   const [loadError, setLoadError] = React.useState<string | null>(null);
   const [questions, setQuestions] = React.useState<BackendQuestion[]>([]);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const sectionRef = React.useRef<SectionHandle>(null);
   const leftSectionRef = React.useRef<SectionHandle>(null);
   const lastSavedAnswersRef = React.useRef("");
@@ -137,7 +140,13 @@ export default function ApplicationPage() {
   }, [isLoadingApplication]);
 
   React.useEffect(() => {
-    if (isLoadingApplication || loadError || !token || questions.length === 0) {
+    if (
+      isLoadingApplication ||
+      isSubmitting ||
+      loadError ||
+      !token ||
+      questions.length === 0
+    ) {
       return;
     }
 
@@ -226,11 +235,103 @@ export default function ApplicationPage() {
   }, [
     formData,
     isLoadingApplication,
+    isSubmitting,
     loadError,
     logout,
     questions,
     token,
   ]);
+
+  async function submitApplication() {
+    if (!token || isSubmitting) return;
+
+    setIsSubmitting(true);
+    toast.loading("Submitting application...", {
+      id: AUTOSAVE_TOAST_ID,
+      duration: Infinity,
+    });
+
+    try {
+      await saveQueueRef.current;
+
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+      const answerUpdates = serializeApplicationAnswers(formData, questions);
+      const answersSnapshot = JSON.stringify(answerUpdates);
+      const resume = formData.portfolio.resume;
+      const saveRequests: Promise<Response>[] = [
+        fetch(apiUrl("/api/forms/answers"), {
+          method: "PUT",
+          headers: {
+            ...headers,
+            "Content-Type": "application/json",
+          },
+          body: answersSnapshot,
+        }),
+      ];
+
+      if (resume && resume !== lastUploadedResumeRef.current) {
+        const body = new FormData();
+        body.append("file", resume);
+        saveRequests.push(
+          fetch(apiUrl("/api/forms/resume"), {
+            method: "POST",
+            headers,
+            body,
+          }),
+        );
+      }
+
+      const saveResponses = await Promise.all(saveRequests);
+      if (
+        saveResponses.some(
+          (response) => response.status === 401 || response.status === 403,
+        )
+      ) {
+        toast.dismiss(AUTOSAVE_TOAST_ID);
+        logout();
+        return;
+      }
+      if (saveResponses.some((response) => !response.ok)) {
+        throw new Error("Unable to save application before submission");
+      }
+
+      lastSavedAnswersRef.current = answersSnapshot;
+      if (resume) lastUploadedResumeRef.current = resume;
+
+      const submissionResponse = await fetch(
+        apiUrl("/api/forms/submission"),
+        {
+          method: "POST",
+          headers,
+        },
+      );
+      if (
+        submissionResponse.status === 401 ||
+        submissionResponse.status === 403
+      ) {
+        toast.dismiss(AUTOSAVE_TOAST_ID);
+        logout();
+        return;
+      }
+      if (!submissionResponse.ok) {
+        throw new Error("Unable to submit application");
+      }
+
+      toast.success("Application submitted", {
+        id: AUTOSAVE_TOAST_ID,
+        duration: 700,
+      });
+      router.replace("/dashboard");
+    } catch {
+      toast.error("Submission failed. Please review your application.", {
+        id: AUTOSAVE_TOAST_ID,
+        duration: 2500,
+      });
+      setIsSubmitting(false);
+    }
+  }
 
   function handleNext() {
     const isRightValid = sectionRef.current?.validate() ?? true;
@@ -239,7 +340,10 @@ export default function ApplicationPage() {
       : true;
     if (!isRightValid || !isLeftValid) return;
 
-    // Hook point for persisting formData[step.id] to the backend once one exists.
+    if (isLastStep) {
+      void submitApplication();
+      return;
+    }
 
     const next = Math.min(stepIndex + 1, SECTIONS.length - 1);
     setStepIndex(next);
@@ -297,8 +401,16 @@ export default function ApplicationPage() {
           <BackgroundBook
             onBack={stepIndex > 0 ? handleBack : undefined}
             onNext={handleNext}
-            nextDisabled={sectionHasErrors || leftSectionHasErrors}
-            nextLabel={isLastStep ? "Submit" : "Next"}
+            nextDisabled={
+              sectionHasErrors || leftSectionHasErrors || isSubmitting
+            }
+            nextLabel={
+              isLastStep && isSubmitting
+                ? "Submitting..."
+                : isLastStep
+                  ? "Submit"
+                  : "Next"
+            }
             left={
               leftId ? (
                 <ActiveLeft
