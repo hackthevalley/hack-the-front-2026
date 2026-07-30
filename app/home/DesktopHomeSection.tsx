@@ -1,6 +1,6 @@
-import Button from "@/components/ui/Button";
 import HomeBackground from "./background/HomeBackground";
 import HomeTextOverlays from "./HomeTextOverlays";
+import HomeApplyButton from "./HomeApplyButton";
 
 export default function DesktopHomeSection() {
   return (
@@ -39,11 +39,7 @@ export default function DesktopHomeSection() {
             October 16-18, 2026 • In-person event
           </p>
           <div id="apply" className="mt-auto" style={{ width: "29.34%" }}>
-            <Button
-              text="Apply Now"
-              width="100%"
-              href="/login"
-            />
+            <HomeApplyButton />
           </div>
         </div>
 
