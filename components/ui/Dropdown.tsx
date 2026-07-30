@@ -2,6 +2,10 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
+import {
+  parseMultiSelectValue,
+  serializeMultiSelectValue,
+} from "@/lib/multiSelectValue";
 
 export type DropdownHandle = {
   /** Runs validation, updates the error message, returns whether the field is valid. */
@@ -22,10 +26,12 @@ type DropdownProps = {
   errorMessages?: ErrorMessages;
   value?: string;
   onChange?: (value: string) => void;
+  multiple?: boolean;
   /** Fires whenever this field's error status changes, so a parent can track
    * section-wide validity (e.g. to disable a "Next" button) without polling. */
   onValidityChange?: (hasError: boolean) => void;
   className?: string;
+  labelClassName?: string;
 };
 
 /** Matches the panel background the field sits on (see backgroundBook.tsx), so
@@ -76,8 +82,10 @@ function Dropdown(
     errorMessages = {},
     value: controlledValue,
     onChange,
+    multiple = false,
     onValidityChange,
     className = "",
+    labelClassName = "",
   }: DropdownProps,
   ref: React.Ref<DropdownHandle>,
 ) {
@@ -87,6 +95,10 @@ function Dropdown(
   const [activeIndex, setActiveIndex] = React.useState(0);
 
   const value = controlledValue ?? internalValue;
+  const selectedOptions = multiple ? parseMultiSelectValue(value) : [value];
+  const displayValue = multiple
+    ? `${selectedOptions.length} selected`
+    : value;
   const containerRef = React.useRef<HTMLDivElement>(null);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
   const listRef = React.useRef<HTMLUListElement>(null);
@@ -159,6 +171,21 @@ function Dropdown(
   }, [open]);
 
   function selectOption(option: string) {
+    if (multiple) {
+      const nextOptions = selectedOptions.includes(option)
+        ? selectedOptions.filter((selected) => selected !== option)
+        : [...selectedOptions, option];
+      const nextValue = serializeMultiSelectValue(nextOptions);
+      setInternalValue(nextValue);
+      onChange?.(nextValue);
+
+      if (error && !computeError(nextValue)) {
+        setError(null);
+        onValidityChange?.(false);
+      }
+      return;
+    }
+
     setInternalValue(option);
     onChange?.(option);
     setOpen(false);
@@ -232,7 +259,9 @@ function Dropdown(
 
   return (
     <div className={`w-full font-figtree ${className}`} ref={containerRef}>
-      <span className="mb-1.5 block text-[clamp(13px,1vw,16px)] font-normal text-white/80">
+      <span
+        className={`mb-1.5 block text-[clamp(13px,1vw,16px)] font-normal text-white/80 ${labelClassName}`}
+      >
         {name}
       </span>
 
@@ -251,7 +280,9 @@ function Dropdown(
           aria-invalid={error !== null}
           aria-describedby={error ? errorId : undefined}
           onClick={() => {
-            const selectedIndex = options.indexOf(value);
+            const selectedIndex = options.findIndex((option) =>
+              selectedOptions.includes(option),
+            );
             setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
             setOpen((prev) => !prev);
           }}
@@ -285,10 +316,10 @@ function Dropdown(
 
           <span
             className={`relative z-10 min-w-0 flex-1 truncate font-normal leading-[clamp(30px,2.6vw,44px)] ${inputSizeClass} ${
-              value ? "text-white" : "text-white/40"
+              selectedOptions.length > 0 ? "text-white" : "text-white/40"
             }`}
           >
-            {value || placeholder}
+            {selectedOptions.length > 0 ? displayValue : placeholder}
           </span>
           <span className="relative z-10">
             <ChevronIcon open={open} />
@@ -302,6 +333,7 @@ function Dropdown(
               ref={listRef}
               id={listId}
               role="listbox"
+              aria-multiselectable={multiple || undefined}
               aria-labelledby={fieldId}
               onKeyDown={handleKeyDown}
               className="fixed z-20 max-h-60 overflow-y-auto rounded-[10px] border-2 border-transparent p-1.5 shadow-[0px_4px_10px_rgba(0,0,0,0.35)]"
@@ -317,7 +349,7 @@ function Dropdown(
                   key={option}
                   id={`${listId}-option-${index}`}
                   role="option"
-                  aria-selected={option === value}
+                  aria-selected={selectedOptions.includes(option)}
                   data-active={index === activeIndex}
                   onMouseEnter={() => setActiveIndex(index)}
                   onMouseDown={(event) => {
@@ -330,7 +362,7 @@ function Dropdown(
                     cursor-pointer rounded-[8px] px-[13px] py-2 font-figtree
                     transition-colors duration-200 ease-out
                     ${inputSizeClass}
-                    ${option === value ? "bg-white/15 text-white" : "text-white/80"}
+                    ${selectedOptions.includes(option) ? "bg-white/15 text-white" : "text-white/80"}
                     ${index === activeIndex ? "bg-white/10 text-white outline-none ring-1 ring-white/50" : ""}
                     hover:bg-white/10 hover:text-white
                   `}

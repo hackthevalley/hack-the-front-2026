@@ -14,6 +14,7 @@ import type {
 } from "./data";
 import { AVATARS, ACCESSORIES, getComboPlacement } from "./avatarAssets";
 import AvatarFrame from "./AvatarFrame";
+import { parseMultiSelectValue } from "@/lib/multiSelectValue";
 
 export type ReviewFormData = {
   about: AboutData;
@@ -67,8 +68,9 @@ export const LEFT_GROUPS: SummaryGroup[] = [
       { label: "Age", get: (d) => d.demography.age || "—" },
       { label: "Gender", get: (d) => d.demography.gender || "—" },
       {
-        label: "Race/Ethnicity",
-        get: (d) => d.demography.raceEthnicity || "—",
+        label: "Race/Ethnicity (Select all that apply)",
+        get: (d) =>
+          parseMultiSelectValue(d.demography.raceEthnicity).join(", ") || "—",
       },
       { label: "LGBTQ+ Community", get: (d) => d.demography.lgbtq || "—" },
       {

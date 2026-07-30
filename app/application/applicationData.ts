@@ -49,7 +49,7 @@ const ANSWER_BINDINGS: Record<string, AnswerBinding> = {
   },
   Age: { section: "demography", field: "age" },
   Gender: { section: "demography", field: "gender" },
-  "Race/Ethnicity": { section: "demography", field: "raceEthnicity" },
+  "Race/Ethnicity (Select all that apply)": { section: "demography", field: "raceEthnicity" },
   "Part of the LGBTQ+ Community": {
     section: "demography",
     field: "lgbtq",
