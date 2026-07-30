@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import PortalBackButton from "@/components/layout/PortalBackButton";
 import PortalContentStage from "@/components/layout/PortalContentStage";
 import PortalNavbar from "@/components/layout/PortalNavbar";
+import { useAuth } from "@/components/providers/AuthProvider";
 import Button from "@/components/ui/Button";
 
 export type DashboardStatus =
@@ -79,6 +80,7 @@ function Art({ src, className }: ArtProps) {
 
 export default function Dashboard({ status }: { status: DashboardStatus }) {
   const router = useRouter();
+  const { logout } = useAuth();
   const current = STATUS_DETAILS[status];
   const isNotSubmitted = status === "not-submitted";
 
@@ -278,7 +280,15 @@ export default function Dashboard({ status }: { status: DashboardStatus }) {
 
       <PortalContentStage>
         <PortalNavbar />
-        <PortalBackButton href="/" />
+        <PortalBackButton
+          text="Log Out"
+          width={170}
+          tone="danger"
+          onClick={() => {
+            logout();
+            router.replace("/login");
+          }}
+        />
       </PortalContentStage>
     </main>
   );

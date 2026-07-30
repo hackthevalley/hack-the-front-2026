@@ -14,6 +14,8 @@ type ButtonProps = {
   direction?: "next" | "back";
   /** Uses a supplied direction icon instead of the default circled chevron. */
   directionIconSrc?: string;
+  /** Recolors a supplied direction icon while preserving its SVG shape. */
+  directionIconColor?: string;
   /** Overrides the direction label typography without changing other variants. */
   directionTextClassName?: string;
   /** Direction buttons are circled by default; focused flows can opt into a plain icon. */
@@ -184,6 +186,7 @@ export default function Button({
   direction = "next",
   directionAppearance = "circled",
   directionIconSrc,
+  directionIconColor,
   directionTextClassName,
   directionIconSize = 24,
   directionGap = 8,
@@ -214,7 +217,28 @@ export default function Button({
           height: toCssSize(directionIconSize),
         }}
       >
-        {directionIconSrc ? (
+        {directionIconSrc && directionIconColor ? (
+          <span
+            aria-hidden="true"
+            className="block"
+            style={{
+              width: "75.8%",
+              height: "44.22%",
+              backgroundColor: directionIconColor,
+              maskImage: `url("${directionIconSrc}")`,
+              maskPosition: "center",
+              maskRepeat: "no-repeat",
+              maskSize: "contain",
+              WebkitMaskImage: `url("${directionIconSrc}")`,
+              WebkitMaskPosition: "center",
+              WebkitMaskRepeat: "no-repeat",
+              WebkitMaskSize: "contain",
+              transform: `rotate(${
+                directionIconRotation ?? (isBack ? -90 : 90)
+              }deg)`,
+            }}
+          />
+        ) : directionIconSrc ? (
           <img
             src={directionIconSrc}
             alt=""
