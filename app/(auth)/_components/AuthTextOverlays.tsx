@@ -7,26 +7,30 @@ import DesignBox from "@/components/layout/DesignBox";
 import Button from "@/components/ui/Button";
 import TextField, { type TextFieldHandle } from "@/components/ui/TextField";
 import { isValidEmail } from "@/components/ui/validation";
+import { useAuth } from "@/components/providers/AuthProvider";
+import { apiUrl, type TokenResponse } from "@/lib/auth";
 import {
   AUTH_BACKGROUND_DESIGN_HEIGHT,
   AUTH_BACKGROUND_DESIGN_WIDTH,
 } from "./background/layers";
 
 const TITLE_GLOW = "0 0 16.6px #FEE9D3";
-const DEMO_EMAIL = "hacker@hackthevalley.io";
-const DEMO_PASSWORD = "Password1";
 const EMAIL_ERROR = "Please enter a valid email.";
 const CREDENTIAL_ERROR = "Email or password incorrect";
+const LOGIN_ERROR = "Unable to log in. Please try again.";
 
 export default function AuthTextOverlays() {
   const router = useRouter();
+  const { login } = useAuth();
   const emailRef = React.useRef<TextFieldHandle>(null);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [emailError, setEmailError] = React.useState<string | null>(null);
   const [credentialError, setCredentialError] = React.useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  const canSubmit = email.trim().length > 0 && password.length > 0;
+  const canSubmit =
+    email.trim().length > 0 && password.length > 0 && !isSubmitting;
 
   function handleEmailChange(value: string) {
     setEmail(value);
@@ -42,7 +46,7 @@ export default function AuthTextOverlays() {
     setCredentialError(null);
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!canSubmit) return;
 
@@ -54,20 +58,52 @@ export default function AuthTextOverlays() {
     }
 
     setEmailError(null);
+    setCredentialError(null);
+    setIsSubmitting(true);
 
-    if (email.trim().toLowerCase() === DEMO_EMAIL && password === DEMO_PASSWORD) {
-      router.push("/application");
-      return;
+    try {
+      const response = await fetch(apiUrl("/api/account/sessions"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          username: email.trim().toLowerCase(),
+          password,
+        }),
+      });
+
+      if (!response.ok) {
+        setCredentialError(
+          response.status === 401 ? CREDENTIAL_ERROR : LOGIN_ERROR,
+        );
+        emailRef.current?.focus();
+        return;
+      }
+
+      const data = (await response.json()) as Partial<TokenResponse>;
+      if (
+        typeof data.access_token !== "string" ||
+        data.access_token.length === 0
+      ) {
+        setCredentialError(LOGIN_ERROR);
+        return;
+      }
+
+      login(data.access_token);
+      router.push("/dashboard");
+    } catch {
+      setCredentialError(LOGIN_ERROR);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setCredentialError(CREDENTIAL_ERROR);
-    emailRef.current?.focus();
   }
 
   return (
     <form
       className="auth-form"
       aria-labelledby="auth-title"
+      aria-busy={isSubmitting}
       noValidate
       onSubmit={handleSubmit}
     >
@@ -246,7 +282,7 @@ export default function AuthTextOverlays() {
         className="flex items-start"
       >
         <Button
-          text="Log In"
+          text={isSubmitting ? "Logging In..." : "Log In"}
           buttonType={canSubmit ? "primary" : "disabled"}
           width="100%"
           fontSize={24}
