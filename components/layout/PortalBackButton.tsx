@@ -32,7 +32,7 @@ export default function PortalBackButton({
       zIndex={50}
       compactRole="secondary"
       compactOrder={0}
-      className="auth-back-box"
+      className="auth-back-box pointer-events-auto"
     >
       <Button
         text={text}

@@ -231,7 +231,7 @@ export default function Dashboard() {
   return (
     <main className="relative h-dvh min-h-[520px] overflow-hidden bg-[radial-gradient(circle_at_50%_55%,#171b70_0%,#0d0a46_42%,#07021d_100%)] text-white">
       <div
-        className="absolute left-1/2 top-1/2 aspect-[1512/982] -translate-x-1/2 -translate-y-1/2 overflow-hidden"
+        className="absolute left-1/2 top-1/2 aspect-[1512/982] -translate-x-1/2 -translate-y-1/2 overflow-hidden [&_img]:select-none"
         style={{
           width: "max(100vw, calc(100vh * 1512 / 982))",
           height: "max(100vh, calc(100vw * 982 / 1512))",
@@ -422,7 +422,7 @@ export default function Dashboard() {
         </section>
       </div>
 
-      <PortalContentStage>
+      <PortalContentStage className="pointer-events-none">
         <PortalNavbar />
         <PortalBackButton
           text="Log Out"

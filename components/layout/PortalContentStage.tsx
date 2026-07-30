@@ -5,10 +5,12 @@ const DESIGN_HEIGHT = 982;
 
 type PortalContentStageProps = {
   children: ReactNode;
+  className?: string;
 };
 
 export default function PortalContentStage({
   children,
+  className = "",
 }: PortalContentStageProps) {
   const style: CSSProperties = {
     width: `min(100vw, calc(100dvh * ${DESIGN_WIDTH} / ${DESIGN_HEIGHT}))`,
@@ -18,7 +20,7 @@ export default function PortalContentStage({
 
   return (
     <div
-      className="auth-content-stage absolute left-1/2 top-1/2 z-30"
+      className={`auth-content-stage absolute left-1/2 top-1/2 z-30 ${className}`}
       style={style}
     >
       {children}

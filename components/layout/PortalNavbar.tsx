@@ -3,7 +3,7 @@ import MaskIcon from "@/components/ui/MaskIcon";
 
 export default function PortalNavbar() {
   return (
-    <header className="h-[123.2548828125px] w-full">
+    <header className="pointer-events-auto h-[123.2548828125px] w-full">
       <nav className="mx-auto flex h-full w-full max-w-[1512px] items-center px-[clamp(24px,7.9365vw,120px)]">
         <Link
           href="/"
