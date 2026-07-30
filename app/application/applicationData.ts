@@ -19,6 +19,11 @@ export type BackendApplicationResponse = {
   form_answersfile: string | null;
 };
 
+export type BackendAnswerUpdate = {
+  answer: string;
+  question_id: string;
+};
+
 type AnswerBinding = {
   field: string;
   section: SectionId;
@@ -130,4 +135,31 @@ export function hydrateApplicationAnswers(
   }
 
   return hydrated;
+}
+
+export function serializeApplicationAnswers(
+  formData: WizardFormData,
+  questions: BackendQuestion[],
+): BackendAnswerUpdate[] {
+  const questionIdsByLabel = new Map(
+    questions.map((question) => [question.label, question.question_id]),
+  );
+  const updates: BackendAnswerUpdate[] = [];
+
+  for (const [label, binding] of Object.entries(ANSWER_BINDINGS)) {
+    const questionId = questionIdsByLabel.get(label);
+    if (!questionId) continue;
+
+    const section = formData[binding.section] as unknown as Record<
+      string,
+      boolean | File | null | string
+    >;
+    const value = section[binding.field];
+    updates.push({
+      question_id: questionId,
+      answer: typeof value === "boolean" ? String(value) : String(value ?? ""),
+    });
+  }
+
+  return updates;
 }

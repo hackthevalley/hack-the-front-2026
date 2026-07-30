@@ -7,11 +7,7 @@ export type FileUploadHandle = {
   validate: () => boolean;
 };
 
-/**
- * Mock file upload dropzone — captures a File locally and reports it via
- * onChange, styled to match TextField's "application" theme. No actual
- * upload/storage wiring yet; that lands once the backend exists.
- */
+/** Captures a file locally and reports it to the parent for upload. */
 type FileUploadProps = {
   name: string;
   placeholder?: string;

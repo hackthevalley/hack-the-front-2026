@@ -1,12 +1,14 @@
 "use client";
 
 import * as React from "react";
+import { toast } from "sonner";
 import LogoNavbar from "@/components/layout/LogoNavbar";
 import AuthRouteGuard from "@/components/providers/AuthRouteGuard";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { apiUrl } from "@/lib/auth";
 import {
   hydrateApplicationAnswers,
+  serializeApplicationAnswers,
   type BackendApplicationResponse,
   type BackendQuestion,
 } from "./applicationData";
@@ -23,6 +25,8 @@ import {
 } from "./sectionConfig";
 import type { SectionHandle } from "./sections/types";
 
+const AUTOSAVE_TOAST_ID = "application-autosave";
+
 export default function ApplicationPage() {
   const { logout, token } = useAuth();
   const [stepIndex, setStepIndex] = React.useState(0);
@@ -33,8 +37,12 @@ export default function ApplicationPage() {
   const [leftSectionHasErrors, setLeftSectionHasErrors] = React.useState(false);
   const [isLoadingApplication, setIsLoadingApplication] = React.useState(true);
   const [loadError, setLoadError] = React.useState<string | null>(null);
+  const [questions, setQuestions] = React.useState<BackendQuestion[]>([]);
   const sectionRef = React.useRef<SectionHandle>(null);
   const leftSectionRef = React.useRef<SectionHandle>(null);
+  const lastSavedAnswersRef = React.useRef("");
+  const lastUploadedResumeRef = React.useRef<File | null>(null);
+  const saveQueueRef = React.useRef<Promise<void>>(Promise.resolve());
 
   const step = SECTIONS[stepIndex];
   const ActiveLeft = step.Left;
@@ -87,9 +95,15 @@ export default function ApplicationPage() {
           (await questionsResponse.json()) as BackendQuestion[];
         const application =
           (await applicationResponse.json()) as BackendApplicationResponse;
+        const hydrated = hydrateApplicationAnswers(
+          questions,
+          application.form_answers,
+        );
 
-        setFormData(
-          hydrateApplicationAnswers(questions, application.form_answers),
+        setQuestions(questions);
+        setFormData(hydrated);
+        lastSavedAnswersRef.current = JSON.stringify(
+          serializeApplicationAnswers(hydrated, questions),
         );
       } catch (error) {
         if (error instanceof Error && error.name === "AbortError") return;
@@ -104,6 +118,102 @@ export default function ApplicationPage() {
     void loadApplication();
     return () => controller.abort();
   }, [logout, token]);
+
+  React.useEffect(() => {
+    if (isLoadingApplication || loadError || !token || questions.length === 0) {
+      return;
+    }
+
+    const answerUpdates = serializeApplicationAnswers(formData, questions);
+    const answersSnapshot = JSON.stringify(answerUpdates);
+    const resume = formData.portfolio.resume;
+    const hasUnsavedAnswers =
+      answersSnapshot !== lastSavedAnswersRef.current;
+    const hasUnsavedResume =
+      resume !== null && resume !== lastUploadedResumeRef.current;
+    if (!hasUnsavedAnswers && !hasUnsavedResume) return;
+
+    const timeoutId = window.setTimeout(() => {
+      const operation = saveQueueRef.current.then(async () => {
+        const answersChanged =
+          answersSnapshot !== lastSavedAnswersRef.current;
+        const resumeChanged =
+          resume !== null && resume !== lastUploadedResumeRef.current;
+        if (!answersChanged && !resumeChanged) return;
+
+        toast.loading("Saving...", {
+          id: AUTOSAVE_TOAST_ID,
+          duration: Infinity,
+        });
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+        const requests: Promise<Response>[] = [];
+
+        if (answersChanged) {
+          requests.push(
+            fetch(apiUrl("/api/forms/answers"), {
+              method: "PUT",
+              headers: {
+                ...headers,
+                "Content-Type": "application/json",
+              },
+              body: answersSnapshot,
+            }),
+          );
+        }
+
+        if (resumeChanged) {
+          const body = new FormData();
+          body.append("file", resume);
+          requests.push(
+            fetch(apiUrl("/api/forms/resume"), {
+              method: "POST",
+              headers,
+              body,
+            }),
+          );
+        }
+
+        const responses = await Promise.all(requests);
+        if (
+          responses.some(
+            (response) => response.status === 401 || response.status === 403,
+          )
+        ) {
+          toast.dismiss(AUTOSAVE_TOAST_ID);
+          logout();
+          return;
+        }
+        if (responses.some((response) => !response.ok)) {
+          throw new Error("Unable to save application");
+        }
+
+        if (answersChanged) lastSavedAnswersRef.current = answersSnapshot;
+        if (resumeChanged) lastUploadedResumeRef.current = resume;
+        toast.success("Saved", {
+          id: AUTOSAVE_TOAST_ID,
+          duration: 700,
+        });
+      });
+
+      saveQueueRef.current = operation.catch(() => {
+        toast.error("Autosave failed", {
+          id: AUTOSAVE_TOAST_ID,
+          duration: 1800,
+        });
+      });
+    }, 1000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [
+    formData,
+    isLoadingApplication,
+    loadError,
+    logout,
+    questions,
+    token,
+  ]);
 
   function handleNext() {
     const isRightValid = sectionRef.current?.validate() ?? true;
@@ -140,10 +250,10 @@ export default function ApplicationPage() {
           {loadError}
         </main>
       ) : (
-      <div className="relative flex min-h-screen flex-col items-center justify-center px-6 pb-10 font-figtree">
-        <Background />
+        <div className="relative flex min-h-screen flex-col items-center justify-center px-6 pb-10 font-figtree">
+          <Background />
 
-        <LogoNavbar />
+          <LogoNavbar />
 
       {/* Grid rows are auto-sized from the tallest cell in each row, so the
        * nav list (lg:h-full) and the book wrapper (lg:row-start-2) always end

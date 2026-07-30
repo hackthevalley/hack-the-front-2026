@@ -48,7 +48,7 @@ const PortfolioSection = React.forwardRef<SectionHandle, SectionProps<PortfolioD
           ref={resumeRef}
           name="Attach Resume"
           placeholder="Attach Resume"
-          accept=".pdf,.doc,.docx"
+          accept=".pdf"
           value={value.resume}
           onChange={(file) => set("resume", file)}
           onValidityChange={(hasError) => setFieldError("resume", hasError)}
