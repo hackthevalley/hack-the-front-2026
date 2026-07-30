@@ -1,11 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import DesignBox from "@/components/layout/DesignBox";
 import Button from "@/components/ui/Button";
 import TextField, { type TextFieldHandle } from "@/components/ui/TextField";
 import { isValidEmail, isValidPassword } from "@/components/ui/validation";
+import { apiUrl } from "@/lib/auth";
 import {
   AUTH_BACKGROUND_DESIGN_HEIGHT,
   AUTH_BACKGROUND_DESIGN_WIDTH,
@@ -58,7 +59,6 @@ function ErrorMessage({ message }: ErrorMessageProps) {
 }
 
 export default function SignUpSection({ onNavigate }: AuthSectionProps) {
-  const router = useRouter();
   const refs = {
     firstName: React.useRef<TextFieldHandle>(null),
     lastName: React.useRef<TextFieldHandle>(null),
@@ -72,13 +72,15 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
   const [password, setPassword] = React.useState("");
   const [confirmation, setConfirmation] = React.useState("");
   const [errors, setErrors] = React.useState<FormErrors>({});
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const canSubmit =
     firstName.trim().length > 0 &&
     lastName.trim().length > 0 &&
     email.trim().length > 0 &&
     password.length > 0 &&
-    confirmation.length > 0;
+    confirmation.length > 0 &&
+    !isSubmitting;
 
   function setFieldError(field: FieldName, message: string | null) {
     setErrors((current) => {
@@ -123,7 +125,7 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
     }
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!canSubmit) return;
 
@@ -147,13 +149,45 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
       return;
     }
 
-    router.push("/application");
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(apiUrl("/api/account/users"), {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          first_name: firstName.trim(),
+          last_name: lastName.trim(),
+          email: email.trim().toLowerCase(),
+          password,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Signup failed with status ${response.status}`);
+      }
+
+      toast.success("Account created", {
+        description: "Check your email to activate your account.",
+      });
+      onNavigate("login");
+    } catch {
+      toast.error("Unable to create your account", {
+        description: "Please try again in a moment.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
     <form
       className="auth-form auth-form--sign-up"
       aria-labelledby="sign-up-title"
+      aria-busy={isSubmitting}
       noValidate
       onSubmit={handleSubmit}
     >
@@ -431,7 +465,7 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
         className="flex items-start"
       >
         <Button
-          text="Sign Up"
+          text={isSubmitting ? "Signing Up..." : "Sign Up"}
           buttonType={canSubmit ? "primary" : "disabled"}
           width="100%"
           fontSize={24}

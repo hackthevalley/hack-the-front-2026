@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Figtree } from "next/font/google";
+import { Toaster } from "sonner";
 import AuthProvider from "@/components/providers/AuthProvider";
 import "./globals.css";
 
@@ -37,6 +38,18 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <AuthProvider>{children}</AuthProvider>
+        <Toaster
+          position="bottom-right"
+          richColors
+          closeButton
+          toastOptions={{
+            duration: 6000,
+            style: {
+              background: "#0E0D5B",
+              color: "#FFFFFF",
+            },
+          }}
+        />
       </body>
     </html>
   );

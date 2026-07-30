@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import DesignBox from "@/components/layout/DesignBox";
 import Button from "@/components/ui/Button";
 import TextField, { type TextFieldHandle } from "@/components/ui/TextField";
@@ -91,6 +92,7 @@ export default function AuthTextOverlays() {
       }
 
       login(data.access_token);
+      toast.success("Sign in successful");
       router.push("/dashboard");
     } catch {
       setCredentialError(LOGIN_ERROR);
