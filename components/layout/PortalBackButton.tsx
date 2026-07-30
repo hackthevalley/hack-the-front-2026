@@ -1,28 +1,24 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import DesignBox from "@/components/layout/DesignBox";
 import Button from "@/components/ui/Button";
-import {
-  AUTH_BACKGROUND_DESIGN_HEIGHT,
-  AUTH_BACKGROUND_DESIGN_WIDTH,
-} from "./background/layers";
+import DesignBox from "./DesignBox";
 
-type AuthBackButtonProps = {
+type PortalBackButtonProps = {
   href?: string;
   onClick?: () => void;
 };
 
-export default function AuthBackButton({
+export default function PortalBackButton({
   href = "/",
   onClick,
-}: AuthBackButtonProps) {
+}: PortalBackButtonProps) {
   const router = useRouter();
 
   return (
     <DesignBox
-      designWidth={AUTH_BACKGROUND_DESIGN_WIDTH}
-      designHeight={AUTH_BACKGROUND_DESIGN_HEIGHT}
+      designWidth={1512}
+      designHeight={982}
       left={108}
       top={145}
       width={133}

@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
+import PortalContentStage from "@/components/layout/PortalContentStage";
 import {
   AUTH_BACKGROUND_DESIGN_HEIGHT,
   AUTH_BACKGROUND_DESIGN_WIDTH,
@@ -15,11 +16,6 @@ export default function AuthBackground({ children }: AuthBackgroundProps) {
     width: `max(100vw, calc(100dvh * ${AUTH_BACKGROUND_DESIGN_WIDTH} / ${AUTH_BACKGROUND_DESIGN_HEIGHT}))`,
     aspectRatio: `${AUTH_BACKGROUND_DESIGN_WIDTH} / ${AUTH_BACKGROUND_DESIGN_HEIGHT}`,
   };
-  const contentStageStyle: CSSProperties = {
-    width: `min(100vw, calc(100dvh * ${AUTH_BACKGROUND_DESIGN_WIDTH} / ${AUTH_BACKGROUND_DESIGN_HEIGHT}))`,
-    aspectRatio: `${AUTH_BACKGROUND_DESIGN_WIDTH} / ${AUTH_BACKGROUND_DESIGN_HEIGHT}`,
-  };
-
   return (
     <div className="auth-viewport relative h-[100dvh] w-full overflow-hidden bg-[#0a0324]">
       <div
@@ -79,15 +75,7 @@ export default function AuthBackground({ children }: AuthBackgroundProps) {
         className="auth-compact-scrim pointer-events-none absolute inset-0 z-20"
       />
 
-      <div
-        className="auth-content-stage absolute left-1/2 top-1/2 z-30"
-        style={{
-          ...contentStageStyle,
-          transform: "translate(-50%, -50%)",
-        }}
-      >
-        {children}
-      </div>
+      <PortalContentStage>{children}</PortalContentStage>
     </div>
   );
 }

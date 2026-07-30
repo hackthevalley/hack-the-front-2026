@@ -1,7 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import LogoNavbar from "@/components/layout/LogoNavbar";
+import PortalBackButton from "@/components/layout/PortalBackButton";
+import PortalContentStage from "@/components/layout/PortalContentStage";
+import PortalNavbar from "@/components/layout/PortalNavbar";
 import Button from "@/components/ui/Button";
 
 export type DashboardStatus =
@@ -218,24 +220,6 @@ export default function Dashboard({ status }: { status: DashboardStatus }) {
           className="left-[57.59%] top-[85.92%] h-[4.87%] w-[9.58%]"
         />
 
-        <div className="absolute inset-x-0 top-0 z-20">
-          <LogoNavbar
-            navClassName="!mx-0 !h-[123.255px] !max-w-none !px-[120px]"
-            logoWidth={45}
-            logoHeight={47}
-          />
-        </div>
-        <Button
-          text="Back"
-          buttonType="direction"
-          direction="back"
-          directionIconSrc="/dashboard/chevron-left.svg"
-          directionIconRotation={0}
-          directionTextClassName="font-figtree text-[24px] font-normal leading-[29px]"
-          onClick={() => router.push("/")}
-          className="absolute left-[6.68%] top-[13.14%] z-20 h-7.25 w-20.75"
-        />
-
         <h1 className="absolute left-1/2 top-[17.62%] z-10 -translate-x-1/2 whitespace-nowrap font-vcr text-[clamp(32px,4.23vw,64px)] leading-none tracking-[0.02em] [text-shadow:0_0_10px_rgba(255,255,255,.9),0_0_18px_#7075ff]">
           Welcome back, Hacker
         </h1>
@@ -290,8 +274,12 @@ export default function Dashboard({ status }: { status: DashboardStatus }) {
             />
           </div>
         </section>
-
       </div>
+
+      <PortalContentStage>
+        <PortalNavbar />
+        <PortalBackButton href="/login" />
+      </PortalContentStage>
     </main>
   );
 }

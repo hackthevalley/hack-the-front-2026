@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import AuthNavbar from "./AuthNavbar";
-import AuthBackButton from "./AuthBackButton";
+import PortalBackButton from "@/components/layout/PortalBackButton";
+import PortalNavbar from "@/components/layout/PortalNavbar";
 import AuthTextOverlays from "./AuthTextOverlays";
 import AuthBackground from "./background/AuthBackground";
 import ForgotPasswordSection from "./sections/ForgotPasswordSection";
@@ -57,8 +57,8 @@ export default function AuthFlow({ initialView = "login" }: AuthFlowProps) {
   return (
     <main>
       <AuthBackground>
-        <AuthNavbar />
-        <AuthBackButton onClick={handleBack} />
+        <PortalNavbar />
+        <PortalBackButton onClick={handleBack} />
         <ActiveSection onNavigate={handleNavigate} />
       </AuthBackground>
     </main>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
+import PortalNavbar from "@/components/layout/PortalNavbar";
 import AuthBackground from "../_components/background/AuthBackground";
-import AuthNavbar from "../_components/AuthNavbar";
 import ResetPasswordForm from "./ResetPasswordForm";
 
 export const metadata: Metadata = {
@@ -11,7 +11,7 @@ export default function ResetPasswordPage() {
   return (
     <main>
       <AuthBackground>
-        <AuthNavbar />
+        <PortalNavbar />
         <ResetPasswordForm />
       </AuthBackground>
     </main>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import MaskIcon from "@/components/ui/MaskIcon";
 
-export default function AuthNavbar() {
+export default function PortalNavbar() {
   return (
     <header className="h-[123.2548828125px] w-full">
       <nav className="mx-auto flex h-full w-full max-w-[1512px] items-center px-[clamp(24px,7.9365vw,120px)]">
