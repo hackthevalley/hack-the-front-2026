@@ -193,14 +193,14 @@ export default function ApplicationPage() {
         if (resumeChanged) lastUploadedResumeRef.current = resume;
         toast.success("Saved", {
           id: AUTOSAVE_TOAST_ID,
-          duration: 700,
+          duration: 250,
         });
       });
 
       saveQueueRef.current = operation.catch(() => {
         toast.error("Autosave failed", {
           id: AUTOSAVE_TOAST_ID,
-          duration: 1800,
+          duration: 900,
         });
       });
     }, 1000);
