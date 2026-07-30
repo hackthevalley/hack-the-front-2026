@@ -116,36 +116,38 @@ export const homeToFaqTransitionLayers: readonly HomeToFaqTransitionLayer[] = [
     height: 105,
     zIndex: 4,
   },
-  {
-    id: "ellipse-3",
-    src: "/transitions/home-to-faq/Ellipse3.svg",
-    left: 880,
-    top: 2496,
-    width: 39,
-    height: 39,
-    zIndex: 4,
-  },
-  {
-    id: "ellipse-4",
-    src: "/transitions/home-to-faq/Ellipse4.svg",
-    left: 1034,
-    top: 2565,
-    width: 29,
-    height: 29,
-    zIndex: 4,
-  },
-  {
-    id: "ellipse-5",
-    src: "/transitions/home-to-faq/Ellipse5.svg",
-    left: 1054,
-    top: 2565,
-    width: 45,
-    height: 45,
-    zIndex: 4,
-  },
+  // {
+  //   id: "ellipse-3",
+  //   src: "/transitions/home-to-faq/Ellipse3.svg",
+  //   left: 880,
+  //   top: 2496,
+  //   width: 39,
+  //   height: 39,
+  //   zIndex: 4,
+  // },
+  // {
+  //   id: "ellipse-4",
+  //   src: "/transitions/home-to-faq/Ellipse4.svg",
+  //   left: 1034,
+  //   top: 2565,
+  //   width: 29,
+  //   height: 29,
+  //   zIndex: 4,
+  // },
+  // {
+  //   id: "ellipse-5",
+  //   src: "/transitions/home-to-faq/Ellipse5.svg",
+  //   left: 1054,
+  //   top: 2565,
+  //   width: 45,
+  //   height: 45,
+  //   zIndex: 4,
+  // },
 ];
 
-const minLayerTop = Math.min(...homeToFaqTransitionLayers.map((layer) => layer.top));
+const minLayerTop = Math.min(
+  ...homeToFaqTransitionLayers.map((layer) => layer.top),
+);
 const maxLayerBottom = Math.max(
   ...homeToFaqTransitionLayers.map((layer) => layer.top + layer.height),
 );

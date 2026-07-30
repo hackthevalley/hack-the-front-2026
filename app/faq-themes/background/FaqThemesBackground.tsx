@@ -79,7 +79,37 @@ export default function FaqThemesBackground({
       }}
     >
       <div
-        className="relative left-1/2 -translate-x-1/2"
+        className="relative left-1/2 block -translate-x-1/2 md:hidden"
+        style={{
+          width: "clamp(1700px, 400vw, 2100px)",
+          aspectRatio: `${FAQ_THEMES_DESIGN_WIDTH} / ${FAQ_THEMES_DESIGN_HEIGHT}`,
+          background: faqBackground,
+          containerType: "inline-size",
+        }}
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-0"
+        >
+          <ScenePlane layers={rearSceneLayers} />
+        </div>
+
+        <div className="absolute inset-0 z-30">{children}</div>
+
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-20"
+        >
+          <ScenePlane layers={foregroundSceneLayers} />
+        </div>
+
+        <div className="pointer-events-none absolute inset-0 z-35">
+          <FaqStaticOverlays />
+        </div>
+      </div>
+
+      <div
+        className="relative left-1/2 hidden -translate-x-1/2 md:block"
         style={{
           width: stageWidth,
           aspectRatio: `${FAQ_THEMES_DESIGN_WIDTH} / ${FAQ_THEMES_DESIGN_HEIGHT}`,

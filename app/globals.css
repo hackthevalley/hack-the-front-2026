@@ -16,6 +16,11 @@
   font-display: swap;
 }
 
+/* Below this size there's no room to move the section nav anywhere without
+ * covering the vertically-centered application book, so it hides entirely
+ * instead (see SectionNavbar). */
+@custom-variant nav-collapse (@media (max-width: 767px) and (max-height: 480px));
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -36,6 +41,26 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.home-nav-section-link {
+  text-shadow:
+    0 0 0 rgba(255, 255, 255, 0),
+    0 0 0 rgba(255, 222, 244, 0);
+  transition:
+    color 0.18s ease,
+    text-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.home-nav-section-link:hover,
+.home-nav-section-link:focus-visible {
+  color: #ffffff;
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 0.92),
+    0 0 24px rgba(255, 214, 236, 0.72);
+  transform: translateY(-1px);
+  outline: none;
 }
 
 @keyframes team-shelf-scroll-right {
