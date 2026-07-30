@@ -3,6 +3,13 @@
 import * as React from "react";
 import LogoNavbar from "@/components/layout/LogoNavbar";
 import AuthRouteGuard from "@/components/providers/AuthRouteGuard";
+import { useAuth } from "@/components/providers/AuthProvider";
+import { apiUrl } from "@/lib/auth";
+import {
+  hydrateApplicationAnswers,
+  type BackendApplicationResponse,
+  type BackendQuestion,
+} from "./applicationData";
 import Background from "./background/Background";
 import BackgroundBook from "./backgroundBook";
 import ProgressBar from "./progressBar";
@@ -17,12 +24,15 @@ import {
 import type { SectionHandle } from "./sections/types";
 
 export default function ApplicationPage() {
+  const { logout, token } = useAuth();
   const [stepIndex, setStepIndex] = React.useState(0);
   const [furthestVisited, setFurthestVisited] = React.useState(0);
   const [formData, setFormData] =
     React.useState<WizardFormData>(initialFormData);
   const [sectionHasErrors, setSectionHasErrors] = React.useState(false);
   const [leftSectionHasErrors, setLeftSectionHasErrors] = React.useState(false);
+  const [isLoadingApplication, setIsLoadingApplication] = React.useState(true);
+  const [loadError, setLoadError] = React.useState<string | null>(null);
   const sectionRef = React.useRef<SectionHandle>(null);
   const leftSectionRef = React.useRef<SectionHandle>(null);
 
@@ -33,6 +43,67 @@ export default function ApplicationPage() {
   const isLastStep = stepIndex === SECTIONS.length - 1;
   const furthestVisitedGroupIndex = SECTIONS[furthestVisited].groupIndex;
   const groupStepCounts = SECTION_GROUPS.map((group) => group.steps.length);
+
+  React.useEffect(() => {
+    if (!token) return;
+
+    const controller = new AbortController();
+
+    async function loadApplication() {
+      setIsLoadingApplication(true);
+      setLoadError(null);
+
+      try {
+        const headers = {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        };
+        const [questionsResponse, applicationResponse] = await Promise.all([
+          fetch(apiUrl("/api/forms/questions"), {
+            headers,
+            signal: controller.signal,
+          }),
+          fetch(apiUrl("/api/forms/application"), {
+            headers,
+            signal: controller.signal,
+          }),
+        ]);
+
+        if (
+          questionsResponse.status === 401 ||
+          questionsResponse.status === 403 ||
+          applicationResponse.status === 401 ||
+          applicationResponse.status === 403
+        ) {
+          logout();
+          return;
+        }
+
+        if (!questionsResponse.ok || !applicationResponse.ok) {
+          throw new Error("Unable to load application");
+        }
+
+        const questions =
+          (await questionsResponse.json()) as BackendQuestion[];
+        const application =
+          (await applicationResponse.json()) as BackendApplicationResponse;
+
+        setFormData(
+          hydrateApplicationAnswers(questions, application.form_answers),
+        );
+      } catch (error) {
+        if (error instanceof Error && error.name === "AbortError") return;
+        setLoadError(
+          "We couldn't load your application. Please refresh and try again.",
+        );
+      } finally {
+        if (!controller.signal.aborted) setIsLoadingApplication(false);
+      }
+    }
+
+    void loadApplication();
+    return () => controller.abort();
+  }, [logout, token]);
 
   function handleNext() {
     const isRightValid = sectionRef.current?.validate() ?? true;
@@ -60,6 +131,15 @@ export default function ApplicationPage() {
 
   return (
     <AuthRouteGuard requireAuth>
+      {isLoadingApplication ? (
+        <main className="flex min-h-screen items-center justify-center bg-[#0a0324] font-figtree text-white">
+          Loading your application...
+        </main>
+      ) : loadError ? (
+        <main className="flex min-h-screen items-center justify-center bg-[#0a0324] px-6 text-center font-figtree text-white">
+          {loadError}
+        </main>
+      ) : (
       <div className="relative flex min-h-screen flex-col items-center justify-center px-6 pb-10 font-figtree">
         <Background />
 
@@ -122,6 +202,7 @@ export default function ApplicationPage() {
         </div>
         </div>
       </div>
+      )}
     </AuthRouteGuard>
   );
 }

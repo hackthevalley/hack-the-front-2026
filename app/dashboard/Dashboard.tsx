@@ -11,6 +11,7 @@ import { apiUrl } from "@/lib/auth";
 
 type DashboardStatus =
   | "apply"
+  | "applying"
   | "pending"
   | "not-submitted"
   | "accepted"
@@ -44,6 +45,13 @@ const STATUS_DETAILS: Record<
 > = {
   apply: {
     title: "Apply Now",
+    titleColor: "#71e4bc",
+    action: "Apply Now",
+    disabled: false,
+    potionClass: "",
+  },
+  applying: {
+    title: "Not Submitted",
     titleColor: "#71e4bc",
     action: "Apply Now",
     disabled: false,
@@ -124,6 +132,10 @@ function resolveDashboardStatus(
     now > start &&
     now < end;
 
+  if (applicationStatus === "APPLYING") {
+    return registrationIsOpen ? "applying" : "not-submitted";
+  }
+
   return registrationIsOpen ? "apply" : "not-submitted";
 }
 
@@ -165,7 +177,8 @@ export default function Dashboard() {
   });
   const status = dashboardData.status;
   const current = STATUS_DETAILS[status];
-  const isNotSubmitted = status === "not-submitted";
+  const isNotSubmitted =
+    status === "applying" || status === "not-submitted";
 
   useEffect(() => {
     if (!token) return;

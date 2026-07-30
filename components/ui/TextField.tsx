@@ -30,6 +30,7 @@ type TextFieldProps = {
   name: string;
   placeholder?: string;
   autoComplete?: React.HTMLInputAutoCompleteAttribute;
+  disabled?: boolean;
   required?: boolean;
   type?: TextFieldType;
   /** Enforce the strength rule (8+ chars, a capital, a number). Use for sign-up, not login. */
@@ -81,6 +82,7 @@ function TextField(
     name,
     placeholder = "",
     autoComplete,
+    disabled = false,
     required = false,
     type = "text",
     requireStrongPassword = false,
@@ -261,6 +263,7 @@ function TextField(
             name={name}
             type={inputType}
             autoComplete={autoComplete}
+            disabled={disabled}
             value={value}
             onChange={handleChange}
             onBlur={validate}
@@ -277,7 +280,7 @@ function TextField(
             aria-invalid={error !== null}
             aria-describedby={error ? errorId : undefined}
             className={`
-              w-full bg-transparent outline-none font-figtree
+              w-full bg-transparent outline-none font-figtree disabled:cursor-not-allowed disabled:text-white/60
               font-normal leading-[clamp(30px,2.6vw,44px)] text-white
               placeholder:tracking-normal
               ${
