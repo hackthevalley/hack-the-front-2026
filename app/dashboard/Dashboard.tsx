@@ -658,6 +658,7 @@ export default function Dashboard() {
           text="Log Out"
           width={170}
           tone="danger"
+          placement="navbar-end"
           onClick={() => {
             logout();
             router.replace("/login");
