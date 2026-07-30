@@ -1,6 +1,3 @@
-"use client";
-
-import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
 import DesignBox from "@/components/layout/DesignBox";
 import {
@@ -148,8 +145,6 @@ function MobileStatLabel({
 }
 
 export default function MobileHomeSection() {
-  const router = useRouter();
-
   return (
     <section
       aria-labelledby="home-title-mobile"
@@ -269,7 +264,7 @@ export default function MobileHomeSection() {
             <Button
               text="Apply Now"
               width="100%"
-              onClick={() => router.push("/login")}
+              href="/login"
             />
           </div>
         </div>

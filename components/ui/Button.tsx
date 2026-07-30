@@ -1,6 +1,7 @@
 "use client";
 
 import type { CSSProperties } from "react";
+import Link from "next/link";
 
 type ButtonProps = {
   className?: string;
@@ -20,6 +21,8 @@ type ButtonProps = {
   directionGap?: number | string;
   /** Rotation applied to an exported direction icon. */
   directionIconRotation?: number;
+  /** Uses Next.js client navigation and automatic route prefetching. */
+  href?: string;
   onClick?: () => void;
   width?: number | string;
   /** Overrides the default button artwork ratio for compact design variants. */
@@ -187,6 +190,7 @@ export default function Button({
   directionIconSize = 24,
   directionGap = 8,
   directionIconRotation,
+  href,
   onClick,
   className = "",
   width,
@@ -301,32 +305,32 @@ export default function Button({
         ? `${width}px`
         : width;
 
-  return (
-    <button
-      onClick={!isDisabled ? onClick : undefined}
-      disabled={isDisabled}
-      className={`button-component relative isolate inline-flex overflow-hidden border-0 p-0 text-white ${
-        isDisabled ? "cursor-default" : "cursor-pointer"
-      } ${className}`}
-      style={{
-        containerType: "inline-size",
-        width: resolvedWidth,
-        aspectRatio:
-          aspectRatio ??
-          (isCompact ? "240 / 56" : `${FRAME_WIDTH} / ${FRAME_HEIGHT}`),
-        background: isCompact
-          ? isDisabled
-            ? "linear-gradient(110.77deg, #9e9e9e 13.3%, #5f5f5f 113.68%)"
-            : "linear-gradient(110.77deg, #ff7ccd 13.3%, #7839dc 113.68%)"
-          : isDisabled
-            ? DISABLED_BACKGROUND
-            : PRIMARY_BACKGROUND,
-        borderRadius: isCompact ? 999 : pxToCqw(PILL_RADIUS),
-        boxShadow: isCompact
-          ? "inset 0 2px 3.7px #fff"
-          : `inset 0 ${pxToCqw(INNER_SHADOW_OFFSET_Y)} ${pxToCqw(INNER_SHADOW_BLUR)} #FFFFFF`,
-      }}
-    >
+  const rootClassName = `button-component relative isolate inline-flex overflow-hidden border-0 p-0 text-white no-underline transition-[filter,transform] duration-150 ${
+    isDisabled
+      ? "cursor-default"
+      : "cursor-pointer hover:[filter:brightness(1.15)_saturate(1.1)] active:translate-y-px active:[filter:brightness(0.8)_saturate(0.95)]"
+  } ${className}`;
+  const rootStyle: CSSProperties = {
+    containerType: "inline-size",
+    width: resolvedWidth,
+    aspectRatio:
+      aspectRatio ??
+      (isCompact ? "240 / 56" : `${FRAME_WIDTH} / ${FRAME_HEIGHT}`),
+    background: isCompact
+      ? isDisabled
+        ? "linear-gradient(110.77deg, #9e9e9e 13.3%, #5f5f5f 113.68%)"
+        : "linear-gradient(110.77deg, #ff7ccd 13.3%, #7839dc 113.68%)"
+      : isDisabled
+        ? DISABLED_BACKGROUND
+        : PRIMARY_BACKGROUND,
+    borderRadius: isCompact ? 999 : pxToCqw(PILL_RADIUS),
+    boxShadow: isCompact
+      ? "inset 0 2px 3.7px #fff"
+      : `inset 0 ${pxToCqw(INNER_SHADOW_OFFSET_Y)} ${pxToCqw(INNER_SHADOW_BLUR)} #FFFFFF`,
+  };
+
+  const content = (
+    <>
       {isCompact ? (
         <>
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[62.5%] bg-gradient-to-b from-transparent to-[#8da8ff] opacity-60" />
@@ -403,25 +407,26 @@ export default function Button({
         {text}
       </span>
 
-      <style jsx>{`
-        .button-component {
-          filter: none;
-          transform: none;
-          transition:
-            filter 0.15s ease,
-            transform 0.1s ease;
-        }
-        .button-component:hover:not(:disabled) {
-          filter: brightness(1.15) saturate(1.1);
-        }
-        .button-component:active:not(:disabled) {
-          filter: brightness(0.8) saturate(0.95);
-          transform: translateY(1px);
-        }
-        .button-component:disabled {
-          filter: none;
-        }
-      `}</style>
+    </>
+  );
+
+  if (href && !isDisabled) {
+    return (
+      <Link href={href} className={rootClassName} style={rootStyle}>
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={!isDisabled ? onClick : undefined}
+      disabled={isDisabled}
+      className={rootClassName}
+      style={rootStyle}
+    >
+      {content}
     </button>
   );
 }

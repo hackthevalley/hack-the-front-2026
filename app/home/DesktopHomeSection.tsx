@@ -1,13 +1,8 @@
-"use client";
-
-import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
 import HomeBackground from "./background/HomeBackground";
 import HomeTextOverlays from "./HomeTextOverlays";
 
 export default function DesktopHomeSection() {
-  const router = useRouter();
-
   return (
     <section aria-labelledby="home-title" className="hidden md:block">
       <HomeBackground>
@@ -47,7 +42,7 @@ export default function DesktopHomeSection() {
             <Button
               text="Apply Now"
               width="100%"
-              onClick={() => router.push("/login")}
+              href="/login"
             />
           </div>
         </div>
