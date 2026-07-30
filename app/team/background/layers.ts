@@ -40,7 +40,7 @@ export const BACKGROUND_GLOW = {
   width: 1448,
   height: 1015,
   background:
-    "radial-gradient(50% 50% at 50% 50%, #1C2C95 0%, #160B3F 69.71%, #040815 100%)",
+    "radial-gradient(50% 50% at 50% 50%, #1C2C95 0%, #160B3F 69.71%, #040A15 100%)",
 };
 
 export const EDGE_VIGNETTE = {
@@ -49,7 +49,7 @@ export const EDGE_VIGNETTE = {
   width: 1515,
   height: 1078,
   background:
-    "linear-gradient(270deg, #040815 0%, rgba(4, 8, 21, 0) 25%, rgba(4, 8, 21, 0) 50%, rgba(4, 8, 21, 0) 75%, #040815 100%)",
+    "linear-gradient(270deg, #040A15 0%, rgba(4, 10, 21, 0) 25%, rgba(4, 10, 21, 0) 50%, rgba(4, 10, 21, 0) 75%, #040A15 100%)",
 };
 
 const SHELF_COLUMN_MARGIN = 14;
