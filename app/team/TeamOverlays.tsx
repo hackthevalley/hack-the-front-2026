@@ -92,6 +92,7 @@ function MarqueeItem({
   isHoverTrigger = false,
   isTapped = false,
   triggerLabel,
+  href,
   onToggleTap,
   children,
 }: {
@@ -106,6 +107,7 @@ function MarqueeItem({
   isHoverTrigger?: boolean;
   isTapped?: boolean;
   triggerLabel?: string;
+  href?: string;
   onToggleTap?: () => void;
   children: ReactNode;
 }) {
@@ -135,7 +137,17 @@ function MarqueeItem({
           }
         >
           {children}
-          {isHoverTrigger ? (
+          {isHoverTrigger && href ? (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={triggerLabel}
+              className="team-shelf-hover-trigger pointer-events-auto absolute inset-0 cursor-pointer"
+              style={{ clipPath: "ellipse(50% 50% at 50% 52%)" }}
+              onClick={(event) => event.stopPropagation()}
+            />
+          ) : isHoverTrigger ? (
             <button
               type="button"
               aria-label={triggerLabel}
@@ -232,7 +244,12 @@ function ShelfJars({
             direction={direction}
             isHoverTrigger
             isTapped={activeSlotId === slot.id}
-            triggerLabel={member ? `${member.name}, ${member.role}` : undefined}
+            triggerLabel={
+              member
+                ? `Open ${member.name}'s LinkedIn profile in a new tab`
+                : undefined
+            }
+            href={member?.linkedinUrl}
             onToggleTap={() => onToggleTap(slot.id)}
           >
             <TeamJar color={slot.color} member={member} />
