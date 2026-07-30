@@ -125,6 +125,14 @@ body {
   ) !important;
 }
 
+.auth-navbar-end-box {
+  right: calc(
+    (100% - min(100%, var(--auth-home-nav-max-width))) / 2 +
+      var(--auth-home-logo-inset)
+  ) !important;
+  left: auto !important;
+}
+
 /* Auth screens use their Figma-derived absolute composition on desktop. On
  * narrow, short, or portrait-tablet viewports, the foreground becomes a
  * single scrollable column while the forest remains fixed behind it. */
@@ -187,6 +195,15 @@ body {
   .auth-back-box > button > span:first-child {
     width: 28px !important;
     height: 28px !important;
+  }
+
+  .auth-navbar-end-box {
+    top: 39px !important;
+    right: max(24px, env(safe-area-inset-right)) !important;
+    left: auto !important;
+    width: 130px !important;
+    height: 45px !important;
+    container-type: size !important;
   }
 
   .auth-form {

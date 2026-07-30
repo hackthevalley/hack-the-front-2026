@@ -1,6 +1,6 @@
 export const COUNTRY_OPTIONS = [
-  "United States",
   "Canada",
+  "United States",
   "United Kingdom",
   "India",
   "Australia",

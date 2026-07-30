@@ -5,14 +5,14 @@ import { useRouter } from "next/navigation";
 import DesignBox from "@/components/layout/DesignBox";
 import Button from "@/components/ui/Button";
 import TextField, { type TextFieldHandle } from "@/components/ui/TextField";
+import { getPasswordValidationMessage } from "@/components/ui/validation";
 import {
   AUTH_BACKGROUND_DESIGN_HEIGHT,
   AUTH_BACKGROUND_DESIGN_WIDTH,
 } from "../_components/background/layers";
 
 const TITLE_GLOW = "0 0 16.6px #FEE9D3";
-const PASSWORD_ERROR =
-  "Password must be at least 8 characters with a capital letter and a number.";
+const PASSWORD_REQUIRED_ERROR = "Please enter a new password.";
 const CONFIRMATION_ERROR = "Please re-enter your new password.";
 const MISMATCH_ERROR = "Passwords do not match.";
 
@@ -37,11 +37,14 @@ export default function ResetPasswordForm() {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    const passwordError = newPassword
+      ? getPasswordValidationMessage(newPassword)
+      : PASSWORD_REQUIRED_ERROR;
     const passwordIsValid = newPasswordRef.current?.validate() ?? false;
     const confirmationIsValid = confirmationRef.current?.validate() ?? false;
 
     if (!passwordIsValid) {
-      setFormError(PASSWORD_ERROR);
+      setFormError(passwordError);
       newPasswordRef.current?.focus();
       return;
     }
@@ -127,8 +130,7 @@ export default function ResetPasswordForm() {
           requireStrongPassword
           showPasswordToggle={false}
           errorMessages={{
-            required: PASSWORD_ERROR,
-            invalid: PASSWORD_ERROR,
+            required: PASSWORD_REQUIRED_ERROR,
           }}
           value={newPassword}
           onChange={handleNewPasswordChange}
@@ -185,7 +187,7 @@ export default function ResetPasswordForm() {
           className={`m-0 whitespace-nowrap ${formError ? "" : "invisible"}`}
           style={{ fontSize: "83.333cqh" }}
         >
-          {formError ?? PASSWORD_ERROR}
+          {formError ?? PASSWORD_REQUIRED_ERROR}
         </p>
       </DesignBox>
 

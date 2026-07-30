@@ -5,7 +5,10 @@ import { toast } from "sonner";
 import DesignBox from "@/components/layout/DesignBox";
 import Button from "@/components/ui/Button";
 import TextField, { type TextFieldHandle } from "@/components/ui/TextField";
-import { isValidEmail, isValidPassword } from "@/components/ui/validation";
+import {
+  getPasswordValidationMessage,
+  isValidEmail,
+} from "@/components/ui/validation";
 import { apiUrl } from "@/lib/auth";
 import {
   AUTH_BACKGROUND_DESIGN_HEIGHT,
@@ -17,8 +20,7 @@ const TITLE_GLOW = "0 0 16.6px #FEE9D3";
 const FIRST_NAME_ERROR = "Please enter your first name.";
 const LAST_NAME_ERROR = "Please enter your last name.";
 const EMAIL_ERROR = "Please enter a valid email.";
-const PASSWORD_ERROR =
-  "Password must be at least 8 characters with a capital letter and a number.";
+const PASSWORD_REQUIRED_ERROR = "Please enter a password.";
 const CONFIRMATION_ERROR = "Please retype your password.";
 const MISMATCH_ERROR = "Passwords do not match.";
 
@@ -110,8 +112,13 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
 
   function handlePasswordChange(value: string) {
     setPassword(value);
-    if (errors.password && isValidPassword(value)) {
-      setFieldError("password", null);
+    if (errors.password) {
+      setFieldError(
+        "password",
+        value
+          ? getPasswordValidationMessage(value)
+          : PASSWORD_REQUIRED_ERROR,
+      );
     }
     if (errors.confirmation === MISMATCH_ERROR && value === confirmation) {
       setFieldError("confirmation", null);
@@ -135,7 +142,10 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
     if (!firstName.trim()) nextErrors.firstName = FIRST_NAME_ERROR;
     if (!lastName.trim()) nextErrors.lastName = LAST_NAME_ERROR;
     if (!isValidEmail(email.trim())) nextErrors.email = EMAIL_ERROR;
-    if (!isValidPassword(password)) nextErrors.password = PASSWORD_ERROR;
+    const passwordError = password
+      ? getPasswordValidationMessage(password)
+      : PASSWORD_REQUIRED_ERROR;
+    if (passwordError) nextErrors.password = passwordError;
     if (!confirmation) {
       nextErrors.confirmation = CONFIRMATION_ERROR;
     } else if (password !== confirmation) {
@@ -380,11 +390,18 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
           autoComplete="new-password"
           required
           requireStrongPassword
-          errorMessages={{ required: PASSWORD_ERROR, invalid: PASSWORD_ERROR }}
+          errorMessages={{ required: PASSWORD_REQUIRED_ERROR }}
           value={password}
           onChange={handlePasswordChange}
           onValidityChange={(hasError) =>
-            setFieldError("password", hasError ? PASSWORD_ERROR : null)
+            setFieldError(
+              "password",
+              hasError
+                ? password
+                  ? getPasswordValidationMessage(password)
+                  : PASSWORD_REQUIRED_ERROR
+                : null,
+            )
           }
         />
       </DesignBox>
