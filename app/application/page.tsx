@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import LogoNavbar from "@/components/layout/LogoNavbar";
+import AuthRouteGuard from "@/components/providers/AuthRouteGuard";
 import Background from "./background/Background";
 import BackgroundBook from "./backgroundBook";
 import ProgressBar from "./progressBar";
@@ -58,10 +59,11 @@ export default function ApplicationPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center px-6 pb-10 font-figtree">
-      <Background />
+    <AuthRouteGuard requireAuth>
+      <div className="relative flex min-h-screen flex-col items-center justify-center px-6 pb-10 font-figtree">
+        <Background />
 
-      <LogoNavbar />
+        <LogoNavbar />
 
       {/* Grid rows are auto-sized from the tallest cell in each row, so the
        * nav list (lg:h-full) and the book wrapper (lg:row-start-2) always end
@@ -69,13 +71,13 @@ export default function ApplicationPage() {
        * buttons then center as a group against that height. The first column
        * is "auto"-width so it sizes to the nav's widest button instead of a
        * fixed pixel value. */}
-      <div className="grid w-full items-center gap-6 lg:grid-cols-[auto_minmax(0,1100px)] lg:grid-rows-[auto_auto] lg:justify-center lg:gap-x-16 lg:gap-y-6">
-        <SectionNavbar
-          groups={SECTION_GROUPS.map((g) => ({ id: g.id, label: g.label }))}
-          currentGroupIndex={step.groupIndex}
-          furthestVisitedGroupIndex={furthestVisitedGroupIndex}
-          onGroupClick={handleGroupClick}
-        />
+        <div className="grid w-full items-center gap-6 lg:grid-cols-[auto_minmax(0,1100px)] lg:grid-rows-[auto_auto] lg:justify-center lg:gap-x-16 lg:gap-y-6">
+          <SectionNavbar
+            groups={SECTION_GROUPS.map((g) => ({ id: g.id, label: g.label }))}
+            currentGroupIndex={step.groupIndex}
+            furthestVisitedGroupIndex={furthestVisitedGroupIndex}
+            onGroupClick={handleGroupClick}
+          />
 
         <ProgressBar
           className="lg:col-start-2 lg:row-start-1"
@@ -118,7 +120,8 @@ export default function ApplicationPage() {
             }
           />
         </div>
+        </div>
       </div>
-    </div>
+    </AuthRouteGuard>
   );
 }
