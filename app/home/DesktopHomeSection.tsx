@@ -39,7 +39,11 @@ export default function DesktopHomeSection() {
             October 16-18, 2026 • In-person event
           </p>
           <div id="apply" className="mt-auto" style={{ width: "29.34%" }}>
-            <Button text="Apply Now" width="100%" />
+            <Button
+              text="Apply Now"
+              width="100%"
+              href="/login"
+            />
           </div>
         </div>
 

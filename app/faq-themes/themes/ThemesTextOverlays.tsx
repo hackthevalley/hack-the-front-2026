@@ -191,6 +191,8 @@ function ThemeCard({
         <img
           src={theme.iconSrc}
           alt=""
+          loading="lazy"
+          decoding="async"
           draggable="false"
           className="h-full w-full select-none object-contain"
         />
@@ -284,6 +286,8 @@ export function MobileThemesTextOverlays() {
                   <img
                     src={theme.iconSrc}
                     alt=""
+                    loading="lazy"
+                    decoding="async"
                     draggable="false"
                     className="h-full w-full select-none object-contain"
                   />

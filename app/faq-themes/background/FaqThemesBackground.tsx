@@ -40,6 +40,8 @@ function ScenePlane({ layers }: { layers: readonly FaqThemesSceneLayer[] }) {
             <img
               src={layer.src}
               alt=""
+              loading="lazy"
+              decoding="async"
               draggable="false"
               className="absolute max-w-none select-none"
               style={{
@@ -53,6 +55,8 @@ function ScenePlane({ layers }: { layers: readonly FaqThemesSceneLayer[] }) {
             <img
               src={layer.src}
               alt=""
+              loading="lazy"
+              decoding="async"
               draggable="false"
               className="h-full w-full max-w-none select-none"
             />

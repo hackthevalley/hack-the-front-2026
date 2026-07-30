@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import IconLink from "@/components/ui/IconLink";
 import MaskIcon from "@/components/ui/MaskIcon";
 
@@ -389,12 +390,17 @@ function Shell({
 export default function HomeNavbar({
   items = DEFAULT_ITEMS,
 }: HomeNavbarProps) {
+  const router = useRouter();
   const [isVisible, setIsVisible] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const lastScrollYRef = useRef(0);
   const upwardTravelRef = useRef(0);
   const downwardTravelRef = useRef(0);
+
+  useEffect(() => {
+    router.prefetch("/login");
+  }, [router]);
 
   useEffect(() => {
     lastScrollYRef.current = window.scrollY;

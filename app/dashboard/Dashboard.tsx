@@ -1,15 +1,58 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import LogoNavbar from "@/components/layout/LogoNavbar";
+import PortalBackButton from "@/components/layout/PortalBackButton";
+import PortalContentStage from "@/components/layout/PortalContentStage";
+import PortalNavbar from "@/components/layout/PortalNavbar";
+import { useAuth } from "@/components/providers/AuthProvider";
 import Button from "@/components/ui/Button";
+import { apiUrl } from "@/lib/auth";
+import {
+  hydrateApplicationAnswers,
+  type BackendApplicationResponse,
+  type BackendQuestion,
+} from "@/app/application/applicationData";
+import {
+  ACCESSORIES,
+  AVATARS,
+  getComboPlacement,
+} from "@/app/application/sections/avatarAssets";
+import type {
+  AccessoryKey,
+  AvatarKey,
+} from "@/app/application/sections/data";
 
-export type DashboardStatus =
+type DashboardStatus =
   | "apply"
+  | "applying"
+  | "submitted"
   | "pending"
+  | "waitlisted"
   | "not-submitted"
   | "accepted"
-  | "declined";
+  | "rsvped"
+  | "scanned-in"
+  | "rejected"
+  | "declined"
+  | "loading"
+  | "unavailable";
+
+type UserResponse = {
+  application_status: string | null;
+};
+
+type RegistrationTimeRange = {
+  start_at: string;
+  end_at: string;
+};
+
+type DashboardData = {
+  accessory: AccessoryKey | null;
+  avatar: AvatarKey | null;
+  deadline: string;
+  status: DashboardStatus;
+};
 
 const STATUS_DETAILS: Record<
   DashboardStatus,
@@ -28,11 +71,32 @@ const STATUS_DETAILS: Record<
     disabled: false,
     potionClass: "",
   },
+  applying: {
+    title: "Not Submitted",
+    titleColor: "#71e4bc",
+    action: "Apply Now",
+    disabled: false,
+    potionClass: "",
+  },
+  submitted: {
+    title: "Submitted",
+    titleColor: "#d1d5db",
+    action: "Applied",
+    disabled: true,
+    potionClass: "grayscale",
+  },
   pending: {
     title: "Pending",
     titleColor: "#d1d5db",
-    action: "Open",
-    disabled: false,
+    action: "Applied",
+    disabled: true,
+    potionClass: "grayscale",
+  },
+  waitlisted: {
+    title: "Waitlisted",
+    titleColor: "#d1d5db",
+    action: "Applied",
+    disabled: true,
     potionClass: "grayscale",
   },
   "not-submitted": {
@@ -45,18 +109,108 @@ const STATUS_DETAILS: Record<
   accepted: {
     title: "Accepted",
     titleColor: "#71e4bc",
-    action: "Application Closed",
+    action: "Applied",
+    disabled: true,
+    potionClass: "",
+  },
+  rsvped: {
+    title: "RSVPed",
+    titleColor: "#71e4bc",
+    action: "Applied",
+    disabled: true,
+    potionClass: "",
+  },
+  "scanned-in": {
+    title: "Scanned In",
+    titleColor: "#71e4bc",
+    action: "Applied",
+    disabled: true,
+    potionClass: "",
+  },
+  rejected: {
+    title: "Rejected",
+    titleColor: "#ff6068",
+    action: "Applied",
     disabled: true,
     potionClass: "",
   },
   declined: {
     title: "Declined",
     titleColor: "#ff6068",
-    action: "Application Closed",
+    action: "Applied",
     disabled: true,
     potionClass: "",
   },
+  loading: {
+    title: "Loading...",
+    titleColor: "#d1d5db",
+    action: "Loading",
+    disabled: true,
+    potionClass: "grayscale",
+  },
+  unavailable: {
+    title: "Unavailable",
+    titleColor: "#ff6068",
+    action: "Try Again Later",
+    disabled: true,
+    potionClass: "grayscale",
+  },
 };
+
+const SUBMITTED_STATUSES = new Set(["APPLIED", "WALK_IN_SUBMITTED"]);
+const NO_APPLICATION_STATUSES = new Set([
+  "ACCOUNT_INACTIVE",
+  "NOT_APPLIED",
+]);
+
+function hasApplication(applicationStatus: string | null): boolean {
+  return (
+    applicationStatus !== null &&
+    !NO_APPLICATION_STATUSES.has(applicationStatus)
+  );
+}
+
+function resolveDashboardStatus(
+  applicationStatus: string | null,
+  registration: RegistrationTimeRange,
+): DashboardStatus {
+  if (SUBMITTED_STATUSES.has(applicationStatus ?? "")) return "submitted";
+  if (applicationStatus === "UNDER_REVIEW") return "pending";
+  if (applicationStatus === "WAITLISTED") return "waitlisted";
+  if (applicationStatus === "ACCEPTED") return "accepted";
+  if (applicationStatus === "ACCEPTED_INVITE") return "rsvped";
+  if (applicationStatus === "SCANNED_IN") return "scanned-in";
+  if (applicationStatus === "REJECTED") return "rejected";
+  if (applicationStatus === "REJECTED_INVITE") return "declined";
+  if (applicationStatus === "WALK_IN") return "apply";
+
+  const now = Date.now();
+  const start = new Date(registration.start_at).getTime();
+  const end = new Date(registration.end_at).getTime();
+  const registrationIsOpen =
+    Number.isFinite(start) &&
+    Number.isFinite(end) &&
+    now > start &&
+    now < end;
+
+  if (applicationStatus === "APPLYING") {
+    return registrationIsOpen ? "applying" : "not-submitted";
+  }
+
+  return registrationIsOpen ? "apply" : "not-submitted";
+}
+
+function formatDeadline(value: string): string {
+  const deadline = new Date(value);
+  if (Number.isNaN(deadline.getTime())) return "Unavailable";
+
+  return new Intl.DateTimeFormat("en-CA", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  }).format(deadline);
+}
 
 type ArtProps = {
   src: string;
@@ -75,15 +229,232 @@ function Art({ src, className }: ArtProps) {
   );
 }
 
-export default function Dashboard({ status }: { status: DashboardStatus }) {
+function DashboardAvatar({
+  accessoryKey,
+  avatarKey,
+}: {
+  accessoryKey: AccessoryKey | null;
+  avatarKey: AvatarKey;
+}) {
+  const avatar = AVATARS.find((option) => option.key === avatarKey);
+  const accessory = ACCESSORIES.find(
+    (option) => option.key === accessoryKey,
+  );
+  const placement =
+    avatar && accessory
+      ? getComboPlacement(avatar.key, accessory.key)
+      : undefined;
+  const isFigmaOwlHat =
+    avatar?.key === "owl" && accessory?.key === "hat";
+  const underTreeClass =
+    avatar?.key === "raccoon"
+      ? "left-[42.06%] top-[69.96%] w-[16.2%]"
+      : avatar?.key === "bear"
+        ? "left-[59.92%] top-[67.62%] w-[16.73%]"
+        : null;
+
+  if (!avatar) return null;
+
+  if (underTreeClass) {
+    return (
+      <div
+        className={`pointer-events-none absolute z-10 aspect-square select-none ${underTreeClass}`}
+      >
+        <img
+          src={avatar.src}
+          alt={`${avatar.label} avatar`}
+          draggable="false"
+          className="absolute inset-0 size-full max-w-none object-contain"
+        />
+        {accessory && placement && (
+          <img
+            src={accessory.src}
+            alt={`${accessory.label} accessory`}
+            draggable="false"
+            className="absolute h-auto max-w-none object-contain"
+            style={{
+              left: `${placement.left}%`,
+              top: `${placement.top}%`,
+              width: `${placement.width}%`,
+              transform: placement.rotate
+                ? `rotate(${placement.rotate}deg)`
+                : undefined,
+            }}
+          />
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="pointer-events-none absolute left-[78.64%] top-[42.87%] z-10 aspect-[335.84/345.63] w-[22.21%] select-none">
+      <img
+        src={avatar.src}
+        alt={`${avatar.label} avatar`}
+        draggable="false"
+        className="absolute left-[23.64%] top-[25.8%] h-auto w-[76.36%] max-w-none object-contain"
+      />
+      {accessory && placement && (
+        <img
+          src={accessory.src}
+          alt={`${accessory.label} accessory`}
+          draggable="false"
+          className="absolute h-auto max-w-none object-contain"
+          style={
+            isFigmaOwlHat
+              ? {
+                  left: "13.09%",
+                  top: "12.72%",
+                  width: "66.61%",
+                  transform: "rotate(-35.07deg)",
+                }
+              : {
+                  left: `${23.64 + placement.left * 0.7636}%`,
+                  top: `${25.8 + placement.top * 0.7419}%`,
+                  width: `${placement.width * 0.7636}%`,
+                  transform: placement.rotate
+                    ? `rotate(${placement.rotate}deg)`
+                    : undefined,
+                }
+          }
+        />
+      )}
+    </div>
+  );
+}
+
+export default function Dashboard() {
   const router = useRouter();
+  const { logout, token } = useAuth();
+  const [dashboardData, setDashboardData] = useState<DashboardData>({
+    accessory: null,
+    avatar: null,
+    deadline: "Loading...",
+    status: "loading",
+  });
+  const status = dashboardData.status;
   const current = STATUS_DETAILS[status];
-  const isNotSubmitted = status === "not-submitted";
+  const isNotSubmitted =
+    status === "applying" || status === "not-submitted";
+
+  useEffect(() => {
+    if (status === "apply" || status === "applying") {
+      router.prefetch("/application");
+    }
+  }, [router, status]);
+
+  useEffect(() => {
+    if (!token) return;
+
+    const controller = new AbortController();
+
+    async function loadDashboard() {
+      try {
+        const headers = {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        };
+        const [userResponse, registrationResponse] = await Promise.all([
+          fetch(apiUrl("/api/account/me"), {
+            headers,
+            signal: controller.signal,
+          }),
+          fetch(apiUrl("/api/forms/registration-timerange"), {
+            headers,
+            signal: controller.signal,
+          }),
+        ]);
+
+        if (
+          userResponse.status === 401 ||
+          userResponse.status === 403 ||
+          registrationResponse.status === 401 ||
+          registrationResponse.status === 403
+        ) {
+          logout();
+          router.replace("/login");
+          return;
+        }
+
+        if (!userResponse.ok || !registrationResponse.ok) {
+          throw new Error("Unable to load dashboard");
+        }
+
+        const user = (await userResponse.json()) as UserResponse;
+        const registration =
+          (await registrationResponse.json()) as RegistrationTimeRange;
+        let avatar: AvatarKey | null = null;
+        let accessory: AccessoryKey | null = null;
+
+        if (hasApplication(user.application_status)) {
+          const [questionsResponse, applicationResponse] =
+            await Promise.all([
+              fetch(apiUrl("/api/forms/questions"), {
+                headers,
+                signal: controller.signal,
+              }),
+              fetch(apiUrl("/api/forms/application"), {
+                headers,
+                signal: controller.signal,
+              }),
+            ]);
+
+          if (
+            questionsResponse.status === 401 ||
+            questionsResponse.status === 403 ||
+            applicationResponse.status === 401 ||
+            applicationResponse.status === 403
+          ) {
+            logout();
+            router.replace("/login");
+            return;
+          }
+
+          if (questionsResponse.ok && applicationResponse.ok) {
+            const questions =
+              (await questionsResponse.json()) as BackendQuestion[];
+            const application =
+              (await applicationResponse.json()) as BackendApplicationResponse;
+            const hydrated = hydrateApplicationAnswers(
+              questions,
+              application.form_answers,
+            );
+            const savedAvatar = hydrated.customCharacter.character;
+            const savedAccessory = hydrated.customAccessory.accessory;
+
+            avatar = savedAvatar || null;
+            accessory = savedAccessory || null;
+          }
+        }
+
+        setDashboardData({
+          accessory,
+          avatar,
+          deadline: formatDeadline(registration.end_at),
+          status: resolveDashboardStatus(
+            user.application_status,
+            registration,
+          ),
+        });
+      } catch (error) {
+        if (error instanceof Error && error.name === "AbortError") return;
+        setDashboardData({
+          accessory: null,
+          avatar: null,
+          deadline: "Unavailable",
+          status: "unavailable",
+        });
+      }
+    }
+
+    void loadDashboard();
+    return () => controller.abort();
+  }, [logout, router, token]);
 
   return (
     <main className="relative h-dvh min-h-[520px] overflow-hidden bg-[radial-gradient(circle_at_50%_55%,#171b70_0%,#0d0a46_42%,#07021d_100%)] text-white">
       <div
-        className="absolute left-1/2 top-1/2 aspect-[1512/982] -translate-x-1/2 -translate-y-1/2 overflow-hidden"
+        className="absolute left-1/2 top-1/2 aspect-[1512/982] -translate-x-1/2 -translate-y-1/2 overflow-hidden [&_img]:select-none"
         style={{
           width: "max(100vw, calc(100vh * 1512 / 982))",
           height: "max(100vh, calc(100vw * 982 / 1512))",
@@ -218,23 +589,6 @@ export default function Dashboard({ status }: { status: DashboardStatus }) {
           className="left-[57.59%] top-[85.92%] h-[4.87%] w-[9.58%]"
         />
 
-        <div className="absolute inset-x-0 top-0 z-20">
-          <LogoNavbar
-            navClassName="!mx-0 !h-[123.255px] !max-w-none !px-[120px]"
-            logoWidth={45}
-            logoHeight={47}
-          />
-        </div>
-        <Button
-          text="Back"
-          buttonType="direction"
-          direction="back"
-          directionIconSrc="/dashboard/chevron-left.svg"
-          directionTextClassName="font-figtree text-[24px] font-normal leading-[29px]"
-          onClick={() => router.push("/")}
-          className="absolute left-[6.68%] top-[13.14%] z-20 h-7.25 w-20.75"
-        />
-
         <h1 className="absolute left-1/2 top-[17.62%] z-10 -translate-x-1/2 whitespace-nowrap font-vcr text-[clamp(32px,4.23vw,64px)] leading-none tracking-[0.02em] [text-shadow:0_0_10px_rgba(255,255,255,.9),0_0_18px_#7075ff]">
           Welcome back, Hacker
         </h1>
@@ -253,7 +607,7 @@ export default function Dashboard({ status }: { status: DashboardStatus }) {
           />
           <Art
             src={
-              status === "declined"
+              status === "declined" || status === "rejected"
                 ? "/dashboard/declined-potion.svg"
                 : "/dashboard/status-potion.svg"
             }
@@ -276,7 +630,7 @@ export default function Dashboard({ status }: { status: DashboardStatus }) {
             {current.title}
           </p>
           <p className="absolute left-[61.2%] top-[54.26%] w-[38.89%] -translate-x-1/2 whitespace-nowrap text-center font-figtree text-[clamp(10px,1.06vw,16px)] leading-[1.2] text-[#cecece]">
-            Application deadline: September XXXX
+            Application deadline: {dashboardData.deadline}
           </p>
           <div className="absolute left-[44.41%] top-[66.93%] h-[18.67%] w-[33.57%]">
             <Button
@@ -290,7 +644,26 @@ export default function Dashboard({ status }: { status: DashboardStatus }) {
           </div>
         </section>
 
+        {dashboardData.avatar && (
+          <DashboardAvatar
+            avatarKey={dashboardData.avatar}
+            accessoryKey={dashboardData.accessory}
+          />
+        )}
       </div>
+
+      <PortalContentStage className="pointer-events-none">
+        <PortalNavbar />
+        <PortalBackButton
+          text="Log Out"
+          width={170}
+          tone="danger"
+          onClick={() => {
+            logout();
+            router.replace("/login");
+          }}
+        />
+      </PortalContentStage>
     </main>
   );
 }

@@ -1,23 +1,10 @@
-import Dashboard, { type DashboardStatus } from "./Dashboard";
+import AuthRouteGuard from "@/components/providers/AuthRouteGuard";
+import Dashboard from "./Dashboard";
 
-const VALID_STATUSES = new Set<DashboardStatus>([
-  "apply",
-  "pending",
-  "not-submitted",
-  "accepted",
-  "declined",
-]);
-
-export default async function DashboardPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ status?: string }>;
-}) {
-  const { status: requestedStatus } = await searchParams;
-  const status =
-    requestedStatus && VALID_STATUSES.has(requestedStatus as DashboardStatus)
-      ? (requestedStatus as DashboardStatus)
-      : "apply";
-
-  return <Dashboard status={status} />;
+export default function DashboardPage() {
+  return (
+    <AuthRouteGuard requireAuth>
+      <Dashboard />
+    </AuthRouteGuard>
+  );
 }

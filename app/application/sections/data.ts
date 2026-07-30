@@ -19,6 +19,7 @@ export type ExperienceData = {
 export type PortfolioData = {
   portfolio: string;
   resume: File | null;
+  savedResumeName: string;
 };
 
 export type DevSkillsData = {

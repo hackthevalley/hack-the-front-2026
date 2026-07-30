@@ -7,6 +7,9 @@ import type { SectionHandle, SectionProps } from "./types";
 import type { MlhData } from "./data";
 
 const MLH_CODE_OF_CONDUCT_URL = "https://mlh.io/code-of-conduct";
+const MLH_PRIVACY_URL = "https://mlh.io/privacy";
+const MLH_CONTEST_TERMS_URL =
+  "https://github.com/MLH/mlh-policies/blob/main/contest-terms.md";
 
 type CheckboxErrors = Record<keyof MlhData, boolean>;
 
@@ -105,12 +108,29 @@ const MlhSection = React.forwardRef<SectionHandle, SectionProps<MlhData>>(
               }
             />
             <span className="text-sm text-white">
-              I Authorize You To Share My Application/Registration Information.{" "}
-              <a href="#" className="underline underline-offset-2">
-                View All.
-              </a>
+              I Authorize You To Share My Application/Registration Information.
             </span>
           </label>
+          <p className="pl-[44px] text-sm text-white">
+              Review the{" "}
+              <a
+                href={MLH_PRIVACY_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="underline underline-offset-2"
+              >
+                Privacy Policy
+              </a>{" "}
+              and{" "}
+              <a
+                href={MLH_CONTEST_TERMS_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="underline underline-offset-2"
+              >
+                Contest Terms.
+              </a>
+          </p>
           <RequiredMessage show={errors.authorizedShareInfo} />
 
           <label className="flex cursor-pointer items-start gap-3">
@@ -147,10 +167,7 @@ const MlhSection = React.forwardRef<SectionHandle, SectionProps<MlhData>>(
             />
             <span className="text-sm text-white">
               I, Hereby Grant Permission To Hack The Valley To Use Screenshots
-              And/Or Video Of Me Taken During Hack The Valley 11.{" "}
-              <a href="#" className="underline underline-offset-2">
-                View All.
-              </a>
+              And/Or Video Of Me Taken During Hack The Valley 11.
             </span>
           </label>
           <RequiredMessage show={errors.consentMediaRelease} />

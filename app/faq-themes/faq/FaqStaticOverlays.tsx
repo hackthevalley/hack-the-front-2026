@@ -10,7 +10,7 @@ export default function FaqStaticOverlays() {
   return (
     <>
       <div
-        id="themes"
+        data-nav-target="themes"
         aria-hidden="true"
         className="absolute inset-x-0 top-[47.2%] h-px md:top-[45.0418%]"
       />

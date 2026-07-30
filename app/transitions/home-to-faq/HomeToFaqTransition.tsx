@@ -54,6 +54,8 @@ function TransitionBand({
             <img
               src={layer.src}
               alt=""
+              loading="lazy"
+              decoding="async"
               draggable="false"
               className={
                 layer.preserveAspectRatio

@@ -7,14 +7,18 @@ import SectionHeading from "./SectionHeading";
 import type { SectionHandle, SectionProps } from "./types";
 import { useFieldErrors } from "./useFieldErrors";
 import type { DemographyData } from "./data";
+import {
+  GENDER_OPTIONS,
+  RACE_ETHNICITY_OPTIONS,
+} from "./applicationOptions";
 
 const YES_NO_OPTIONS = ["Yes", "No", "Prefer not to say"];
 
 const DemographySection = React.forwardRef<SectionHandle, SectionProps<DemographyData>>(
   ({ value, onChange, onValidityChange }, ref) => {
     const ageRef = React.useRef<TextFieldHandle>(null);
-    const genderRef = React.useRef<TextFieldHandle>(null);
-    const raceEthnicityRef = React.useRef<TextFieldHandle>(null);
+    const genderRef = React.useRef<DropdownHandle>(null);
+    const raceEthnicityRef = React.useRef<DropdownHandle>(null);
     const lgbtqRef = React.useRef<DropdownHandle>(null);
     const disabilityRef = React.useRef<DropdownHandle>(null);
     const setFieldError = useFieldErrors(onValidityChange);
@@ -52,12 +56,12 @@ const DemographySection = React.forwardRef<SectionHandle, SectionProps<Demograph
             onChange={(v) => set("age", v)}
             onValidityChange={(hasError) => setFieldError("age", hasError)}
           />
-          <TextField
+          <Dropdown
             ref={genderRef}
             name="Gender"
-            placeholder="Gender"
+            placeholder="Select gender"
+            options={GENDER_OPTIONS}
             required
-            theme="application"
             value={value.gender}
             onChange={(v) => set("gender", v)}
             onValidityChange={(hasError) => setFieldError("gender", hasError)}
@@ -65,12 +69,12 @@ const DemographySection = React.forwardRef<SectionHandle, SectionProps<Demograph
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <TextField
+          <Dropdown
             ref={raceEthnicityRef}
             name="Race/Ethnicity"
-            placeholder="Race/Ethnicity"
+            placeholder="Select race/ethnicity"
+            options={RACE_ETHNICITY_OPTIONS}
             required
-            theme="application"
             value={value.raceEthnicity}
             onChange={(v) => set("raceEthnicity", v)}
             onValidityChange={(hasError) => setFieldError("raceEthnicity", hasError)}
