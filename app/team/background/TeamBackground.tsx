@@ -18,7 +18,7 @@ export default function TeamBackground({ children }: TeamBackgroundProps) {
         className="team-shelf-canvas relative"
         style={{
           aspectRatio: `${TEAM_DESIGN_WIDTH} / ${TEAM_DESIGN_HEIGHT}`,
-          background: "#040815",
+          background: "#040A15",
         }}
       >
       <div

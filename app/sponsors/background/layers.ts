@@ -12,3 +12,12 @@ export const SPONSORS_BACKGROUND_LAYER = {
   width: 2157,
   height: 2755,
 } as const;
+
+export const SPONSORS_TEAM_WAVE_LAYER = {
+  src: "/sponsors/background/team-wave.svg",
+  left: -49.39,
+  top: 8434.63 - 6223,
+  width: 1691.67,
+  height: 373.55,
+  rotation: 2.16,
+} as const;

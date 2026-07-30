@@ -803,7 +803,7 @@
 <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_3" result="shape"/>
 </filter>
 <linearGradient id="paint0_linear_1_3" x1="756" y1="2582" x2="756" y2="-234" gradientUnits="userSpaceOnUse">
-<stop offset="0.8125" stop-color="#040815"/>
+<stop offset="0.8125" stop-color="#040A15"/>
 <stop offset="1" stop-color="#080E32"/>
 </linearGradient>
 <linearGradient id="paint1_linear_1_3" x1="1322.86" y1="212.399" x2="1358.25" y2="259.155" gradientUnits="userSpaceOnUse">
@@ -825,7 +825,7 @@
 <linearGradient id="paint5_linear_1_3" x1="1078.5" y1="203" x2="1078.5" y2="2740" gradientUnits="userSpaceOnUse">
 <stop stop-color="#6856A5"/>
 <stop offset="0.221154" stop-color="#4A4FAF"/>
-<stop offset="0.774038" stop-color="#040B15"/>
+<stop offset="0.774038" stop-color="#040A15"/>
 </linearGradient>
 <linearGradient id="paint6_linear_1_3" x1="742.604" y1="762.102" x2="739.676" y2="573.147" gradientUnits="userSpaceOnUse">
 <stop stop-color="#1C1F5D"/>
