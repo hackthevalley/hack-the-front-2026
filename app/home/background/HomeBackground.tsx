@@ -49,6 +49,8 @@ export default function HomeBackground({ children }: HomeBackgroundProps) {
               <img
                 src={layer.src}
                 alt=""
+                loading="lazy"
+                decoding="async"
                 draggable="false"
                 className="absolute max-w-none select-none"
                 style={{
@@ -62,6 +64,8 @@ export default function HomeBackground({ children }: HomeBackgroundProps) {
               <img
                 src={layer.src}
                 alt=""
+                loading="lazy"
+                decoding="async"
                 draggable="false"
                 className={
                   layer.preserveAspectRatio

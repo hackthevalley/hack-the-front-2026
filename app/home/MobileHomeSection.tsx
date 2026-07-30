@@ -71,6 +71,8 @@ function MobileSceneLayer({ layerId }: { layerId: string }) {
         <img
           src={layer.src}
           alt=""
+          loading="lazy"
+          decoding="async"
           draggable="false"
           className="absolute max-w-none select-none"
           style={{
@@ -84,6 +86,8 @@ function MobileSceneLayer({ layerId }: { layerId: string }) {
         <img
           src={layer.src}
           alt=""
+          loading="lazy"
+          decoding="async"
           draggable="false"
           className={
             layer.preserveAspectRatio
@@ -257,7 +261,11 @@ export default function MobileHomeSection() {
             data-nav-target="apply"
             className="pointer-events-auto mt-7 w-full max-w-[11.35rem]"
           >
-            <Button text="Apply Now" width="100%" />
+            <Button
+              text="Apply Now"
+              width="100%"
+              href="/login"
+            />
           </div>
         </div>
       </div>

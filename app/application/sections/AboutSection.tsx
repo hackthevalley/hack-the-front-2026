@@ -38,6 +38,7 @@ const AboutSection = React.forwardRef<SectionHandle, SectionProps<AboutData>>(
             ref={firstNameRef}
             name="First Name"
             placeholder="First Name"
+            disabled
             required
             theme="application"
             value={value.firstName}
@@ -48,6 +49,7 @@ const AboutSection = React.forwardRef<SectionHandle, SectionProps<AboutData>>(
             ref={lastNameRef}
             name="Last Name"
             placeholder="Last Name"
+            disabled
             required
             theme="application"
             value={value.lastName}
@@ -61,6 +63,7 @@ const AboutSection = React.forwardRef<SectionHandle, SectionProps<AboutData>>(
           name="Email"
           placeholder="Email"
           type="email"
+          disabled
           required
           theme="application"
           value={value.email}

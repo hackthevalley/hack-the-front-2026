@@ -84,10 +84,9 @@ export const COMBO_PLACEMENTS: ComboPlacement[] = [
   {
     character: "chipmunk",
     accessory: "hat",
-    left: 23,
-    top: 6,
-    width: 53,
-    rotate: -3,
+    left: 15,
+    top: -15,
+    width: 72.36,
   },
   {
     character: "chipmunk",
@@ -103,9 +102,9 @@ export const COMBO_PLACEMENTS: ComboPlacement[] = [
   {
     character: "raccoon",
     accessory: "hat",
-    left: 21,
-    top: 5,
-    width: 42,
+    left: -5,
+    top: -24,
+    width: 90,
     rotate: -1,
   },
   {
@@ -116,7 +115,14 @@ export const COMBO_PLACEMENTS: ComboPlacement[] = [
     width: 42,
     rotate: 4,
   },
-  { character: "raccoon", accessory: "potion", left: 37, top: 62, width: 14 },
+  {
+    character: "raccoon",
+    accessory: "potion",
+    left: 36.95,
+    top: 63.67,
+    width: 18.6,
+    rotate: 0.76,
+  },
 ];
 
 export function getComboPlacement(

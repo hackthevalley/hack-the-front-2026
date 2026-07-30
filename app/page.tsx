@@ -4,7 +4,7 @@ import {
   HOME_BACKGROUND_DESIGN_WIDTH,
 } from "./home/background/layers";
 import DesktopHomeSection from "./home/DesktopHomeSection";
-import FaqThemesContentLayer from "./faq-themes/FaqThemesContentLayer";
+import DeferredFaqThemesContent from "./faq-themes/DeferredFaqThemesContent";
 import FaqThemesBackground from "./faq-themes/background/FaqThemesBackground";
 import {
   FAQ_THEMES_DESIGN_HEIGHT,
@@ -35,7 +35,7 @@ export default function Home() {
 
       <section id="faq" aria-label="FAQ and themes" className="relative">
         <FaqThemesBackground>
-          <FaqThemesContentLayer />
+          <DeferredFaqThemesContent />
         </FaqThemesBackground>
 
         <div className="pointer-events-none absolute inset-0 z-40">

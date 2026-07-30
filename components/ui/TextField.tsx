@@ -12,6 +12,8 @@ import EyeIcon from "@/components/ui/EyeIcon";
 export type TextFieldHandle = {
   /** Runs validation, updates the error message, returns whether the field is valid. */
   validate: () => boolean;
+  /** Moves keyboard focus to the underlying input. */
+  focus: () => void;
 };
 
 type TextFieldType = "text" | "email" | "password" | "number" | "tel";
@@ -27,10 +29,14 @@ type ErrorMessages = {
 type TextFieldProps = {
   name: string;
   placeholder?: string;
+  autoComplete?: React.HTMLInputAutoCompleteAttribute;
+  disabled?: boolean;
   required?: boolean;
   type?: TextFieldType;
   /** Enforce the strength rule (8+ chars, a capital, a number). Use for sign-up, not login. */
   requireStrongPassword?: boolean;
+  /** Hide the reveal control on password fields whose design does not include it. */
+  showPasswordToggle?: boolean;
   /** For `type="number"`: minimum accepted value (inclusive). */
   min?: number;
   /** For `type="number"`: maximum accepted value (inclusive). */
@@ -43,8 +49,8 @@ type TextFieldProps = {
   onValidityChange?: (hasError: boolean) => void;
   className?: string;
   /** Visual theme. "default" is the existing gradient-label look; "application" is the plain
-   * label-above-box look used by the application wizard. */
-  theme?: "default" | "application";
+   * label-above-box look used by the application wizard; "auth" matches the LOGIN frame. */
+  theme?: "default" | "application" | "auth";
 };
 
 const LABEL_GRADIENT =
@@ -75,9 +81,12 @@ function TextField(
   {
     name,
     placeholder = "",
+    autoComplete,
+    disabled = false,
     required = false,
     type = "text",
     requireStrongPassword = false,
+    showPasswordToggle = true,
     min,
     max,
     errorMessages = {},
@@ -92,6 +101,7 @@ function TextField(
   const [internalValue, setInternalValue] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
   const [showPassword, setShowPassword] = React.useState(false);
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   const value = controlledValue ?? internalValue;
   const isPassword = type === "password";
@@ -139,7 +149,10 @@ function TextField(
     return message === null;
   }
 
-  React.useImperativeHandle(ref, () => ({ validate }));
+  React.useImperativeHandle(ref, () => ({
+    validate,
+    focus: () => inputRef.current?.focus(),
+  }));
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const next =
@@ -170,14 +183,19 @@ function TextField(
       ? "text"
       : type;
 
+  const isApplicationTheme = theme === "application";
+  const isAuthTheme = theme === "auth";
+
   // Keep the minimum at 16px: anything smaller makes iOS Safari zoom the page
   // when the field is focused on mobile.
-  const inputSizeClass = "text-[clamp(16px,1.2vw,21px)]";
-
-  const isApplicationTheme = theme === "application";
+  const inputSizeClass = isAuthTheme
+    ? ""
+    : "text-[clamp(16px,1.2vw,21px)]";
 
   return (
-    <div className={`w-full font-figtree ${className}`}>
+    <div
+      className={`w-full font-figtree ${isAuthTheme ? "h-full" : ""} ${className}`}
+    >
       {isApplicationTheme && (
         <span className="mb-1.5 block text-[clamp(13px,1vw,16px)] font-normal text-white/80">
           {name}
@@ -190,7 +208,9 @@ function TextField(
           bg-transparent
           transition-[border-color,box-shadow] duration-300 ease-out
           ${
-            isApplicationTheme
+            isAuthTheme
+              ? "h-full gap-[3.85cqw] rounded-[34.31cqh] border-[2.573cqh] border-white px-[3.85cqw] py-[11cqh]"
+              : isApplicationTheme
               ? "h-[47px] gap-2.5 rounded-[10px] border-0 px-5 py-2.5 shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
               : "gap-3 rounded-[clamp(16px,1.6vw,24px)] border-2 border-white px-[clamp(16px,1.6vw,28px)] py-[clamp(12px,1.2vw,20px)] focus-within:border-[#F6C7FC] focus-within:shadow-[0_0_12px_2px_rgba(246,199,252,0.55)]"
           }
@@ -215,19 +235,35 @@ function TextField(
             />
           </>
         )}
-        <div className="relative z-10 min-w-0 flex-1">
+        <div
+          className={`relative z-10 min-w-0 flex-1 ${
+            isAuthTheme ? "flex h-full flex-col justify-center" : ""
+          }`}
+        >
           {!isApplicationTheme && (
             <span
-              className="block font-normal text-[clamp(14px,1.2vw,20px)] leading-tight bg-clip-text text-transparent"
-              style={{ backgroundImage: LABEL_GRADIENT }}
+              className={`block ${
+                isAuthTheme
+                  ? "font-semibold leading-[normal] text-[#F6C7FC]"
+                  : "bg-clip-text text-[clamp(14px,1.2vw,20px)] font-normal leading-tight text-transparent"
+              }`}
+              style={
+                isAuthTheme
+                  ? { fontSize: "max(14px,24.02cqh)" }
+                  : { backgroundImage: LABEL_GRADIENT }
+              }
             >
               {name}
             </span>
           )}
 
           <input
+            ref={inputRef}
             id={fieldId}
+            name={name}
             type={inputType}
+            autoComplete={autoComplete}
+            disabled={disabled}
             value={value}
             onChange={handleChange}
             onBlur={validate}
@@ -244,16 +280,22 @@ function TextField(
             aria-invalid={error !== null}
             aria-describedby={error ? errorId : undefined}
             className={`
-              w-full bg-transparent outline-none font-figtree
+              w-full bg-transparent outline-none font-figtree disabled:cursor-not-allowed disabled:text-white/60
               font-normal leading-[clamp(30px,2.6vw,44px)] text-white
               placeholder:tracking-normal
-              ${isApplicationTheme ? "mt-0 placeholder:text-white/40" : "mt-1 placeholder:text-[#EAEFFF]"}
+              ${
+                isAuthTheme
+                  ? "auth-autofill-input mt-0 text-[#EAEFFF] placeholder:text-[#EAEFFF]"
+                  : isApplicationTheme
+                    ? "mt-0 placeholder:text-white/40"
+                    : "mt-1 placeholder:text-[#EAEFFF]"
+              }
               ${inputSizeClass}
             `}
           />
         </div>
 
-        {isPassword && (
+        {isPassword && showPasswordToggle && (
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
@@ -264,24 +306,38 @@ function TextField(
             className="relative z-10 shrink-0 -m-2 flex items-center justify-center p-2 text-white outline-none focus-visible:opacity-70"
           >
             <EyeIcon
-              open={showPassword}
-              className="h-[clamp(16px,1.5vw,24px)] w-auto"
+              open={isAuthTheme ? !showPassword : showPassword}
+              className={
+                isAuthTheme
+                  ? "h-[24.878cqh] w-[5.051cqw]"
+                  : "h-[clamp(16px,1.5vw,24px)] w-auto"
+              }
             />
           </button>
         )}
       </label>
 
-      {/* Always reserve space so showing an error doesn't shift content below. */}
-      <p
-        id={errorId}
-        role="alert"
-        aria-hidden={error === null}
-        className={`mt-[clamp(8px,0.8vw,12px)] text-[clamp(12px,1.06vw,16px)] text-[#FFDADA] ${
-          isApplicationTheme ? "pl-5" : "pl-[clamp(16px,1.6vw,28px)]"
-        } ${error ? "" : "invisible"}`}
-      >
-        {error ?? " "}
-      </p>
+      {/* Auth layouts render their visible error separately, so keep this copy
+       * available only to assistive technology. Other themes reserve space to
+       * prevent validation from shifting nearby content. */}
+      {isAuthTheme ? (
+        error ? (
+          <p id={errorId} className="sr-only">
+            {error}
+          </p>
+        ) : null
+      ) : (
+        <p
+          id={errorId}
+          role="alert"
+          aria-hidden={error === null}
+          className={`mt-[clamp(8px,0.8vw,12px)] text-[clamp(12px,1.06vw,16px)] text-[#FFDADA] ${
+            isApplicationTheme ? "pl-5" : "pl-[clamp(16px,1.6vw,28px)]"
+          } ${error ? "" : "invisible"}`}
+        >
+          {error ?? " "}
+        </p>
+      )}
     </div>
   );
 }

@@ -1,10 +1,7 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties } from "react";
-import { Figtree, Inter } from "next/font/google";
-
-const figtree = Figtree({ subsets: ["latin"], weight: ["400", "600"] });
-const inter = Inter({ subsets: ["latin"], weight: ["600"] });
+import type { CSSProperties } from "react";
+import Link from "next/link";
 
 type ButtonProps = {
   className?: string;
@@ -14,14 +11,28 @@ type ButtonProps = {
   direction?: "next" | "back";
   /** Uses a supplied direction icon instead of the default circled chevron. */
   directionIconSrc?: string;
+  /** Recolors a supplied direction icon while preserving its SVG shape. */
+  directionIconColor?: string;
   /** Overrides the direction label typography without changing other variants. */
   directionTextClassName?: string;
+  /** Direction buttons are circled by default; focused flows can opt into a plain icon. */
+  directionAppearance?: "circled" | "plain";
+  directionIconSize?: number | string;
+  directionGap?: number | string;
+  /** Rotation applied to an exported direction icon. */
+  directionIconRotation?: number;
+  /** Uses Next.js client navigation and automatic route prefetching. */
+  href?: string;
+  /** Native button behavior. Form actions should explicitly use "submit". */
+  htmlType?: "button" | "submit";
   onClick?: () => void;
   width?: number | string;
   /** Overrides the default button artwork ratio for compact design variants. */
   aspectRatio?: string;
   /** Uses the compact 240 × 56 artwork geometry from the dashboard design. */
   artworkVariant?: "default" | "compact";
+  /** Optional design-frame font size. Defaults to the shared 20px label size. */
+  fontSize?: number | string;
   /** Only used when buttonType is "direction" — the "disabled" buttonType covers
    * the primary/disabled pair instead. Grays out the button and blocks onClick. */
   disabled?: boolean;
@@ -85,6 +96,10 @@ function pxToCqw(value: number): string {
 
 function gradientBorder(gradient: string): string {
   return `linear-gradient(#0000, #0000) padding-box, ${gradient} border-box`;
+}
+
+function toCssSize(value: number | string): string {
+  return typeof value === "number" ? `${value}px` : value;
 }
 
 const LAYERS: readonly LayerConfig[] = [
@@ -170,17 +185,84 @@ export default function Button({
   text,
   buttonType = "primary",
   direction = "next",
+  directionAppearance = "circled",
   directionIconSrc,
+  directionIconColor,
   directionTextClassName,
+  directionIconSize = 24,
+  directionGap = 8,
+  directionIconRotation,
+  href,
+  htmlType = "button",
   onClick,
   className = "",
   width,
   aspectRatio,
   artworkVariant = "default",
+  fontSize = BASE_FONT_SIZE,
   disabled = false,
 }: ButtonProps) {
   if (buttonType === "direction") {
     const isBack = direction === "back";
+    const isPlain = directionAppearance === "plain";
+
+    const directionIcon = (
+      <span
+        className={`flex shrink-0 items-center justify-center ${
+          isPlain
+            ? ""
+            : `rounded-full border-2 ${
+                disabled ? "border-white/40" : "border-white"
+              }`
+        }`}
+        style={{
+          width: toCssSize(directionIconSize),
+          height: toCssSize(directionIconSize),
+        }}
+      >
+        {directionIconSrc && directionIconColor ? (
+          <span
+            aria-hidden="true"
+            className="block"
+            style={{
+              width: "75.8%",
+              height: "44.22%",
+              backgroundColor: directionIconColor,
+              maskImage: `url("${directionIconSrc}")`,
+              maskPosition: "center",
+              maskRepeat: "no-repeat",
+              maskSize: "contain",
+              WebkitMaskImage: `url("${directionIconSrc}")`,
+              WebkitMaskPosition: "center",
+              WebkitMaskRepeat: "no-repeat",
+              WebkitMaskSize: "contain",
+              transform: `rotate(${
+                directionIconRotation ?? (isBack ? -90 : 90)
+              }deg)`,
+            }}
+          />
+        ) : directionIconSrc ? (
+          <img
+            src={directionIconSrc}
+            alt=""
+            aria-hidden="true"
+            className="block max-w-none"
+            style={{
+              width: "75.8%",
+              height: "44.22%",
+              transform: `rotate(${
+                directionIconRotation ?? (isBack ? -90 : 90)
+              }deg)`,
+            }}
+          />
+        ) : (
+          <ChevronIcon
+            direction={isBack ? "left" : "right"}
+            className={isPlain ? "h-[44.22%] w-[75.8%]" : "h-3 w-3"}
+          />
+        )}
+      </span>
+    );
 
     return (
       <button
@@ -188,66 +270,32 @@ export default function Button({
         onClick={disabled ? undefined : onClick}
         disabled={disabled}
         aria-disabled={disabled}
-        className={`inline-flex items-center gap-2 border-0 bg-transparent p-0 text-white transition-opacity ${
+        className={`inline-flex items-center border-0 bg-transparent p-0 text-white transition-opacity ${
           disabled
             ? "cursor-not-allowed opacity-40"
             : "cursor-pointer hover:opacity-70"
         } ${className}`}
+        style={{ gap: toCssSize(directionGap) }}
       >
-        {isBack && directionIconSrc && (
-          <img
-            src={directionIconSrc}
-            alt=""
-            aria-hidden="true"
-            className="h-6 w-6 shrink-0"
-          />
-        )}
-        {isBack && !directionIconSrc && (
-          <span
-            className={`flex h-6 w-6 items-center justify-center rounded-full border-2 ${
-              disabled ? "border-white/40" : "border-white"
-            }`}
-          >
-            <ChevronIcon direction="left" className="h-3 w-3" />
-          </span>
-        )}
+        {isBack ? directionIcon : null}
         <span
           className={
             directionTextClassName ??
-            `${figtree.className} text-[20px] font-semibold`
+            "font-figtree font-semibold leading-[normal]"
           }
+          style={{
+            fontSize: directionTextClassName ? undefined : toCssSize(fontSize),
+          }}
         >
           {text}
         </span>
-        {!isBack && directionIconSrc && (
-          <img
-            src={directionIconSrc}
-            alt=""
-            aria-hidden="true"
-            className="h-6 w-6 shrink-0"
-          />
-        )}
-        {!isBack && !directionIconSrc && (
-          <span
-            className={`flex h-6 w-6 items-center justify-center rounded-full border-2 ${
-              disabled ? "border-white/40" : "border-white"
-            }`}
-          >
-            <ChevronIcon direction="right" className="h-3 w-3" />
-          </span>
-        )}
+        {!isBack ? directionIcon : null}
       </button>
     );
   }
 
   const isDisabled = buttonType === "disabled";
   const isCompact = artworkVariant === "compact";
-
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    const raf = requestAnimationFrame(() => setReady(true));
-    return () => cancelAnimationFrame(raf);
-  }, []);
 
   const visibleLayers = LAYERS.filter(
     (layer) => !layer.disabledOnly || isDisabled,
@@ -260,33 +308,32 @@ export default function Button({
         ? `${width}px`
         : width;
 
-  return (
-    <button
-      onClick={!isDisabled ? onClick : undefined}
-      disabled={isDisabled}
-      className={`button-component relative isolate inline-flex overflow-hidden border-0 p-0 text-white ${
-        isDisabled ? "cursor-default" : "cursor-pointer"
-      } ${className}`}
-      style={{
-        width: resolvedWidth,
-        aspectRatio:
-          aspectRatio ??
-          (isCompact ? "240 / 56" : `${FRAME_WIDTH} / ${FRAME_HEIGHT}`),
-        background: isCompact
-          ? isDisabled
-            ? "linear-gradient(110.77deg, #9e9e9e 13.3%, #5f5f5f 113.68%)"
-            : "linear-gradient(110.77deg, #ff7ccd 13.3%, #7839dc 113.68%)"
-          : isDisabled
-            ? DISABLED_BACKGROUND
-            : PRIMARY_BACKGROUND,
-        borderRadius: isCompact ? 999 : pxToCqw(PILL_RADIUS),
-        boxShadow: isCompact
-          ? "inset 0 2px 3.7px #fff"
-          : `inset 0 ${pxToCqw(INNER_SHADOW_OFFSET_Y)} ${pxToCqw(INNER_SHADOW_BLUR)} #FFFFFF`,
-        opacity: ready ? 1 : 0,
-        transition: "opacity 0.15s ease",
-      }}
-    >
+  const rootClassName = `button-component relative isolate inline-flex overflow-hidden border-0 p-0 text-white no-underline transition-[filter,transform] duration-150 ${
+    isDisabled
+      ? "cursor-default"
+      : "cursor-pointer hover:[filter:brightness(1.15)_saturate(1.1)] active:translate-y-px active:[filter:brightness(0.8)_saturate(0.95)]"
+  } ${className}`;
+  const rootStyle: CSSProperties = {
+    containerType: "inline-size",
+    width: resolvedWidth,
+    aspectRatio:
+      aspectRatio ??
+      (isCompact ? "240 / 56" : `${FRAME_WIDTH} / ${FRAME_HEIGHT}`),
+    background: isCompact
+      ? isDisabled
+        ? "linear-gradient(110.77deg, #9e9e9e 13.3%, #5f5f5f 113.68%)"
+        : "linear-gradient(110.77deg, #ff7ccd 13.3%, #7839dc 113.68%)"
+      : isDisabled
+        ? DISABLED_BACKGROUND
+        : PRIMARY_BACKGROUND,
+    borderRadius: isCompact ? 999 : pxToCqw(PILL_RADIUS),
+    boxShadow: isCompact
+      ? "inset 0 2px 3.7px #fff"
+      : `inset 0 ${pxToCqw(INNER_SHADOW_OFFSET_Y)} ${pxToCqw(INNER_SHADOW_BLUR)} #FFFFFF`,
+  };
+
+  const content = (
+    <>
       {isCompact ? (
         <>
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[62.5%] bg-gradient-to-b from-transparent to-[#8da8ff] opacity-60" />
@@ -347,13 +394,15 @@ export default function Button({
       )}
 
       <span
-        className={`${isCompact ? inter.className : figtree.className} pointer-events-none absolute inset-0 z-[1] flex select-none items-center justify-center whitespace-nowrap font-semibold`}
+        className={`${isCompact ? "font-inter" : "font-figtree"} pointer-events-none absolute inset-0 z-[1] flex select-none items-center justify-center whitespace-nowrap font-semibold`}
         style={{
           lineHeight: isCompact ? "normal" : "100%",
           letterSpacing: "0%",
           fontSize: isCompact
             ? "clamp(10px, 5.83cqw, 14px)"
-            : pxToCqw(BASE_FONT_SIZE),
+            : typeof fontSize === "number"
+              ? pxToCqw(fontSize)
+              : fontSize,
           WebkitFontSmoothing: "antialiased",
           MozOsxFontSmoothing: "grayscale",
         }}
@@ -361,26 +410,26 @@ export default function Button({
         {text}
       </span>
 
-      <style jsx>{`
-        .button-component {
-          container-type: inline-size;
-          filter: none;
-          transform: none;
-          transition:
-            filter 0.15s ease,
-            transform 0.1s ease;
-        }
-        .button-component:hover:not(:disabled) {
-          filter: brightness(1.15) saturate(1.1);
-        }
-        .button-component:active:not(:disabled) {
-          filter: brightness(0.8) saturate(0.95);
-          transform: translateY(1px);
-        }
-        .button-component:disabled {
-          filter: none;
-        }
-      `}</style>
+    </>
+  );
+
+  if (href && !isDisabled) {
+    return (
+      <Link href={href} className={rootClassName} style={rootStyle}>
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <button
+      type={htmlType}
+      onClick={!isDisabled ? onClick : undefined}
+      disabled={isDisabled}
+      className={rootClassName}
+      style={rootStyle}
+    >
+      {content}
     </button>
   );
 }

@@ -1,4 +1,8 @@
-import type { ComponentType } from "react";
+import type {
+  ComponentType,
+  ElementType,
+  ReactNode,
+} from "react";
 import AboutSection from "./sections/AboutSection";
 import AccessoryLeftSection from "./sections/AccessoryLeftSection";
 import AccessoryRightSection from "./sections/AccessoryRightSection";
@@ -29,6 +33,7 @@ import type {
   ReviewData,
   SchoolData,
 } from "./sections/data";
+import type { SectionProps } from "./sections/types";
 
 export type WizardFormData = {
   about: AboutData;
@@ -67,7 +72,7 @@ export const initialFormData: WizardFormData = {
   customCharacter: { character: "" },
   customAccessory: { accessory: "" },
   experience: { hackathonCount: "", github: "", linkedin: "" },
-  portfolio: { portfolio: "", resume: null },
+  portfolio: { portfolio: "", resume: null, savedResumeName: "" },
   devSkills: { uiux: "", frontend: "", backend: "", fullstack: "" },
   otherSkills: {
     productManagement: "",
@@ -87,17 +92,42 @@ export const initialFormData: WizardFormData = {
 export type SectionConfigItem = {
   id: SectionId;
   title: string;
-  // Each section has a different data shape, so the shared registry type-erases
-  // the component's props; page.tsx supplies value/onChange (and formData for
-  // the review step) matching whichever section is currently active.
-  Left: ComponentType<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
-  Right: ComponentType<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
+  Left: ElementType;
+  Right: ElementType;
   // Most steps use a purely decorative Left (WelcomeSection, fed just `title`).
   // When a step needs real fields on both sides, set leftId to the form-data
   // key Left should be wired to — page.tsx then gives it the same
   // value/onChange/ref/onValidityChange treatment as Right.
   leftId?: SectionId;
 };
+
+type FormSectionComponent<K extends SectionId> =
+  | ComponentType<SectionProps<WizardFormData[K]>>
+  | ComponentType<
+      SectionProps<WizardFormData[K]> & { formData: WizardFormData }
+    >;
+
+function defineStep<K extends SectionId>(step: {
+  id: K;
+  title: string;
+  Left: ComponentType<{ children: ReactNode }>;
+  Right: FormSectionComponent<K>;
+}): SectionConfigItem {
+  return step;
+}
+
+function defineSplitStep<
+  K extends SectionId,
+  L extends SectionId,
+>(step: {
+  id: K;
+  leftId: L;
+  title: string;
+  Left: FormSectionComponent<L>;
+  Right: FormSectionComponent<K>;
+}): SectionConfigItem {
+  return step;
+}
 
 export type SectionGroup = {
   id: string;
@@ -116,85 +146,85 @@ export const SECTION_GROUPS: SectionGroup[] = [
     id: "about",
     label: "About",
     steps: [
-      {
+      defineStep<"about">({
         id: "about",
         title: "Join Us",
         Left: WelcomeSection,
         Right: AboutSection,
-      },
-      {
+      }),
+      defineSplitStep<"demography", "school">({
         id: "demography",
         leftId: "school",
         title: "Background",
         Left: SchoolSection,
         Right: DemographySection,
-      },
+      }),
     ],
   },
   {
     id: "custom",
     label: "Custom",
     steps: [
-      {
+      defineSplitStep<"customCharacter", "customCharacter">({
         id: "customCharacter",
         leftId: "customCharacter",
         title: "Choose An Avatar",
         Left: CharacterLeftSection,
         Right: CharacterRightSection,
-      },
-      {
+      }),
+      defineSplitStep<"customAccessory", "customAccessory">({
         id: "customAccessory",
         leftId: "customAccessory",
         title: "Choose An Accessory",
         Left: AccessoryLeftSection,
         Right: AccessoryRightSection,
-      },
+      }),
     ],
   },
   {
     id: "experience",
     label: "Experience",
     steps: [
-      {
+      defineSplitStep<"portfolio", "experience">({
         id: "portfolio",
         leftId: "experience",
         title: "Experience Info",
         Left: ExperienceSection,
         Right: PortfolioSection,
-      },
-      {
+      }),
+      defineSplitStep<"otherSkills", "devSkills">({
         id: "otherSkills",
         leftId: "devSkills",
         title: "Skill Confidence",
         Left: SkillsLeftSection,
         Right: SkillsRightSection,
-      },
+      }),
     ],
   },
   {
     id: "survey",
     label: "Survey",
     steps: [
-      {
+      defineSplitStep<"mlh", "custom">({
         id: "mlh",
         leftId: "custom",
         title: "General Info",
         Left: GeneralSection,
         Right: MlhSection,
-      },
+      }),
     ],
   },
   {
     id: "review",
     label: "Review",
     steps: [
-      {
+      defineSplitStep<"review", "review">({
         id: "review",
         leftId: "review",
         title: "Review",
         Left: ReviewSectionLeft,
         Right: ReviewSectionRight,
-      },
+      }),
     ],
   },
 ];
