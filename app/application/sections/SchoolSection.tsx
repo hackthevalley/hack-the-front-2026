@@ -1,7 +1,14 @@
 "use client";
 
 import * as React from "react";
+import Dropdown, { type DropdownHandle } from "@/components/ui/Dropdown";
 import TextField, { type TextFieldHandle } from "@/components/ui/TextField";
+import {
+  COUNTRY_OPTIONS,
+  EDUCATION_LEVEL_OPTIONS,
+  MAJOR_OPTIONS,
+  SCHOOL_OPTIONS,
+} from "./applicationOptions";
 import SectionHeading from "./SectionHeading";
 import type { SectionHandle, SectionProps } from "./types";
 import { useFieldErrors } from "./useFieldErrors";
@@ -9,10 +16,10 @@ import type { SchoolData } from "./data";
 
 const SchoolSection = React.forwardRef<SectionHandle, SectionProps<SchoolData>>(
   ({ value, onChange, onValidityChange }, ref) => {
-    const countryRef = React.useRef<TextFieldHandle>(null);
-    const schoolNameRef = React.useRef<TextFieldHandle>(null);
-    const majorRef = React.useRef<TextFieldHandle>(null);
-    const levelOfEducationRef = React.useRef<TextFieldHandle>(null);
+    const countryRef = React.useRef<DropdownHandle>(null);
+    const schoolNameRef = React.useRef<DropdownHandle>(null);
+    const majorRef = React.useRef<DropdownHandle>(null);
+    const levelOfEducationRef = React.useRef<DropdownHandle>(null);
     const yearOfGraduationRef = React.useRef<TextFieldHandle>(null);
     const setFieldError = useFieldErrors(onValidityChange);
 
@@ -39,22 +46,22 @@ const SchoolSection = React.forwardRef<SectionHandle, SectionProps<SchoolData>>(
         <SectionHeading>Education Info</SectionHeading>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <TextField
+          <Dropdown
             ref={countryRef}
             name="Country"
-            placeholder="Country"
+            placeholder="Select country"
+            options={COUNTRY_OPTIONS}
             required
-            theme="application"
             value={value.country}
             onChange={(v) => set("country", v)}
             onValidityChange={(hasError) => setFieldError("country", hasError)}
           />
-          <TextField
+          <Dropdown
             ref={schoolNameRef}
             name="School"
-            placeholder="School"
+            placeholder="Select school"
+            options={SCHOOL_OPTIONS}
             required
-            theme="application"
             value={value.schoolName}
             onChange={(v) => set("schoolName", v)}
             onValidityChange={(hasError) =>
@@ -64,22 +71,22 @@ const SchoolSection = React.forwardRef<SectionHandle, SectionProps<SchoolData>>(
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <TextField
+          <Dropdown
             ref={majorRef}
             name="Major"
-            placeholder="Major"
+            placeholder="Select major"
+            options={MAJOR_OPTIONS}
             required
-            theme="application"
             value={value.major}
             onChange={(v) => set("major", v)}
             onValidityChange={(hasError) => setFieldError("major", hasError)}
           />
-          <TextField
+          <Dropdown
             ref={levelOfEducationRef}
             name="Current Level of Education"
-            placeholder="Level of Education"
+            placeholder="Select level of education"
+            options={EDUCATION_LEVEL_OPTIONS}
             required
-            theme="application"
             value={value.levelOfEducation}
             onChange={(v) => set("levelOfEducation", v)}
             onValidityChange={(hasError) =>
