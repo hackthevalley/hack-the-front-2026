@@ -545,12 +545,12 @@ export default function HomeNavbar({
 
   return (
     <>
-      <MlhTrustBadge fixed />
-
       <header
         className="fixed inset-x-0 top-0 z-[80] w-full transition-transform duration-300 ease-out"
         style={{ transform: `translateY(${translateY}px)` }}
       >
+        <MlhTrustBadge fixed />
+
         <Shell shellProgress={isMenuOpen ? 0 : shellProgress}>
           <NavContents
             items={items}
