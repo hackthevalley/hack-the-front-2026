@@ -626,7 +626,11 @@ export default function Dashboard() {
             Current Application Status
           </h2>
           <p
-            className="dashboard-status-title absolute left-[61.2%] top-[28.59%] w-[41.96%] -translate-x-1/2 whitespace-nowrap text-center font-vcr text-[clamp(34px,4.23vw,64px)] leading-[0.98]"
+            className={`dashboard-status-title absolute left-[61.2%] top-[28.59%] w-[41.96%] -translate-x-1/2 whitespace-nowrap text-center font-vcr text-[clamp(34px,4.23vw,64px)] leading-[0.98] ${
+              current.title === "Not Submitted"
+                ? "dashboard-status-title-long"
+                : ""
+            }`}
             style={{
               color: current.titleColor,
               textShadow: `0 0 7.8px ${current.titleColor}`,
