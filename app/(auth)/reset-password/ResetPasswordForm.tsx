@@ -167,7 +167,7 @@ export default function ResetPasswordForm({ token }: { token?: string }) {
           autoComplete="new-password"
           required
           requireStrongPassword
-          showPasswordToggle={false}
+          showPasswordToggle
           errorMessages={{
             required: PASSWORD_REQUIRED_ERROR,
           }}
@@ -195,7 +195,7 @@ export default function ResetPasswordForm({ token }: { token?: string }) {
           theme="auth"
           autoComplete="new-password"
           required
-          showPasswordToggle={false}
+          showPasswordToggle
           errorMessages={{ required: CONFIRMATION_ERROR }}
           value={confirmation}
           onChange={handleConfirmationChange}
