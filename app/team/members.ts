@@ -167,7 +167,7 @@ export const teamMembers: Record<string, TeamMember> = {
     id: "hibba",
     name: "Hibba Nouman",
     role: "Sponsorship Coordinator",
-    avatarSrc: resolvePhoto("default"),
+    avatarSrc: resolvePhoto("hibba"),
     linkedinUrl: "https://www.linkedin.com/in/hibba-nouman/",
   },
   "shelf-2-jar-14": {
@@ -175,7 +175,8 @@ export const teamMembers: Record<string, TeamMember> = {
     name: "Danielle Santos",
     role: "Sponsorship Coordinator",
     avatarSrc: resolvePhoto("danielle"),
-    linkedinUrl: "https://www.linkedin.com/in/danielle-andrea-santos-83974523a/",
+    linkedinUrl:
+      "https://www.linkedin.com/in/danielle-andrea-santos-83974523a/",
   },
   "shelf-3-jar-1": {
     id: "johnson",
