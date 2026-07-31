@@ -406,12 +406,12 @@ export default function TeamOverlays({
         left={482}
         top={81}
         width={549}
-        height={70}
+        height={72}
         zIndex={4}
       >
         <p
           className="m-0 w-full text-center font-vcr leading-none text-white"
-          style={{ fontSize: "72cqh", textShadow: HEADING_GLOW }}
+          style={{ fontSize: "100cqh", textShadow: HEADING_GLOW }}
         >
           Meet Our Team
         </p>

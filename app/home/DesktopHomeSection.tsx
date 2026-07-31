@@ -20,7 +20,7 @@ export default function DesktopHomeSection() {
         >
           <h1
             id="home-title"
-            className="m-0 w-full font-figtree font-bold leading-[1.05] text-white"
+            className="m-0 w-full font-figtree font-medium leading-[1.05] text-white"
             style={{
               fontSize: "11.4cqw",
               textShadow:

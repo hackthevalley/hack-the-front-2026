@@ -236,13 +236,13 @@ function NavBarFrame({
 }) {
   return (
     <nav className="mx-auto flex h-[72px] w-full max-w-[1512px] items-center justify-between gap-4 px-4 text-white md:h-[123.2548828125px] md:gap-6 md:px-[clamp(24px,7.9365vw,120px)]">
-      <div className="flex min-w-0 items-center gap-4 md:gap-[clamp(18px,2.8vw,44px)]">
+      <div className="flex min-w-0 items-center gap-4 md:gap-[clamp(18px,2.2vw,34px)]">
         <LogoButton onClick={onLogoClick} />
 
         <SectionLinks
           items={items}
           onSectionClick={onSectionClick}
-          className="hidden flex-wrap items-center gap-x-[clamp(14px,2.2vw,38px)] gap-y-3 md:flex"
+          className="hidden flex-wrap items-center gap-x-[clamp(14px,1.8vw,28px)] gap-y-3 md:flex"
           itemClassName="font-figtree text-[clamp(1rem,1.25vw,1.25rem)] font-semibold tracking-[-0.01em] text-white/88"
         />
       </div>
