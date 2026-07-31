@@ -17,6 +17,13 @@ const DEFAULT_ITEMS: readonly HomeNavItem[] = [
   { key: "about", label: "About", targetId: "about", offsetRatio: 0.18 },
   { key: "faq", label: "FAQ", targetId: "faq", offsetRatio: 0.08 },
   { key: "themes", label: "Themes", targetId: "themes", offsetRatio: 0.16 },
+  {
+    key: "sponsors",
+    label: "Sponsors",
+    targetId: "sponsors",
+    offsetRatio: 0.08,
+  },
+  { key: "team", label: "Team", targetId: "team", offsetRatio: 0.08 },
 ];
 
 const DESKTOP_NAVBAR_HEIGHT = 123.2548828125;
