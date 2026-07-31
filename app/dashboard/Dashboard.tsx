@@ -620,6 +620,7 @@ export default function Dashboard() {
               text={current.action}
               state={current.disabled ? "disabled" : "default"}
               width="100%"
+              textClassName="font-inter text-sm font-semibold leading-normal"
               onClick={() => router.push("/application")}
             />
           </div>

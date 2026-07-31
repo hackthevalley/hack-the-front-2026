@@ -5,7 +5,11 @@ import Button from "@/components/ui/Button";
 import SectionHeading from "./SectionHeading";
 import type { SectionHandle, SectionProps } from "./types";
 import type { CharacterData } from "./data";
-import { AVATARS, CUSTOM_BUTTON_WIDTH } from "./avatarAssets";
+import {
+  AVATARS,
+  CUSTOM_BUTTON_ASPECT_RATIO,
+  CUSTOM_BUTTON_WIDTH,
+} from "./avatarAssets";
 
 const CharacterLeftSection = React.forwardRef<
   SectionHandle,
@@ -40,6 +44,7 @@ const CharacterLeftSection = React.forwardRef<
             key={avatar.key}
             text={avatar.label}
             width={CUSTOM_BUTTON_WIDTH}
+            aspectRatio={CUSTOM_BUTTON_ASPECT_RATIO}
             onClick={() => select(avatar.key)}
             className={
               value.character === avatar.key

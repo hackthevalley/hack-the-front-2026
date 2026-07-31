@@ -26,6 +26,8 @@ type PrimaryButtonProps = CommonButtonProps & {
   width?: number | string;
   /** Overrides the default 240 × 56 artwork ratio. */
   aspectRatio?: string;
+  /** Overrides the default 20px Figtree CTA label treatment. */
+  textClassName?: string;
 };
 
 type DirectionButtonProps = CommonButtonProps & {
@@ -225,6 +227,7 @@ export default function Button(props: ButtonProps) {
     className = "",
     width,
     aspectRatio,
+    textClassName,
   } = props;
   const isInteractive = state === "default";
   const stateIcon = STATE_ICONS[state];
@@ -288,7 +291,10 @@ export default function Button(props: ButtonProps) {
       ) : null}
 
       <span
-        className="pointer-events-none absolute inset-0 z-[1] flex select-none items-center justify-center gap-[5px] whitespace-nowrap font-inter text-xs font-semibold leading-normal"
+        className={`pointer-events-none absolute inset-0 z-[1] flex select-none items-center justify-center gap-[5px] whitespace-nowrap ${
+          textClassName ??
+          "font-figtree text-xl font-semibold leading-normal"
+        }`}
       >
         {text}
         {stateIcon ? (

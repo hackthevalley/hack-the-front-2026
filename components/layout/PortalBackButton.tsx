@@ -18,7 +18,7 @@ export default function PortalBackButton({
   href = "/",
   onClick,
   text = "Back",
-  width = 133,
+  width = 125,
   tone = "default",
   placement = "back",
   showArrow = true,
@@ -32,7 +32,7 @@ export default function PortalBackButton({
       left={placement === "navbar-end" ? 1222 : 108}
       top={placement === "navbar-end" ? 39.127 : 145}
       width={width}
-      height={45}
+      height={placement === "navbar-end" ? 45 : 44}
       zIndex={50}
       compactRole={placement === "back" ? "secondary" : undefined}
       compactOrder={placement === "back" ? 0 : undefined}
@@ -52,7 +52,7 @@ export default function PortalBackButton({
         directionIconColor={tone === "danger" ? "#ff6068" : undefined}
         directionIconSize="77.871cqh"
         directionGap="17.778cqh"
-        fontSize={placement === "navbar-end" ? "55.556cqh" : "82.222cqh"}
+        fontSize={placement === "navbar-end" ? "55.556cqh" : 37}
         onClick={onClick ?? (() => router.push(href))}
         className={`h-full w-full whitespace-nowrap ${
           tone === "danger" ? "!text-[#ff6068]" : ""

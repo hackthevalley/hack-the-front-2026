@@ -5,7 +5,11 @@ import Button from "@/components/ui/Button";
 import SectionHeading from "./SectionHeading";
 import type { SectionHandle, SectionProps } from "./types";
 import type { AccessoryData } from "./data";
-import { ACCESSORIES, CUSTOM_BUTTON_WIDTH } from "./avatarAssets";
+import {
+  ACCESSORIES,
+  CUSTOM_BUTTON_ASPECT_RATIO,
+  CUSTOM_BUTTON_WIDTH,
+} from "./avatarAssets";
 
 const AccessoryLeftSection = React.forwardRef<
   SectionHandle,
@@ -41,6 +45,7 @@ const AccessoryLeftSection = React.forwardRef<
               key={accessory.key}
               text={accessory.label}
               width={CUSTOM_BUTTON_WIDTH}
+              aspectRatio={CUSTOM_BUTTON_ASPECT_RATIO}
               onClick={() => select(accessory.key)}
               className={
                 value.accessory === accessory.key
@@ -56,6 +61,7 @@ const AccessoryLeftSection = React.forwardRef<
               key={accessory.key}
               text={accessory.label}
               width={CUSTOM_BUTTON_WIDTH}
+              aspectRatio={CUSTOM_BUTTON_ASPECT_RATIO}
               onClick={() => select(accessory.key)}
               className={
                 value.accessory === accessory.key

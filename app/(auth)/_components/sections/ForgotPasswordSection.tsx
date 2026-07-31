@@ -182,6 +182,7 @@ export default function ForgotPasswordSection() {
           htmlType="submit"
           width="100%"
           className="h-full"
+          textClassName="font-figtree text-2xl font-semibold leading-normal"
         />
       </DesignBox>
     </form>
