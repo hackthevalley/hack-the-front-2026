@@ -48,3 +48,45 @@ export function formatPhoneNumber(digits: string): string {
   ].filter(Boolean);
   return parts.join("-");
 }
+
+export type ProfilePlatform = "GitHub" | "LinkedIn" | "Devpost";
+
+const PROFILE_HOSTS: Record<ProfilePlatform, string> = {
+  GitHub: "github.com",
+  LinkedIn: "linkedin.com",
+  Devpost: "devpost.com",
+};
+
+/** Returns a platform-specific error for malformed or wrong-domain profile URLs. */
+export function getProfileUrlValidationMessage(
+  value: string,
+  platform: ProfilePlatform,
+): string | null {
+  let url: URL;
+
+  try {
+    url = new URL(value.trim());
+  } catch {
+    return `Enter a valid ${platform} URL, including https://.`;
+  }
+
+  const expectedHost = PROFILE_HOSTS[platform];
+  const hostname = url.hostname.toLowerCase();
+  const isExpectedHost =
+    hostname === expectedHost ||
+    hostname === `www.${expectedHost}` ||
+    (platform !== "GitHub" && hostname.endsWith(`.${expectedHost}`));
+  const hasProfilePath = url.pathname.split("/").some(Boolean);
+
+  if (
+    url.protocol !== "https:" ||
+    url.username ||
+    url.password ||
+    !isExpectedHost ||
+    !hasProfilePath
+  ) {
+    return `Enter a valid ${platform} profile URL on ${expectedHost}.`;
+  }
+
+  return null;
+}

@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import TextField, { type TextFieldHandle } from "@/components/ui/TextField";
+import { getProfileUrlValidationMessage } from "@/components/ui/validation";
 import SectionHeading from "./SectionHeading";
 import type { SectionHandle, SectionProps } from "./types";
 import { useFieldErrors } from "./useFieldErrors";
@@ -12,6 +13,7 @@ const ExperienceSection = React.forwardRef<SectionHandle, SectionProps<Experienc
     const hackathonCountRef = React.useRef<TextFieldHandle>(null);
     const githubRef = React.useRef<TextFieldHandle>(null);
     const linkedinRef = React.useRef<TextFieldHandle>(null);
+    const devpostRef = React.useRef<TextFieldHandle>(null);
     const setFieldError = useFieldErrors(onValidityChange);
 
     React.useImperativeHandle(ref, () => ({
@@ -20,6 +22,7 @@ const ExperienceSection = React.forwardRef<SectionHandle, SectionProps<Experienc
           hackathonCountRef.current?.validate() ?? true,
           githubRef.current?.validate() ?? true,
           linkedinRef.current?.validate() ?? true,
+          devpostRef.current?.validate() ?? true,
         ].every(Boolean),
     }));
 
@@ -49,6 +52,8 @@ const ExperienceSection = React.forwardRef<SectionHandle, SectionProps<Experienc
           name="Github"
           placeholder="Github"
           theme="application"
+          autoComplete="url"
+          validateValue={(v) => getProfileUrlValidationMessage(v, "GitHub")}
           value={value.github}
           onChange={(v) => set("github", v)}
           onValidityChange={(hasError) => setFieldError("github", hasError)}
@@ -59,9 +64,23 @@ const ExperienceSection = React.forwardRef<SectionHandle, SectionProps<Experienc
           name="Linkedin"
           placeholder="Linkedin"
           theme="application"
+          autoComplete="url"
+          validateValue={(v) => getProfileUrlValidationMessage(v, "LinkedIn")}
           value={value.linkedin}
           onChange={(v) => set("linkedin", v)}
           onValidityChange={(hasError) => setFieldError("linkedin", hasError)}
+        />
+
+        <TextField
+          ref={devpostRef}
+          name="Devpost"
+          placeholder="Devpost"
+          theme="application"
+          autoComplete="url"
+          validateValue={(v) => getProfileUrlValidationMessage(v, "Devpost")}
+          value={value.devpost}
+          onChange={(v) => set("devpost", v)}
+          onValidityChange={(hasError) => setFieldError("devpost", hasError)}
         />
       </div>
     );
