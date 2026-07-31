@@ -88,6 +88,7 @@ export const LEFT_GROUPS: SummaryGroup[] = [
       },
       { label: "Github", get: (d) => d.experience.github || "—" },
       { label: "Linkedin", get: (d) => d.experience.linkedin || "—" },
+      { label: "Devpost", get: (d) => d.experience.devpost || "—" },
     ],
   },
 ];

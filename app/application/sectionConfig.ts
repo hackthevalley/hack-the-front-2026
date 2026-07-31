@@ -71,7 +71,12 @@ export const initialFormData: WizardFormData = {
   custom: { tshirtSize: "", dietaryRestrictions: "" },
   customCharacter: { character: "" },
   customAccessory: { accessory: "" },
-  experience: { hackathonCount: "", github: "", linkedin: "" },
+  experience: {
+    hackathonCount: "",
+    github: "",
+    linkedin: "",
+    devpost: "",
+  },
   portfolio: { portfolio: "", resume: null, savedResumeName: "" },
   devSkills: { uiux: "", frontend: "", backend: "", fullstack: "" },
   otherSkills: {

@@ -63,6 +63,7 @@ const ANSWER_BINDINGS: Record<string, AnswerBinding> = {
   Accessory: { section: "customAccessory", field: "accessory" },
   Github: { section: "experience", field: "github" },
   LinkedIn: { section: "experience", field: "linkedin" },
+  Devpost: { section: "experience", field: "devpost" },
   Portfolio: { section: "portfolio", field: "portfolio" },
   "UI/UX Design": { section: "devSkills", field: "uiux" },
   "Frontend Development": { section: "devSkills", field: "frontend" },

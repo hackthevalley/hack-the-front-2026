@@ -14,6 +14,7 @@ export type ExperienceData = {
   hackathonCount: string;
   github: string;
   linkedin: string;
+  devpost: string;
 };
 
 export type PortfolioData = {
