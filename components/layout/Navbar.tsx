@@ -37,7 +37,7 @@ const HTV_2025_HREF = "https://hackthevalley.io/";
 
 /**
  * Site navbar: the Hack the Valley logo on the left, social icons on the right.
- * All icons are rendered via MaskIcon, so they recolor with light/dark mode.
+ * Social icons use MaskIcon so they can recolor with light/dark mode.
  */
 export default function Navbar() {
   return (
@@ -48,11 +48,13 @@ export default function Navbar() {
           aria-label="Hack the Valley — home"
           className="inline-flex sparkle-icon"
         >
-          <MaskIcon
+          <img
             src="/icons/htv-logo.svg"
             width={45}
             height={45}
-            className="text-white transition-colors duration-150 hover:text-zinc-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current"
+            alt=""
+            aria-hidden="true"
+            className="block shrink-0 transition-opacity duration-150 hover:opacity-80"
           />
         </Link>
 

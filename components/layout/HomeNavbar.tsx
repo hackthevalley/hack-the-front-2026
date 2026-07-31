@@ -202,11 +202,13 @@ function LogoButton({ onClick }: { onClick: () => void }) {
       aria-label="Hack the Valley home"
       className="inline-flex h-10 w-10 shrink-0 items-center justify-center sparkle-icon md:h-[45px] md:w-[45px]"
     >
-      <MaskIcon
+      <img
         src="/icons/htv-logo.svg"
         width={45}
         height={45}
-        className="h-8 w-8 text-white transition-colors duration-150 hover:text-zinc-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current md:h-[45px] md:w-[45px]"
+        alt=""
+        aria-hidden="true"
+        className="block shrink-0 transition-opacity duration-150 hover:opacity-80"
       />
     </button>
   );
