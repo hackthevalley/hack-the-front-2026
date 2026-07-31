@@ -75,6 +75,7 @@ export default function HomeApplyButton() {
     <Button
       text={goesToDashboard ? "Go to Dashboard" : "Apply Now"}
       width="100%"
+      aspectRatio="206 / 72"
       href={goesToDashboard ? "/dashboard" : "/login"}
     />
   );

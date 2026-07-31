@@ -483,11 +483,13 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
       >
         <Button
           text={isSubmitting ? "Signing Up..." : "Sign Up"}
-          buttonType={canSubmit ? "primary" : "disabled"}
+          state={
+            isSubmitting ? "loading" : canSubmit ? "default" : "disabled"
+          }
           htmlType="submit"
           width="100%"
-          fontSize={24}
           className="h-full"
+          textClassName="font-figtree text-2xl font-semibold leading-normal"
         />
       </DesignBox>
 

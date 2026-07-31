@@ -18,10 +18,7 @@ import {
   AVATARS,
   getComboPlacement,
 } from "@/app/application/sections/avatarAssets";
-import type {
-  AccessoryKey,
-  AvatarKey,
-} from "@/app/application/sections/data";
+import type { AccessoryKey, AvatarKey } from "@/app/application/sections/data";
 
 type DashboardStatus =
   | "apply"
@@ -158,10 +155,7 @@ const STATUS_DETAILS: Record<
 };
 
 const SUBMITTED_STATUSES = new Set(["APPLIED", "WALK_IN_SUBMITTED"]);
-const NO_APPLICATION_STATUSES = new Set([
-  "ACCOUNT_INACTIVE",
-  "NOT_APPLIED",
-]);
+const NO_APPLICATION_STATUSES = new Set(["ACCOUNT_INACTIVE", "NOT_APPLIED"]);
 
 function hasApplication(applicationStatus: string | null): boolean {
   return (
@@ -188,10 +182,7 @@ function resolveDashboardStatus(
   const start = new Date(registration.start_at).getTime();
   const end = new Date(registration.end_at).getTime();
   const registrationIsOpen =
-    Number.isFinite(start) &&
-    Number.isFinite(end) &&
-    now > start &&
-    now < end;
+    Number.isFinite(start) && Number.isFinite(end) && now > start && now < end;
 
   if (applicationStatus === "APPLYING") {
     return registrationIsOpen ? "applying" : "not-submitted";
@@ -257,15 +248,12 @@ function DashboardAvatar({
   avatarKey: AvatarKey;
 }) {
   const avatar = AVATARS.find((option) => option.key === avatarKey);
-  const accessory = ACCESSORIES.find(
-    (option) => option.key === accessoryKey,
-  );
+  const accessory = ACCESSORIES.find((option) => option.key === accessoryKey);
   const placement =
     avatar && accessory
       ? getComboPlacement(avatar.key, accessory.key)
       : undefined;
-  const isFigmaOwlHat =
-    avatar?.key === "owl" && accessory?.key === "hat";
+  const isFigmaOwlHat = avatar?.key === "owl" && accessory?.key === "hat";
   const underTreeClass =
     avatar?.key === "raccoon"
       ? "left-[42.06%] top-[69.96%] w-[16.2%]"
@@ -354,8 +342,7 @@ export default function Dashboard() {
   });
   const status = dashboardData.status;
   const current = STATUS_DETAILS[status];
-  const isNotSubmitted =
-    status === "applying" || status === "not-submitted";
+  const isNotSubmitted = status === "applying" || status === "not-submitted";
 
   useEffect(() => {
     if (status === "apply" || status === "applying") {
@@ -407,17 +394,16 @@ export default function Dashboard() {
         let accessory: AccessoryKey | null = null;
 
         if (hasApplication(user.application_status)) {
-          const [questionsResponse, applicationResponse] =
-            await Promise.all([
-              fetch(apiUrl("/api/forms/questions"), {
-                headers,
-                signal: controller.signal,
-              }),
-              fetch(apiUrl("/api/forms/application"), {
-                headers,
-                signal: controller.signal,
-              }),
-            ]);
+          const [questionsResponse, applicationResponse] = await Promise.all([
+            fetch(apiUrl("/api/forms/questions"), {
+              headers,
+              signal: controller.signal,
+            }),
+            fetch(apiUrl("/api/forms/application"), {
+              headers,
+              signal: controller.signal,
+            }),
+          ]);
 
           if (
             questionsResponse.status === 401 ||
@@ -451,10 +437,7 @@ export default function Dashboard() {
           accessory,
           avatar,
           deadline: formatDeadline(registration.end_at),
-          status: resolveDashboardStatus(
-            user.application_status,
-            registration,
-          ),
+          status: resolveDashboardStatus(user.application_status, registration),
         });
       } catch (error) {
         if (error instanceof Error && error.name === "AbortError") return;
@@ -657,10 +640,9 @@ export default function Dashboard() {
           <div className="dashboard-status-action absolute left-[44.41%] top-[66.93%] h-[18.67%] w-[33.57%]">
             <Button
               text={current.action}
-              buttonType={current.disabled ? "disabled" : "primary"}
+              state={current.disabled ? "disabled" : "default"}
               width="100%"
-              aspectRatio="240 / 56"
-              artworkVariant="compact"
+              textClassName="font-inter text-sm font-semibold leading-normal"
               onClick={() => router.push("/application")}
             />
           </div>
@@ -681,6 +663,7 @@ export default function Dashboard() {
           width={170}
           tone="danger"
           placement="navbar-end"
+          showArrow={false}
           onClick={() => {
             logout();
             router.replace("/login");

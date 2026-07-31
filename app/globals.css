@@ -337,17 +337,27 @@ body {
 
 /* HomeNavbar is viewport-aligned on the home page, but authentication content
  * lives inside a narrower, centered stage. Project the auth navbar back out to
- * the viewport so the shared logo has the same horizontal position on both
- * pages, then align Back to that same left edge. */
+ * the viewport so the shared logo has the same position on both pages, then
+ * align Back to that same left edge. */
 .auth-content-stage {
-  --auth-home-logo-inset: clamp(24px, 7.9365vw, 120px);
+  --auth-home-logo-inset: 16px;
   --auth-home-nav-max-width: 1512px;
   --auth-stage-gutter-x: calc((100vw - 100%) / 2);
+  --auth-stage-gutter-y: calc(
+    (100dvh - min(100dvh, calc(100vw * 982 / 1512))) / 2
+  );
+}
+
+@media (min-width: 768px) {
+  .auth-content-stage {
+    --auth-home-logo-inset: clamp(24px, 7.9365vw, 120px);
+  }
 }
 
 .auth-content-stage > .site-navbar {
   position: relative;
   left: calc(0px - var(--auth-stage-gutter-x));
+  top: calc(0px - var(--auth-stage-gutter-y));
   width: 100vw;
 }
 
@@ -375,6 +385,8 @@ body {
   }
 
   .auth-content-stage {
+    --auth-stage-gutter-x: 0px;
+    --auth-stage-gutter-y: 0px;
     inset: 0 !important;
     box-sizing: border-box;
     width: 100% !important;
@@ -391,28 +403,19 @@ body {
     -webkit-overflow-scrolling: touch;
   }
 
-  .auth-content-stage .site-navbar,
-  .auth-content-stage .site-navbar__inner {
-    height: 88px;
-  }
-
-  .auth-content-stage .site-navbar__inner {
-    padding-right: max(24px, env(safe-area-inset-right));
-    padding-left: max(24px, env(safe-area-inset-left));
-  }
-
-  .auth-content-stage .site-navbar img[src="/icons/mlh-logo.svg"] {
-    width: 48px;
-    height: auto;
-    max-height: 72px;
-  }
-
   .auth-back-box {
     position: relative !important;
     inset: auto !important;
-    width: min(640px, calc(100% - 48px)) !important;
+    width: calc(
+      100% - (100vw - min(100vw, var(--auth-home-nav-max-width))) -
+        2 * var(--auth-home-logo-inset)
+    ) !important;
     height: 44px !important;
-    margin: 4px auto 0;
+    margin: 4px 0 0
+      calc(
+        (100vw - min(100vw, var(--auth-home-nav-max-width))) / 2 +
+          var(--auth-home-logo-inset)
+      );
     container-type: size !important;
   }
 

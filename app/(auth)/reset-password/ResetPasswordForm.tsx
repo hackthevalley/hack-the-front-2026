@@ -18,7 +18,8 @@ const PASSWORD_REQUIRED_ERROR = "Please enter a new password.";
 const CONFIRMATION_ERROR = "Please re-enter your new password.";
 const MISMATCH_ERROR = "Passwords do not match.";
 const TOKEN_ERROR = "This password reset link is invalid or expired.";
-const REQUEST_ERROR = "Unable to reset your password. Please request a new link.";
+const REQUEST_ERROR =
+  "Unable to reset your password. Please request a new link.";
 
 export default function ResetPasswordForm({ token }: { token?: string }) {
   const router = useRouter();
@@ -244,11 +245,10 @@ export default function ResetPasswordForm({ token }: { token?: string }) {
       >
         <Button
           text="Reset password"
-          buttonType={isSubmitting ? "disabled" : "primary"}
           htmlType="submit"
           width="100%"
-          fontSize="24px"
           className="h-full"
+          textClassName="font-figtree text-2xl font-semibold leading-normal"
         />
       </DesignBox>
     </form>

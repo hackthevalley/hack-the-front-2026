@@ -73,10 +73,11 @@ export default function StatusPage({
       ) : null}
 
       {buttonText && buttonHref ? (
-        <div className="mt-10 w-[206px] max-w-full">
+        <div className="mt-10 w-[237px] max-w-full">
           <Button
             text={buttonText}
             width="100%"
+            aspectRatio="237 / 73"
             onClick={() => router.push(buttonHref)}
           />
         </div>

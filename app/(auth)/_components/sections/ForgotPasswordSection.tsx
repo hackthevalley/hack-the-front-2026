@@ -58,19 +58,15 @@ export default function ForgotPasswordSection() {
       });
 
       if (!response.ok) {
-        throw new Error(`Password reset request failed with status ${response.status}`);
+        throw new Error(
+          `Password reset request failed with status ${response.status}`,
+        );
       }
 
       setSubmitted(true);
-      toast.success("Password reset link sent", {
-        description: "Check your email for instructions to reset your password.",
-      });
     } catch {
       setEmailError(REQUEST_ERROR);
       setSubmitted(false);
-      toast.error("Unable to send reset link", {
-        description: "Please try again in a moment.",
-      });
     } finally {
       setIsSubmitting(false);
     }
@@ -213,11 +209,11 @@ export default function ForgotPasswordSection() {
       >
         <Button
           text="Send Link"
-          buttonType={submitted || isSubmitting ? "disabled" : "primary"}
+          state={submitted ? "success" : "default"}
           htmlType="submit"
           width="100%"
-          fontSize={24}
           className="h-full"
+          textClassName="font-figtree text-2xl font-semibold leading-normal"
         />
       </DesignBox>
     </form>
