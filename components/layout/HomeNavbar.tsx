@@ -17,9 +17,6 @@ const DEFAULT_ITEMS: readonly HomeNavItem[] = [
   { key: "about", label: "About", targetId: "about", offsetRatio: 0.18 },
   { key: "faq", label: "FAQ", targetId: "faq", offsetRatio: 0.08 },
   { key: "themes", label: "Themes", targetId: "themes", offsetRatio: 0.16 },
-];
-
-const MOBILE_MENU_EXTRA_ITEMS: readonly HomeNavItem[] = [
   {
     key: "sponsors",
     label: "Sponsors",
@@ -77,26 +74,6 @@ type HomeNavbarProps = {
 
 const clamp = (value: number, min: number, max: number) =>
   Math.min(max, Math.max(min, value));
-
-const mergeNavItems = (
-  items: readonly HomeNavItem[],
-  extraItems: readonly HomeNavItem[],
-) => {
-  const mergedItems = [...items];
-  const existingTargets = new Set(
-    items.map((item) => `${item.key}:${item.targetId}`),
-  );
-
-  for (const item of extraItems) {
-    const itemIdentity = `${item.key}:${item.targetId}`;
-    if (!existingTargets.has(itemIdentity)) {
-      mergedItems.push(item);
-      existingTargets.add(itemIdentity);
-    }
-  }
-
-  return mergedItems;
-};
 
 function MlhTrustBadge({ fixed = false }: { fixed?: boolean }) {
   return (
@@ -578,7 +555,6 @@ export default function HomeNavbar({
   const translateY = isVisible
     ? 0
     : -(Math.max(MOBILE_NAVBAR_HEIGHT, DESKTOP_NAVBAR_HEIGHT) + 24);
-  const mobileMenuItems = mergeNavItems(items, MOBILE_MENU_EXTRA_ITEMS);
 
   return (
     <>
@@ -601,7 +577,7 @@ export default function HomeNavbar({
 
       <MobileMenuOverlay
         isOpen={isMenuOpen}
-        items={mobileMenuItems}
+        items={items}
         onClose={() => setIsMenuOpen(false)}
         onSectionClick={handleOverlaySectionClick}
       />
