@@ -205,10 +205,8 @@ export default function ResetPasswordForm() {
       >
         <Button
           text="Reset password"
-          buttonType="primary"
           htmlType="submit"
           width="100%"
-          fontSize="24px"
           className="h-full"
         />
       </DesignBox>

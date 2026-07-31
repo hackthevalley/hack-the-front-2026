@@ -178,10 +178,9 @@ export default function ForgotPasswordSection() {
       >
         <Button
           text="Send Link"
-          buttonType={submitted ? "disabled" : "primary"}
+          state={submitted ? "success" : "default"}
           htmlType="submit"
           width="100%"
-          fontSize={24}
           className="h-full"
         />
       </DesignBox>

@@ -618,10 +618,8 @@ export default function Dashboard() {
           <div className="absolute left-[44.41%] top-[66.93%] h-[18.67%] w-[33.57%]">
             <Button
               text={current.action}
-              buttonType={current.disabled ? "disabled" : "primary"}
+              state={current.disabled ? "disabled" : "default"}
               width="100%"
-              aspectRatio="240 / 56"
-              artworkVariant="compact"
               onClick={() => router.push("/application")}
             />
           </div>

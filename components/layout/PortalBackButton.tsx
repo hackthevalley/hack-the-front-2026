@@ -42,7 +42,7 @@ export default function PortalBackButton({
     >
       <Button
         text={text}
-        buttonType="direction"
+        variant="direction"
         direction="back"
         directionAppearance="plain"
         directionIconSrc="/auth/back-chevron.svg"
