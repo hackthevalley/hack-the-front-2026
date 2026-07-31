@@ -70,8 +70,8 @@ body {
     grid-template-rows: auto auto;
     align-content: start;
     justify-items: center;
-    gap: clamp(12px, 2.5svh, 24px);
-    padding-top: clamp(128px, 15.5svh, 150px);
+    gap: clamp(10px, 2svh, 24px);
+    padding-top: clamp(112px, 16svh, 150px);
     aspect-ratio: auto;
     translate: none;
     transform: translateX(-50%) !important;
@@ -157,7 +157,7 @@ body {
     justify-self: start;
     transform: none !important;
     white-space: normal !important;
-    font-size: clamp(26px, 8vw, 40px) !important;
+    font-size: clamp(24px, min(8vw, 4.8svh), 40px) !important;
     line-height: 0.975 !important;
   }
 
@@ -165,9 +165,10 @@ body {
     position: relative !important;
     top: auto !important;
     left: auto !important;
-    width: min(82vw, 388px) !important;
+    width: min(82vw, calc(46svh * 388 / 443), 388px) !important;
     height: auto !important;
     aspect-ratio: 388 / 443;
+    container-type: inline-size;
     overflow: visible;
   }
 
@@ -182,7 +183,7 @@ body {
   .dashboard-status-heading {
     top: 10.7% !important;
     width: 63.66% !important;
-    font-size: min(4.09vw, 18px) !important;
+    font-size: min(4.64cqw, 18px) !important;
     line-height: 1.2 !important;
   }
 
@@ -190,7 +191,7 @@ body {
     top: 18.96% !important;
     left: 50% !important;
     width: 77.32% !important;
-    font-size: min(12.73vw, 56px) !important;
+    font-size: min(14.43cqw, 56px) !important;
     line-height: 0.984375 !important;
   }
 
@@ -199,7 +200,7 @@ body {
     left: 50% !important;
     width: 71.65% !important;
     overflow: hidden;
-    font-size: min(3.18vw, 14px) !important;
+    font-size: min(3.61cqw, 14px) !important;
     line-height: 1.1875 !important;
     text-overflow: ellipsis;
   }
@@ -216,7 +217,7 @@ body {
     right: 3vw !important;
     bottom: clamp(20px, 5.8svh, 56px) !important;
     left: auto !important;
-    width: min(50vw, 245px) !important;
+    width: min(50vw, 27svh, 245px) !important;
     z-index: 20 !important;
   }
 
