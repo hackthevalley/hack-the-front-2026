@@ -307,7 +307,7 @@ function DashboardAvatar({
   }
 
   return (
-    <div className="dashboard-avatar pointer-events-none absolute left-[78.64%] top-[42.87%] z-10 aspect-[335.84/345.63] w-[22.21%] select-none">
+    <div className="dashboard-avatar dashboard-avatar--right pointer-events-none absolute left-[78.64%] top-[42.87%] z-10 aspect-[335.84/345.63] w-[22.21%] select-none">
       <img
         src={avatar.src}
         alt={`${avatar.label} avatar`}
