@@ -5,6 +5,7 @@ import DesignBox from "@/components/layout/DesignBox";
 import Button from "@/components/ui/Button";
 import TextField, { type TextFieldHandle } from "@/components/ui/TextField";
 import { isValidEmail } from "@/components/ui/validation";
+import { apiUrl } from "@/lib/auth";
 import {
   AUTH_BACKGROUND_DESIGN_HEIGHT,
   AUTH_BACKGROUND_DESIGN_WIDTH,
@@ -12,12 +13,14 @@ import {
 
 const TITLE_GLOW = "0 0 16.6px #FEE9D3";
 const EMAIL_ERROR = "Please enter a valid email.";
+const REQUEST_ERROR = "Unable to send the reset link. Please try again.";
 
 export default function ForgotPasswordSection() {
   const emailRef = React.useRef<TextFieldHandle>(null);
   const [email, setEmail] = React.useState("");
   const [emailError, setEmailError] = React.useState<string | null>(null);
   const [submitted, setSubmitted] = React.useState(false);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   function handleEmailChange(value: string) {
     setEmail(value);
@@ -28,10 +31,12 @@ export default function ForgotPasswordSection() {
     }
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (isSubmitting || submitted) return;
 
-    if (!isValidEmail(email)) {
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!isValidEmail(normalizedEmail)) {
       setEmailError(EMAIL_ERROR);
       setSubmitted(false);
       emailRef.current?.focus();
@@ -39,13 +44,38 @@ export default function ForgotPasswordSection() {
     }
 
     setEmailError(null);
-    setSubmitted(true);
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(apiUrl("/api/account/password-resets"), {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: normalizedEmail }),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Password reset request failed with status ${response.status}`,
+        );
+      }
+
+      setSubmitted(true);
+    } catch {
+      setEmailError(REQUEST_ERROR);
+      setSubmitted(false);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
     <form
       className="auth-form"
       aria-labelledby="forgot-password-title"
+      aria-busy={isSubmitting}
       noValidate
       onSubmit={handleSubmit}
     >

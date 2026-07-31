@@ -7,12 +7,22 @@ export const metadata: Metadata = {
   title: "Reset Password | Hack the Valley 11",
 };
 
-export default function ResetPasswordPage() {
+type ResetPasswordPageProps = {
+  searchParams: Promise<{ token?: string | string[] }>;
+};
+
+export default async function ResetPasswordPage({
+  searchParams,
+}: ResetPasswordPageProps) {
+  const { token } = await searchParams;
+
   return (
     <main>
       <AuthBackground>
         <PortalNavbar />
-        <ResetPasswordForm />
+        <ResetPasswordForm
+          token={typeof token === "string" ? token : undefined}
+        />
       </AuthBackground>
     </main>
   );
