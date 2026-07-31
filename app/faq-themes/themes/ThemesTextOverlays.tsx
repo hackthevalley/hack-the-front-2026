@@ -157,7 +157,7 @@ function ThemeCard({
   return (
     <article
       ref={onRegister}
-      className="pointer-events-auto absolute flex select-text border border-white/10 text-white duration-700 ease-out"
+      className="pointer-events-auto absolute flex select-text border border-white/10 font-figtree text-[#EAEFFF] duration-700 ease-out"
       style={{
         left: toStageX(355),
         top: toStageY(theme.top),
@@ -206,7 +206,7 @@ function ThemeCard({
         }}
       >
         <h3
-          className="m-0 font-bold"
+          className="m-0 font-bold text-white"
           style={{
             fontSize: toScale(28),
             lineHeight: "100%",
@@ -267,7 +267,7 @@ export function MobileThemesTextOverlays() {
               ref={(node) => {
                 cardRefs.current[index] = node;
               }}
-              className="mb-9 rounded-[1.65rem] border border-white/10 px-6 py-5 text-white shadow-[inset_0_1px_0_rgba(255,255,255,.08),0_18px_36px_rgba(0,0,0,.18)] last:mb-0"
+              className="mb-9 rounded-[1.65rem] border border-white/10 px-6 py-5 font-figtree text-[#EAEFFF] shadow-[inset_0_1px_0_rgba(255,255,255,.08),0_18px_36px_rgba(0,0,0,.18)] last:mb-0"
               style={{
                 background: `rgba(82, 89, 189, ${Math.min(theme.opacity + 0.12, 0.92)})`,
                 opacity: revealed[index] ? 1 : 0,
@@ -294,14 +294,14 @@ export function MobileThemesTextOverlays() {
                 </div>
 
                 <h3
-                  className="m-0 min-w-0 flex-1 font-bold text-[1.3rem] leading-[1.22]"
+                  className="m-0 min-w-0 flex-1 font-bold text-[1.3rem] leading-[1.22] text-white"
                   style={{ textShadow: THEME_TITLE_GLOW }}
                 >
                   {theme.title}
                 </h3>
               </div>
 
-              <p className="m-0 mt-4 text-[1rem] leading-[1.55] text-white/92">
+              <p className="m-0 mt-4 text-[1rem] leading-[1.55] text-[#EAEFFF]">
                 {theme.description}
               </p>
             </article>

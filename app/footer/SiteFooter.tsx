@@ -3,19 +3,19 @@ const FOOTER_LINKS = [
     label: "hackthevalley on LinkedIn",
     href: "https://www.linkedin.com/company/hack-the-valley/",
     icon: "/icons/linkedin.svg",
-    iconClassName: "h-[41px] w-[41px]",
+    iconClassName: "h-7 w-7",
   },
   {
     label: "hackthevalley on Instagram",
     href: "https://www.instagram.com/hackthevalley/",
     icon: "/icons/instagram.svg",
-    iconClassName: "h-[41px] w-[41px]",
+    iconClassName: "h-7 w-7",
   },
   {
     label: "Email hackthevalley",
     href: "mailto:hello@hackthevalley.io",
     icon: "/icons/email.svg",
-    iconClassName: "h-[41px] w-[41px]",
+    iconClassName: "h-7 w-7",
   },
 ] as const;
 
@@ -31,7 +31,7 @@ export default function SiteFooter() {
               target={link.href.startsWith("mailto:") ? undefined : "_blank"}
               rel={link.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
               aria-label={link.label}
-              className="flex items-center gap-[15px] whitespace-nowrap font-vcr text-xl text-white no-underline drop-shadow-[0_4px_4px_rgba(255,255,255,0.25)] transition-opacity hover:opacity-80 focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white md:text-2xl"
+              className="flex items-center gap-2.5 whitespace-nowrap font-vcr text-xl text-white no-underline drop-shadow-[0_4px_4px_rgba(255,255,255,0.25)] transition-opacity hover:opacity-80 focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white md:text-2xl"
             >
               <img
                 src={link.icon}

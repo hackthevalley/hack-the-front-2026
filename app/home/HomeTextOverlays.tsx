@@ -109,7 +109,7 @@ export default function HomeTextOverlays() {
         width={665}
         height={348}
         zIndex={9}
-        className="text-white"
+        className="text-[#EAEFFF]"
       >
         <div
           id="about"
@@ -118,13 +118,13 @@ export default function HomeTextOverlays() {
           style={{ scrollMarginTop: "24px" }}
         >
           <h2
-            className="m-0 font-vcr leading-none"
+            className="m-0 font-vcr leading-none text-white"
             style={{ fontSize: "15cqh", textShadow: PIXEL_GLOW }}
           >
             About Us
           </h2>
           <p
-            className="m-0 mt-[4cqh] font-figtree font-normal leading-[1.4]"
+            className="m-0 mt-[6cqh] font-figtree font-normal leading-[1.4]"
             style={{ fontSize: "5.8cqh", textShadow: SOFT_GLOW }}
           >
             Join 750 innovative and creative developers, designers, and creators
@@ -133,13 +133,13 @@ export default function HomeTextOverlays() {
             market. Plus, you get to meet some experienced and awesome mentors!
           </p>
           <p
-            className="m-0 mt-[4cqh] font-figtree font-bold leading-[1.3]"
+            className="m-0 mt-[6cqh] font-figtree font-bold leading-[1.3]"
             style={{ fontSize: "6.5cqh", textShadow: SOFT_GLOW }}
           >
             All this in just one weekend? I know, it&apos;s hard to believe.
           </p>
           <p
-            className="m-0 mt-[4cqh] font-figtree font-normal leading-[1.4]"
+            className="m-0 mt-[6cqh] font-figtree font-normal leading-[1.4]"
             style={{ fontSize: "5.8cqh", textShadow: SOFT_GLOW }}
           >
             Remember, you don&apos;t need to be a pro to attend. So if this is
