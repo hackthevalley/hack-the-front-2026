@@ -30,7 +30,11 @@ type PrimaryButtonProps = CommonButtonProps & {
   /** Overrides the default 20px Figtree CTA label treatment. */
   textClassName?: string;
 =======
+<<<<<<< HEAD
 >>>>>>> 855c962 (feat: Button Variant + login mobile fix)
+=======
+>>>>>>> a116999 (feat: Button Variant + login mobile fix)
+>>>>>>> 147f357 (feat: Button Variant + login mobile fix)
 };
 
 type DirectionButtonProps = CommonButtonProps & {
@@ -120,7 +124,11 @@ export default function Button(props: ButtonProps) {
 <<<<<<< HEAD
       showDirectionIcon = true,
 =======
+<<<<<<< HEAD
 >>>>>>> 855c962 (feat: Button Variant + login mobile fix)
+=======
+>>>>>>> a116999 (feat: Button Variant + login mobile fix)
+>>>>>>> 147f357 (feat: Button Variant + login mobile fix)
       directionAppearance = "circled",
       directionIconSrc,
       directionIconColor,
@@ -236,7 +244,11 @@ export default function Button(props: ButtonProps) {
 <<<<<<< HEAD
     textClassName,
 =======
+<<<<<<< HEAD
 >>>>>>> 855c962 (feat: Button Variant + login mobile fix)
+=======
+>>>>>>> a116999 (feat: Button Variant + login mobile fix)
+>>>>>>> 147f357 (feat: Button Variant + login mobile fix)
   } = props;
   const isInteractive = state === "default";
   const stateIcon = STATE_ICONS[state];
@@ -306,7 +318,11 @@ export default function Button(props: ButtonProps) {
         }`}
 =======
         className="pointer-events-none absolute inset-0 z-[1] flex select-none items-center justify-center gap-[5px] whitespace-nowrap font-inter text-xs font-semibold leading-normal"
+<<<<<<< HEAD
 >>>>>>> 855c962 (feat: Button Variant + login mobile fix)
+=======
+>>>>>>> a116999 (feat: Button Variant + login mobile fix)
+>>>>>>> 147f357 (feat: Button Variant + login mobile fix)
       >
         {text}
         {stateIcon ? (
