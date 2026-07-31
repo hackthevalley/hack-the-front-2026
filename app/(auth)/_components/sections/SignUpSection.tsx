@@ -510,7 +510,7 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
           <button
             type="button"
             onClick={() => onNavigate("login")}
-            className="cursor-pointer border-0 bg-transparent p-0 font-inherit text-[#EAEFFF] transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current"
+            className="cursor-pointer border-0 bg-transparent p-0 font-inherit text-[#EAEFFF] transition-opacity hover:underline hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current"
           >
             Log in.
           </button>
