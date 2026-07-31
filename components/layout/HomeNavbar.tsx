@@ -194,11 +194,7 @@ function MenuButton({
   );
 }
 
-function LogoButton({
-  onClick,
-}: {
-  onClick: () => void;
-}) {
+function LogoButton({ onClick }: { onClick: () => void }) {
   return (
     <button
       type="button"
@@ -375,9 +371,7 @@ function Shell({
           background: `linear-gradient(180deg, rgba(255, 255, 255, ${shellBorderAlpha}) 0%, rgba(255, 255, 255, ${shellBorderAlpha * 0.4}) 10%, rgba(255, 255, 255, ${shellBorderAlpha * 0.12}) 18%, transparent 28%)`,
         }}
       />
-      <div className="relative z-10">
-        {children}
-      </div>
+      <div className="relative z-10">{children}</div>
     </div>
   );
 }
@@ -387,9 +381,7 @@ function Shell({
  * scroll, and gradually gains a floating shell as the page moves away from the
  * hero's top edge.
  */
-export default function HomeNavbar({
-  items = DEFAULT_ITEMS,
-}: HomeNavbarProps) {
+export default function HomeNavbar({ items = DEFAULT_ITEMS }: HomeNavbarProps) {
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -428,7 +420,10 @@ export default function HomeNavbar({
         return;
       }
 
-      if (lastScrollYRef.current <= SCROLL_EPSILON && deltaY >= SCROLL_EPSILON) {
+      if (
+        lastScrollYRef.current <= SCROLL_EPSILON &&
+        deltaY >= SCROLL_EPSILON
+      ) {
         setIsVisible(false);
         upwardTravelRef.current = 0;
         downwardTravelRef.current = 0;
@@ -510,8 +505,9 @@ export default function HomeNavbar({
     );
 
     return (
-      dataTargetMatches.find((element) => element.getClientRects().length > 0) ??
-      exactMatch
+      dataTargetMatches.find(
+        (element) => element.getClientRects().length > 0,
+      ) ?? exactMatch
     );
   };
 
@@ -520,7 +516,8 @@ export default function HomeNavbar({
     if (!target) return;
 
     const offset = window.innerHeight * (item.offsetRatio ?? 0.12);
-    const targetTop = window.scrollY + target.getBoundingClientRect().top - offset;
+    const targetTop =
+      window.scrollY + target.getBoundingClientRect().top - offset;
 
     window.scrollTo({
       top: Math.max(0, targetTop),
