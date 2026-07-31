@@ -26,8 +26,11 @@ type PrimaryButtonProps = CommonButtonProps & {
   width?: number | string;
   /** Overrides the default 240 × 56 artwork ratio. */
   aspectRatio?: string;
+<<<<<<< HEAD
   /** Overrides the default 20px Figtree CTA label treatment. */
   textClassName?: string;
+=======
+>>>>>>> 855c962 (feat: Button Variant + login mobile fix)
 };
 
 type DirectionButtonProps = CommonButtonProps & {
@@ -114,7 +117,10 @@ export default function Button(props: ButtonProps) {
     const {
       text,
       direction = "next",
+<<<<<<< HEAD
       showDirectionIcon = true,
+=======
+>>>>>>> 855c962 (feat: Button Variant + login mobile fix)
       directionAppearance = "circled",
       directionIconSrc,
       directionIconColor,
@@ -227,7 +233,10 @@ export default function Button(props: ButtonProps) {
     className = "",
     width,
     aspectRatio,
+<<<<<<< HEAD
     textClassName,
+=======
+>>>>>>> 855c962 (feat: Button Variant + login mobile fix)
   } = props;
   const isInteractive = state === "default";
   const stateIcon = STATE_ICONS[state];
@@ -291,9 +300,13 @@ export default function Button(props: ButtonProps) {
       ) : null}
 
       <span
+<<<<<<< HEAD
         className={`pointer-events-none absolute inset-0 z-[1] flex select-none items-center justify-center gap-[5px] whitespace-nowrap ${
           textClassName ?? "font-figtree text-xl font-semibold leading-normal"
         }`}
+=======
+        className="pointer-events-none absolute inset-0 z-[1] flex select-none items-center justify-center gap-[5px] whitespace-nowrap font-inter text-xs font-semibold leading-normal"
+>>>>>>> 855c962 (feat: Button Variant + login mobile fix)
       >
         {text}
         {stateIcon ? (
