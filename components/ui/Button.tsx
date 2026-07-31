@@ -32,6 +32,8 @@ type DirectionButtonProps = CommonButtonProps & {
   variant: "direction";
   /** Controls chevron placement/style. */
   direction?: "next" | "back";
+  /** Hides the direction icon while preserving the direction-button styling. */
+  showDirectionIcon?: boolean;
   /** Uses a supplied direction icon instead of the default circled chevron. */
   directionIconSrc?: string;
   /** Recolors a supplied direction icon while preserving its SVG shape. */
@@ -110,6 +112,7 @@ export default function Button(props: ButtonProps) {
     const {
       text,
       direction = "next",
+      showDirectionIcon = true,
       directionAppearance = "circled",
       directionIconSrc,
       directionIconColor,
@@ -196,7 +199,7 @@ export default function Button(props: ButtonProps) {
         } ${className}`}
         style={{ gap: toCssSize(directionGap) }}
       >
-        {isBack ? directionIcon : null}
+        {isBack && showDirectionIcon ? directionIcon : null}
         <span
           className={
             directionTextClassName ??
@@ -208,7 +211,7 @@ export default function Button(props: ButtonProps) {
         >
           {text}
         </span>
-        {!isBack ? directionIcon : null}
+        {!isBack && showDirectionIcon ? directionIcon : null}
       </button>
     );
   }

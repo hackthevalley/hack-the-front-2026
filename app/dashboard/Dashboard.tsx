@@ -640,6 +640,7 @@ export default function Dashboard() {
           width={170}
           tone="danger"
           placement="navbar-end"
+          showArrow={false}
           onClick={() => {
             logout();
             router.replace("/login");

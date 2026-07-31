@@ -11,6 +11,7 @@ type PortalBackButtonProps = {
   width?: number;
   tone?: "default" | "danger";
   placement?: "back" | "navbar-end";
+  showArrow?: boolean;
 };
 
 export default function PortalBackButton({
@@ -20,6 +21,7 @@ export default function PortalBackButton({
   width = 133,
   tone = "default",
   placement = "back",
+  showArrow = true,
 }: PortalBackButtonProps) {
   const router = useRouter();
 
@@ -44,6 +46,7 @@ export default function PortalBackButton({
         text={text}
         variant="direction"
         direction="back"
+        showDirectionIcon={showArrow}
         directionAppearance="plain"
         directionIconSrc="/auth/back-chevron.svg"
         directionIconColor={tone === "danger" ? "#ff6068" : undefined}
