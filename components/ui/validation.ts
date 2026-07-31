@@ -76,7 +76,11 @@ export function getProfileUrlValidationMessage(
     hostname === expectedHost ||
     hostname === `www.${expectedHost}` ||
     (platform !== "GitHub" && hostname.endsWith(`.${expectedHost}`));
-  const hasProfilePath = url.pathname.split("/").some(Boolean);
+  const hasProfilePath =
+    url.pathname.split("/").some(Boolean) ||
+    (platform === "Devpost" &&
+      hostname !== expectedHost &&
+      hostname !== `www.${expectedHost}`);
 
   if (
     url.protocol !== "https:" ||

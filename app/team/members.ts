@@ -174,7 +174,7 @@ export const teamMembers: Record<string, TeamMember> = {
     id: "danielle",
     name: "Danielle Santos",
     role: "Sponsorship Coordinator",
-    avatarSrc: resolvePhoto("default"),
+    avatarSrc: resolvePhoto("danielle"),
     linkedinUrl: "https://www.linkedin.com/in/danielle-andrea-santos-83974523a/",
   },
   "shelf-3-jar-1": {
