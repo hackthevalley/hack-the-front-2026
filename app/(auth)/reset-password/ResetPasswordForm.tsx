@@ -18,8 +18,12 @@ const PASSWORD_REQUIRED_ERROR = "Please enter a new password.";
 const CONFIRMATION_ERROR = "Please re-enter your new password.";
 const MISMATCH_ERROR = "Passwords do not match.";
 const TOKEN_ERROR = "This password reset link is invalid or expired.";
+<<<<<<< HEAD
 const REQUEST_ERROR =
   "Unable to reset your password. Please request a new link.";
+=======
+const REQUEST_ERROR = "Unable to reset your password. Please request a new link.";
+>>>>>>> 57bce74 (Fix forget and reset password)
 
 export default function ResetPasswordForm({ token }: { token?: string }) {
   const router = useRouter();

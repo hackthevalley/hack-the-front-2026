@@ -64,16 +64,9 @@ export default function ForgotPasswordSection() {
       }
 
       setSubmitted(true);
-      toast.success("Password reset link sent", {
-        description:
-          "Check your email for instructions to reset your password.",
-      });
     } catch {
       setEmailError(REQUEST_ERROR);
       setSubmitted(false);
-      toast.error("Unable to send reset link", {
-        description: "Please try again in a moment.",
-      });
     } finally {
       setIsSubmitting(false);
     }
