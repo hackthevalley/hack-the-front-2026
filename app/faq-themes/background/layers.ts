@@ -968,7 +968,7 @@ export const faqThemesSceneLayers = [
     id: "subtract",
     figmaId: "1447:4204",
     figmaName: "Subtract",
-    src: "/faq-themes/background/Subtract.svg",
+    src: "/faq-themes/background/subtract.svg",
     left: 247.48,
     top: 1767.5703,
     width: 1034.642333984375,
@@ -1202,4 +1202,3 @@ export const rearSceneLayers = faqThemesSceneLayers.filter(
 export const foregroundSceneLayers = faqThemesSceneLayers.filter(
   (layer) => layer.plane === "foreground",
 );
-

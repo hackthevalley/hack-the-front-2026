@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/components/providers/AuthProvider";
 import Button from "@/components/ui/Button";
-import { apiUrl } from "@/lib/auth";
+import { apiFetch } from "@/lib/apiClient";
 
 const PAST_APPLYING_STATUSES = new Set([
   "APPLIED",
@@ -31,7 +31,7 @@ let statusRequest:
 function isPastApplying(token: string): Promise<boolean> {
   if (statusRequest?.token === token) return statusRequest.promise;
 
-  const promise = fetch(apiUrl("/api/account/me"), {
+  const promise = apiFetch("/api/account/me", {
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${token}`,

@@ -3,9 +3,9 @@
 import * as React from "react";
 import {
   ACCESS_TOKEN_KEY,
-  apiUrl,
   type TokenResponse,
 } from "@/lib/auth";
+import { apiFetch } from "@/lib/apiClient";
 
 const REFRESH_LEEWAY_MS = 5 * 60 * 1000;
 const REFRESH_RETRY_MS = 60 * 1000;
@@ -68,7 +68,7 @@ export default function AuthProvider({
         return null;
       }
 
-      const response = await fetch(apiUrl("/api/account/tokens"), {
+      const response = await apiFetch("/api/account/tokens", {
         method: "POST",
         signal: AbortSignal.timeout(10_000),
         headers: {

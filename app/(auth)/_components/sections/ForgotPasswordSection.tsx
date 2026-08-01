@@ -1,12 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { toast } from "sonner";
 import DesignBox from "@/components/layout/DesignBox";
 import Button from "@/components/ui/Button";
 import TextField, { type TextFieldHandle } from "@/components/ui/TextField";
 import { isValidEmail } from "@/components/ui/validation";
-import { apiUrl } from "@/lib/auth";
+import { apiFetch } from "@/lib/apiClient";
 import {
   AUTH_BACKGROUND_DESIGN_HEIGHT,
   AUTH_BACKGROUND_DESIGN_WIDTH,
@@ -48,7 +47,7 @@ export default function ForgotPasswordSection() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(apiUrl("/api/account/password-resets"), {
+      const response = await apiFetch("/api/account/password-resets", {
         method: "POST",
         headers: {
           Accept: "application/json",
