@@ -5,6 +5,15 @@ export type AuthBackgroundBleed = {
   left: number;
 };
 
+export type AuthBackgroundTwinkle = {
+  duration: string;
+  delay: string;
+  min?: number;
+  scaleMax?: number;
+  mode?: "sparkle" | "breathe";
+  spin?: string;
+};
+
 export type AuthBackgroundLayer = {
   id: string;
   figmaId: string;
@@ -16,4 +25,5 @@ export type AuthBackgroundLayer = {
   zIndex: number;
   transform?: string;
   bleed?: AuthBackgroundBleed;
+  twinkle?: AuthBackgroundTwinkle;
 };
