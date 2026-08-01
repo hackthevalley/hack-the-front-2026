@@ -7,6 +7,18 @@ export type HomeBackgroundVisibleBounds = {
   height: number;
 };
 
+export type HomeBackgroundTwinkle = {
+  duration: string;
+  delay: string;
+};
+
+export type HomeBackgroundSway = {
+  duration: string;
+  delay: string;
+  angle: string;
+  origin: string;
+};
+
 export type HomeBackgroundLayer = {
   id: string;
   src: string;
@@ -18,4 +30,6 @@ export type HomeBackgroundLayer = {
   preserveAspectRatio?: boolean;
   rotation?: number;
   visibleBounds?: HomeBackgroundVisibleBounds;
+  twinkle?: HomeBackgroundTwinkle;
+  sway?: HomeBackgroundSway;
 };

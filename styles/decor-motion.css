@@ -1,0 +1,175 @@
+@keyframes decor-twinkle {
+  0%,
+  6%,
+  30%,
+  42%,
+  66%,
+  100% {
+    opacity: var(--decor-twinkle-min, 0.25);
+    transform: scale(var(--decor-twinkle-scale-min, 0.95)) rotate(0deg);
+  }
+  18% {
+    opacity: var(--decor-twinkle-max, 1);
+    transform: scale(var(--decor-twinkle-scale-max, 1.05))
+      rotate(var(--decor-twinkle-spin, 0deg));
+  }
+  54% {
+    opacity: calc(var(--decor-twinkle-max, 1) * 0.72);
+    transform: scale(var(--decor-twinkle-scale-max, 1.05))
+      rotate(calc(var(--decor-twinkle-spin, 0deg) * -0.6));
+  }
+}
+
+.decor-twinkle {
+  transform-origin: center center;
+  animation: decor-twinkle var(--decor-duration, 2.6s) ease-in-out
+    var(--decor-delay, 0s) infinite;
+}
+
+@keyframes decor-breathe {
+  0%,
+  100% {
+    opacity: var(--decor-twinkle-min, 0.45);
+    transform: scale(var(--decor-twinkle-scale-min, 0.9));
+  }
+  50% {
+    opacity: var(--decor-twinkle-max, 1);
+    transform: scale(var(--decor-twinkle-scale-max, 1.12));
+  }
+}
+
+.decor-breathe {
+  transform-origin: center center;
+  animation: decor-breathe var(--decor-duration, 2.4s)
+    cubic-bezier(0.37, 0, 0.63, 1) var(--decor-delay, 0s) infinite;
+}
+
+@keyframes decor-sway {
+  0%,
+  100% {
+    transform: rotate(calc(var(--decor-sway-angle, 4deg) * -1));
+  }
+  27% {
+    transform: rotate(calc(var(--decor-sway-angle, 4deg) * 0.42));
+  }
+  50% {
+    transform: rotate(var(--decor-sway-angle, 4deg));
+  }
+  76% {
+    transform: rotate(calc(var(--decor-sway-angle, 4deg) * -0.5));
+  }
+}
+
+.decor-sway {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: var(--decor-sway-origin, bottom center);
+  animation: decor-sway var(--decor-duration, 6.5s)
+    cubic-bezier(0.37, 0, 0.63, 1) var(--decor-delay, 0s) infinite;
+}
+
+@keyframes decor-pulse {
+  0%,
+  100% {
+    opacity: var(--decor-pulse-min, 0.6);
+    filter: drop-shadow(0 0 calc(var(--decor-pulse-glow, 24px) * 0.5)
+      var(--decor-pulse-color, rgba(255, 124, 205, 0.35)));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 var(--decor-pulse-glow, 24px)
+        var(--decor-pulse-color, rgba(255, 124, 205, 0.55)))
+      drop-shadow(0 0 calc(var(--decor-pulse-glow, 24px) * 2)
+        var(--decor-pulse-color, rgba(255, 124, 205, 0.28)));
+  }
+}
+
+.decor-pulse {
+  animation: decor-pulse var(--decor-duration, 4s) ease-in-out
+    var(--decor-delay, 0s) infinite;
+}
+
+@keyframes decor-leaf-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(
+        var(--decor-enter-x, -24px),
+        var(--decor-enter-y, 14px),
+        0
+      )
+      rotate(var(--decor-enter-rotate, -6deg));
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
+.decor-leaf-enter {
+  animation: decor-leaf-enter var(--decor-duration, 1100ms)
+    cubic-bezier(0.22, 0.61, 0.36, 1) var(--decor-delay, 0s) both;
+}
+
+@keyframes decor-flame-flicker {
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1, 1);
+  }
+  18% {
+    transform: rotate(6deg) scale(0.96, 1.12);
+  }
+  37% {
+    transform: rotate(-4.5deg) scale(1.05, 0.94);
+  }
+  56% {
+    transform: rotate(7deg) scale(0.97, 1.14);
+  }
+  74% {
+    transform: rotate(-5.5deg) scale(1.04, 0.95);
+  }
+}
+
+.app-candle-flame {
+  transform-origin: var(--flame-origin, 50% 100%);
+  transition: transform 420ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+body:has([data-app-menu-item]:hover) .app-candle-flame,
+body:has([data-app-menu-item]:focus-visible) .app-candle-flame {
+  animation: decor-flame-flicker var(--decor-duration, 2.4s)
+    cubic-bezier(0.37, 0, 0.63, 1) var(--decor-delay, 0s) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .decor-twinkle,
+  .decor-sway,
+  .decor-pulse,
+  .decor-leaf-enter,
+  body:has([data-app-menu-item]:hover) .app-candle-flame,
+  body:has([data-app-menu-item]:focus-visible) .app-candle-flame {
+    animation: none !important;
+  }
+
+  .app-candle-flame {
+    transition: none;
+  }
+
+  .decor-twinkle {
+    opacity: 1;
+    transform: none;
+  }
+
+  .decor-pulse {
+    opacity: 1;
+    filter: drop-shadow(
+      0 0 var(--decor-pulse-glow, 24px)
+        var(--decor-pulse-color, rgba(255, 124, 205, 0.4))
+    );
+  }
+
+  .decor-leaf-enter {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import HomeLayerArtwork from "./HomeLayerArtwork";
 import {
   HOME_BACKGROUND_DESIGN_HEIGHT,
   HOME_BACKGROUND_DESIGN_WIDTH,
@@ -45,35 +46,7 @@ export default function HomeBackground({ children }: HomeBackgroundProps) {
               zIndex: layer.zIndex ?? 0,
             }}
           >
-            {layer.visibleBounds ? (
-              <img
-                src={layer.src}
-                alt=""
-                loading="lazy"
-                decoding="async"
-                draggable="false"
-                className="absolute max-w-none select-none"
-                style={{
-                  left: `${-(layer.visibleBounds.left / layer.visibleBounds.width) * 100}%`,
-                  top: `${-(layer.visibleBounds.top / layer.visibleBounds.height) * 100}%`,
-                  width: `${(layer.visibleBounds.imageWidth / layer.visibleBounds.width) * 100}%`,
-                  height: `${(layer.visibleBounds.imageHeight / layer.visibleBounds.height) * 100}%`,
-                }}
-              />
-            ) : (
-              <img
-                src={layer.src}
-                alt=""
-                loading="lazy"
-                decoding="async"
-                draggable="false"
-                className={
-                  layer.preserveAspectRatio
-                    ? "h-full w-full max-w-none select-none object-contain"
-                    : "h-full w-full max-w-none select-none"
-                }
-              />
-            )}
+            <HomeLayerArtwork layer={layer} />
           </div>
         ))}
         {children}

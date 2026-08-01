@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "../styles/sparkle-icon.css";
+@import "../styles/decor-motion.css";
 
 :root {
   --background: #ffffff;
