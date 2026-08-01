@@ -2,10 +2,12 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import DesignBox from "@/components/layout/DesignBox";
 import Button from "@/components/ui/Button";
 import TextField, { type TextFieldHandle } from "@/components/ui/TextField";
 import { getPasswordValidationMessage } from "@/components/ui/validation";
+import { apiFetch } from "@/lib/apiClient";
 import {
   AUTH_BACKGROUND_DESIGN_HEIGHT,
   AUTH_BACKGROUND_DESIGN_WIDTH,
@@ -15,14 +17,18 @@ const TITLE_GLOW = "0 0 16.6px #FEE9D3";
 const PASSWORD_REQUIRED_ERROR = "Please enter a new password.";
 const CONFIRMATION_ERROR = "Please re-enter your new password.";
 const MISMATCH_ERROR = "Passwords do not match.";
+const TOKEN_ERROR = "This password reset link is invalid or expired.";
+const REQUEST_ERROR =
+  "Unable to reset your password. Please request a new link.";
 
-export default function ResetPasswordForm() {
+export default function ResetPasswordForm({ token }: { token?: string }) {
   const router = useRouter();
   const newPasswordRef = React.useRef<TextFieldHandle>(null);
   const confirmationRef = React.useRef<TextFieldHandle>(null);
   const [newPassword, setNewPassword] = React.useState("");
   const [confirmation, setConfirmation] = React.useState("");
   const [formError, setFormError] = React.useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   function handleNewPasswordChange(value: string) {
     setNewPassword(value);
@@ -34,8 +40,14 @@ export default function ResetPasswordForm() {
     setFormError(null);
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (isSubmitting) return;
+
+    if (!token) {
+      setFormError(TOKEN_ERROR);
+      return;
+    }
 
     const passwordError = newPassword
       ? getPasswordValidationMessage(newPassword)
@@ -62,13 +74,41 @@ export default function ResetPasswordForm() {
     }
 
     setFormError(null);
-    router.push("/login");
+    setIsSubmitting(true);
+
+    try {
+      const response = await apiFetch("/api/account/password-resets", {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token, password: newPassword }),
+      });
+
+      if (!response.ok) {
+        setFormError(
+          response.status === 401 || response.status === 404
+            ? TOKEN_ERROR
+            : REQUEST_ERROR,
+        );
+        return;
+      }
+
+      toast.success("Password reset successfully");
+      router.push("/login");
+    } catch {
+      setFormError(REQUEST_ERROR);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
     <form
       className="auth-form auth-form--standalone"
       aria-labelledby="reset-password-title"
+      aria-busy={isSubmitting}
       noValidate
       onSubmit={handleSubmit}
     >
@@ -128,7 +168,7 @@ export default function ResetPasswordForm() {
           autoComplete="new-password"
           required
           requireStrongPassword
-          showPasswordToggle={false}
+          showPasswordToggle
           errorMessages={{
             required: PASSWORD_REQUIRED_ERROR,
           }}
@@ -156,7 +196,7 @@ export default function ResetPasswordForm() {
           theme="auth"
           autoComplete="new-password"
           required
-          showPasswordToggle={false}
+          showPasswordToggle
           errorMessages={{ required: CONFIRMATION_ERROR }}
           value={confirmation}
           onChange={handleConfirmationChange}
@@ -205,11 +245,10 @@ export default function ResetPasswordForm() {
       >
         <Button
           text="Reset password"
-          buttonType="primary"
           htmlType="submit"
           width="100%"
-          fontSize="24px"
           className="h-full"
+          textClassName="font-figtree text-2xl font-semibold leading-normal"
         />
       </DesignBox>
     </form>

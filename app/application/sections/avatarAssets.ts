@@ -1,8 +1,8 @@
 import type { AccessoryKey, AvatarKey } from "./data";
 
-// Shared pixel width for the avatar/accessory picker buttons, so both steps
-// of the Custom screen read as one consistent size.
-export const CUSTOM_BUTTON_WIDTH = 140;
+// Figma's Custom screens use one consistent 187 × 72 picker button.
+export const CUSTOM_BUTTON_WIDTH = 187;
+export const CUSTOM_BUTTON_ASPECT_RATIO = "187 / 72";
 
 export const AVATARS: { key: AvatarKey; label: string; src: string }[] = [
   { key: "owl", label: "Owl", src: "/application/owl.svg" },

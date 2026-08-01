@@ -1,5 +1,4 @@
 import Link from "next/link";
-import MaskIcon from "@/components/ui/MaskIcon";
 
 /**
  * Minimal top navbar with just the Hack the Valley logo in the top-left
@@ -29,11 +28,13 @@ export default function LogoNavbar({
           aria-label="Hack the Valley — home"
           className="inline-flex sparkle-icon"
         >
-          <MaskIcon
+          <img
             src="/icons/htv-logo.svg"
             width={logoWidth}
             height={logoHeight}
-            className="text-white transition-colors duration-150 hover:text-zinc-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current"
+            alt=""
+            aria-hidden="true"
+            className="block shrink-0 transition-opacity duration-150 hover:opacity-80"
           />
         </Link>
       </nav>

@@ -9,7 +9,8 @@ import Button from "@/components/ui/Button";
 import TextField, { type TextFieldHandle } from "@/components/ui/TextField";
 import { isValidEmail } from "@/components/ui/validation";
 import { useAuth } from "@/components/providers/AuthProvider";
-import { apiUrl, type TokenResponse } from "@/lib/auth";
+import type { TokenResponse } from "@/lib/auth";
+import { apiFetch } from "@/lib/apiClient";
 import {
   AUTH_BACKGROUND_DESIGN_HEIGHT,
   AUTH_BACKGROUND_DESIGN_WIDTH,
@@ -65,7 +66,7 @@ export default function AuthTextOverlays() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(apiUrl("/api/account/sessions"), {
+      const response = await apiFetch("/api/account/sessions", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -298,11 +299,13 @@ export default function AuthTextOverlays() {
       >
         <Button
           text={isSubmitting ? "Logging In..." : "Log In"}
-          buttonType={canSubmit ? "primary" : "disabled"}
+          state={
+            isSubmitting ? "loading" : canSubmit ? "default" : "disabled"
+          }
           htmlType="submit"
           width="100%"
-          fontSize={24}
           className="h-full"
+          textClassName="font-figtree text-2xl font-semibold leading-normal"
         />
       </DesignBox>
 

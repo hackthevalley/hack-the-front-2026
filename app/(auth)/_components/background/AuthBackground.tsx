@@ -65,7 +65,9 @@ export default function AuthBackground({ children }: AuthBackgroundProps) {
                   width: `${(layer.width / AUTH_BACKGROUND_DESIGN_WIDTH) * 100}%`,
                   height: `${(layer.height / AUTH_BACKGROUND_DESIGN_HEIGHT) * 100}%`,
                   transform: layer.transform,
-                  transformOrigin: layer.transform ? "center center" : undefined,
+                  transformOrigin: layer.transform
+                    ? "center center"
+                    : undefined,
                   zIndex: layer.zIndex,
                 }}
               >

@@ -41,11 +41,11 @@ export const CTA_HEADING_WIDTH = 1125.408203125;
 export const CTA_EMAIL_LEFT = PANEL_LEFT;
 export const CTA_EMAIL_HEIGHT = 29;
 export const CTA_EMAIL_WIDTH = 1080.8375244140625;
-export const CTA_BUTTON_WIDTH = 240;
-export const CTA_BUTTON_HEIGHT = 56;
+export const CTA_BUTTON_WIDTH = 206;
+export const CTA_BUTTON_HEIGHT = 72;
 export const CTA_BLUR_RADIUS = 13.199999809265137 / 2;
 export const CTA_EMAIL_OFFSET_TOP = 30;
-export const CTA_BUTTON_OFFSET_LEFT = 444;
+export const CTA_BUTTON_OFFSET_LEFT = 460.5;
 export const CTA_BUTTON_OFFSET_TOP = 96;
 
 export const TIER_VARIANTS: Record<SponsorTier["id"], TierVariant> = {

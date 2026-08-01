@@ -1,58 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import PortalBackButton from "@/components/layout/PortalBackButton";
 import PortalContentStage from "@/components/layout/PortalContentStage";
 import PortalNavbar from "@/components/layout/PortalNavbar";
 import { useAuth } from "@/components/providers/AuthProvider";
 import Button from "@/components/ui/Button";
-import { apiUrl } from "@/lib/auth";
-import {
-  hydrateApplicationAnswers,
-  type BackendApplicationResponse,
-  type BackendQuestion,
-} from "@/app/application/applicationData";
 import {
   ACCESSORIES,
   AVATARS,
   getComboPlacement,
 } from "@/app/application/sections/avatarAssets";
-import type {
-  AccessoryKey,
-  AvatarKey,
-} from "@/app/application/sections/data";
-
-type DashboardStatus =
-  | "apply"
-  | "applying"
-  | "submitted"
-  | "pending"
-  | "waitlisted"
-  | "not-submitted"
-  | "accepted"
-  | "rsvped"
-  | "scanned-in"
-  | "rejected"
-  | "declined"
-  | "loading"
-  | "unavailable";
-
-type UserResponse = {
-  application_status: string | null;
-};
-
-type RegistrationTimeRange = {
-  start_at: string;
-  end_at: string;
-};
-
-type DashboardData = {
-  accessory: AccessoryKey | null;
-  avatar: AvatarKey | null;
-  deadline: string;
-  status: DashboardStatus;
-};
+import type { AccessoryKey, AvatarKey } from "@/app/application/sections/data";
+import { useDashboardData, type DashboardStatus } from "./useDashboardData";
 
 const STATUS_DETAILS: Record<
   DashboardStatus,
@@ -109,7 +70,7 @@ const STATUS_DETAILS: Record<
   accepted: {
     title: "Accepted",
     titleColor: "#71e4bc",
-    action: "Applied",
+    action: "Application Closed",
     disabled: true,
     potionClass: "",
   },
@@ -157,61 +118,6 @@ const STATUS_DETAILS: Record<
   },
 };
 
-const SUBMITTED_STATUSES = new Set(["APPLIED", "WALK_IN_SUBMITTED"]);
-const NO_APPLICATION_STATUSES = new Set([
-  "ACCOUNT_INACTIVE",
-  "NOT_APPLIED",
-]);
-
-function hasApplication(applicationStatus: string | null): boolean {
-  return (
-    applicationStatus !== null &&
-    !NO_APPLICATION_STATUSES.has(applicationStatus)
-  );
-}
-
-function resolveDashboardStatus(
-  applicationStatus: string | null,
-  registration: RegistrationTimeRange,
-): DashboardStatus {
-  if (SUBMITTED_STATUSES.has(applicationStatus ?? "")) return "submitted";
-  if (applicationStatus === "UNDER_REVIEW") return "pending";
-  if (applicationStatus === "WAITLISTED") return "waitlisted";
-  if (applicationStatus === "ACCEPTED") return "accepted";
-  if (applicationStatus === "ACCEPTED_INVITE") return "rsvped";
-  if (applicationStatus === "SCANNED_IN") return "scanned-in";
-  if (applicationStatus === "REJECTED") return "rejected";
-  if (applicationStatus === "REJECTED_INVITE") return "declined";
-  if (applicationStatus === "WALK_IN") return "apply";
-
-  const now = Date.now();
-  const start = new Date(registration.start_at).getTime();
-  const end = new Date(registration.end_at).getTime();
-  const registrationIsOpen =
-    Number.isFinite(start) &&
-    Number.isFinite(end) &&
-    now > start &&
-    now < end;
-
-  if (applicationStatus === "APPLYING") {
-    return registrationIsOpen ? "applying" : "not-submitted";
-  }
-
-  return registrationIsOpen ? "apply" : "not-submitted";
-}
-
-function formatDeadline(value: string): string {
-  const deadline = new Date(value);
-  if (Number.isNaN(deadline.getTime())) return "Unavailable";
-
-  return new Intl.DateTimeFormat("en-CA", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: "UTC",
-  }).format(deadline);
-}
-
 type ArtProps = {
   src: string;
   className: string;
@@ -229,6 +135,26 @@ function Art({ src, className }: ArtProps) {
   );
 }
 
+function MobileWoodenBoard() {
+  return (
+    <div
+      className="dashboard-board-mobile pointer-events-none absolute inset-0"
+      aria-hidden="true"
+    >
+      {Array.from({ length: 5 }, (_, index) => (
+        <img
+          key={index}
+          src="/dashboard/wooden-board.svg"
+          alt=""
+          draggable="false"
+          className="dashboard-board-plank absolute left-0 w-full max-w-none select-none"
+          style={{ top: `${index * 20}%` }}
+        />
+      ))}
+    </div>
+  );
+}
+
 function DashboardAvatar({
   accessoryKey,
   avatarKey,
@@ -237,15 +163,12 @@ function DashboardAvatar({
   avatarKey: AvatarKey;
 }) {
   const avatar = AVATARS.find((option) => option.key === avatarKey);
-  const accessory = ACCESSORIES.find(
-    (option) => option.key === accessoryKey,
-  );
+  const accessory = ACCESSORIES.find((option) => option.key === accessoryKey);
   const placement =
     avatar && accessory
       ? getComboPlacement(avatar.key, accessory.key)
       : undefined;
-  const isFigmaOwlHat =
-    avatar?.key === "owl" && accessory?.key === "hat";
+  const isFigmaOwlHat = avatar?.key === "owl" && accessory?.key === "hat";
   const underTreeClass =
     avatar?.key === "raccoon"
       ? "left-[42.06%] top-[69.96%] w-[16.2%]"
@@ -258,7 +181,7 @@ function DashboardAvatar({
   if (underTreeClass) {
     return (
       <div
-        className={`pointer-events-none absolute z-10 aspect-square select-none ${underTreeClass}`}
+        className={`dashboard-avatar pointer-events-none absolute z-10 aspect-square select-none ${underTreeClass}`}
       >
         <img
           src={avatar.src}
@@ -287,7 +210,7 @@ function DashboardAvatar({
   }
 
   return (
-    <div className="pointer-events-none absolute left-[78.64%] top-[42.87%] z-10 aspect-[335.84/345.63] w-[22.21%] select-none">
+    <div className="dashboard-avatar dashboard-avatar--right pointer-events-none absolute left-[78.64%] top-[42.87%] z-10 aspect-[335.84/345.63] w-[22.21%] select-none">
       <img
         src={avatar.src}
         alt={`${avatar.label} avatar`}
@@ -326,16 +249,10 @@ function DashboardAvatar({
 export default function Dashboard() {
   const router = useRouter();
   const { logout, token } = useAuth();
-  const [dashboardData, setDashboardData] = useState<DashboardData>({
-    accessory: null,
-    avatar: null,
-    deadline: "Loading...",
-    status: "loading",
-  });
+  const dashboardData = useDashboardData({ logout, token });
   const status = dashboardData.status;
   const current = STATUS_DETAILS[status];
-  const isNotSubmitted =
-    status === "applying" || status === "not-submitted";
+  const isNotSubmitted = status === "applying" || status === "not-submitted";
 
   useEffect(() => {
     if (status === "apply" || status === "applying") {
@@ -343,140 +260,33 @@ export default function Dashboard() {
     }
   }, [router, status]);
 
-  useEffect(() => {
-    if (!token) return;
-
-    const controller = new AbortController();
-
-    async function loadDashboard() {
-      try {
-        const headers = {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        };
-        const [userResponse, registrationResponse] = await Promise.all([
-          fetch(apiUrl("/api/account/me"), {
-            headers,
-            signal: controller.signal,
-          }),
-          fetch(apiUrl("/api/forms/registration-timerange"), {
-            headers,
-            signal: controller.signal,
-          }),
-        ]);
-
-        if (
-          userResponse.status === 401 ||
-          userResponse.status === 403 ||
-          registrationResponse.status === 401 ||
-          registrationResponse.status === 403
-        ) {
-          logout();
-          router.replace("/login");
-          return;
-        }
-
-        if (!userResponse.ok || !registrationResponse.ok) {
-          throw new Error("Unable to load dashboard");
-        }
-
-        const user = (await userResponse.json()) as UserResponse;
-        const registration =
-          (await registrationResponse.json()) as RegistrationTimeRange;
-        let avatar: AvatarKey | null = null;
-        let accessory: AccessoryKey | null = null;
-
-        if (hasApplication(user.application_status)) {
-          const [questionsResponse, applicationResponse] =
-            await Promise.all([
-              fetch(apiUrl("/api/forms/questions"), {
-                headers,
-                signal: controller.signal,
-              }),
-              fetch(apiUrl("/api/forms/application"), {
-                headers,
-                signal: controller.signal,
-              }),
-            ]);
-
-          if (
-            questionsResponse.status === 401 ||
-            questionsResponse.status === 403 ||
-            applicationResponse.status === 401 ||
-            applicationResponse.status === 403
-          ) {
-            logout();
-            router.replace("/login");
-            return;
-          }
-
-          if (questionsResponse.ok && applicationResponse.ok) {
-            const questions =
-              (await questionsResponse.json()) as BackendQuestion[];
-            const application =
-              (await applicationResponse.json()) as BackendApplicationResponse;
-            const hydrated = hydrateApplicationAnswers(
-              questions,
-              application.form_answers,
-            );
-            const savedAvatar = hydrated.customCharacter.character;
-            const savedAccessory = hydrated.customAccessory.accessory;
-
-            avatar = savedAvatar || null;
-            accessory = savedAccessory || null;
-          }
-        }
-
-        setDashboardData({
-          accessory,
-          avatar,
-          deadline: formatDeadline(registration.end_at),
-          status: resolveDashboardStatus(
-            user.application_status,
-            registration,
-          ),
-        });
-      } catch (error) {
-        if (error instanceof Error && error.name === "AbortError") return;
-        setDashboardData({
-          accessory: null,
-          avatar: null,
-          deadline: "Unavailable",
-          status: "unavailable",
-        });
-      }
-    }
-
-    void loadDashboard();
-    return () => controller.abort();
-  }, [logout, router, token]);
-
   return (
-    <main className="relative h-dvh min-h-[520px] overflow-hidden bg-[radial-gradient(circle_at_50%_55%,#171b70_0%,#0d0a46_42%,#07021d_100%)] text-white">
+    <main className="dashboard-page relative h-dvh min-h-[520px] overflow-hidden bg-[radial-gradient(circle_at_50%_55%,#171b70_0%,#0d0a46_42%,#07021d_100%)] text-white">
       <div
-        className="absolute left-1/2 top-1/2 aspect-[1512/982] -translate-x-1/2 -translate-y-1/2 overflow-hidden [&_img]:select-none"
+        className="dashboard-scene absolute left-1/2 top-1/2 aspect-[1512/982] overflow-hidden [&_img]:select-none"
         style={{
           width: "max(100vw, calc(100vh * 1512 / 982))",
           height: "max(100vh, calc(100vw * 982 / 1512))",
+          transform: "translate(-50%, -50%)",
         }}
       >
         <Art
           src="/dashboard/back-tree-left.svg"
-          className="left-[6.08%] top-[-30.66%] h-[134.4%] w-[32.39%]"
+          className="dashboard-back-tree-left left-[6.08%] top-[-30.66%] h-[134.4%] w-[32.39%]"
         />
         <Art
           src="/dashboard/back-tree-right.svg"
-          className="left-[60.12%] top-[-20.57%] h-[137.42%] w-[37.57%] -scale-x-100"
+          className="dashboard-back-tree-right left-[60.12%] top-[-20.57%] h-[137.42%] w-[37.57%] -scale-x-100"
         />
         <Art
           src="/dashboard/rear-trunk-left.svg"
-          className="left-[3.64%] top-[-15.3%] h-[117.2%] w-[5.36%]"
+          className="dashboard-rear-trunk-left left-[3.64%] top-[-15.3%] h-[117.2%] w-[5.36%]"
         />
         <Art
           src="/dashboard/rear-trunk-right.svg"
-          className="left-[93.85%] top-[-4.89%] h-[117.48%] w-[6.15%]"
+          className="dashboard-rear-trunk-right left-[93.85%] top-[-4.89%] h-[117.48%] w-[6.15%]"
         />
-        <div className="pointer-events-none absolute left-[24.41%] top-[-4.8%] h-[107.96%] w-[13.86%] origin-top-left rotate-[7.3251deg]">
+        <div className="dashboard-back-tree pointer-events-none absolute left-[24.41%] top-[-4.8%] h-[107.96%] w-[13.86%] origin-top-left rotate-[7.3251deg]">
           <img
             src="/dashboard/back-tree.svg"
             alt=""
@@ -487,21 +297,21 @@ export default function Dashboard() {
         </div>
         <Art
           src="/dashboard/leaves-right.svg"
-          className="left-[68.25%] top-[65.28%] h-[23.7%] w-[12.09%]"
+          className="dashboard-leaves-right left-[68.25%] top-[65.28%] h-[23.7%] w-[12.09%]"
         />
         <Art
           src="/dashboard/leaves-left.svg"
-          className="left-[14.68%] top-[81.67%] h-[12.34%] w-[9.25%]"
+          className="dashboard-leaves-left left-[14.68%] top-[81.67%] h-[12.34%] w-[9.25%]"
         />
         <Art
           src="/dashboard/rocks-right.svg"
-          className="left-[66.27%] top-[95.72%] h-[5.3%] w-[9.79%]"
+          className="dashboard-rocks-right left-[66.27%] top-[95.72%] h-[5.3%] w-[9.79%]"
         />
         <Art
           src="/dashboard/small-mushroom.svg"
-          className="left-[2.78%] top-[88.55%] h-[44.25%] w-[25.58%]"
+          className="dashboard-small-mushroom left-[2.78%] top-[88.55%] h-[44.25%] w-[25.58%]"
         />
-        <div className="pointer-events-none absolute left-[15.55%] top-[69.05%] h-[12%] w-[7.8%]">
+        <div className="dashboard-desktop-decoration pointer-events-none absolute left-[15.55%] top-[69.05%] h-[12%] w-[7.8%]">
           <img
             src="/dashboard/glow-orange.svg"
             alt=""
@@ -517,7 +327,7 @@ export default function Dashboard() {
             className="absolute left-1/2 top-1/2 h-[69.69%] w-[58.39%] -translate-x-1/2 -translate-y-1/2 rotate-[-20.8417deg]"
           />
         </div>
-        <div className="pointer-events-none absolute left-[81.35%] top-[44.1%] h-[12.41%] w-[8.06%]">
+        <div className="dashboard-board-star pointer-events-none absolute left-[81.35%] top-[44.1%] h-[12.41%] w-[8.06%]">
           <img
             src="/dashboard/glow-cream.svg"
             alt=""
@@ -535,33 +345,33 @@ export default function Dashboard() {
         </div>
         <Art
           src="/dashboard/glow-large.svg"
-          className="left-[79.8%] top-[45.8%] h-[4.2%] w-[2.7%]"
+          className="dashboard-desktop-decoration left-[79.8%] top-[45.8%] h-[4.2%] w-[2.7%]"
         />
         <Art
           src="/dashboard/glow-small.svg"
-          className="left-[21.6%] top-[65.3%] h-[5%] w-[3.3%]"
+          className="dashboard-desktop-decoration left-[21.6%] top-[65.3%] h-[5%] w-[3.3%]"
         />
         <Art
           src="/dashboard/glow-tiny.svg"
-          className="left-[82.5%] top-[20%] h-[3.9%] w-[2.6%]"
+          className="dashboard-desktop-decoration left-[82.5%] top-[20%] h-[3.9%] w-[2.6%]"
         />
         <Art
           src="/dashboard/glow-muted.svg"
-          className="left-[78.2%] top-[56%] h-[5%] w-[3.3%]"
+          className="dashboard-desktop-decoration left-[78.2%] top-[56%] h-[5%] w-[3.3%]"
         />
         <Art
           src="/dashboard/glow-muted-right.svg"
-          className="left-[96%] top-[30.5%] h-[5%] w-[3.3%]"
+          className="dashboard-desktop-decoration left-[96%] top-[30.5%] h-[5%] w-[3.3%]"
         />
         <Art
           src="/dashboard/glow-muted-left.svg"
-          className="left-[18.5%] top-[43.5%] h-[4.8%] w-[3.1%]"
+          className="dashboard-desktop-decoration left-[18.5%] top-[43.5%] h-[4.8%] w-[3.1%]"
         />
         <Art
           src="/dashboard/left-grasses.svg"
-          className="left-[-3.66%] top-[65.27%] h-[39.87%] w-[26.92%]"
+          className="dashboard-left-grasses left-[-3.66%] top-[65.27%] h-[39.87%] w-[26.92%]"
         />
-        <div className="pointer-events-none absolute left-[-9.66%] top-[70.95%] flex h-[43.57%] w-[25.35%] items-center justify-center">
+        <div className="dashboard-left-leaves pointer-events-none absolute left-[-9.66%] top-[70.95%] flex h-[43.57%] w-[25.35%] items-center justify-center">
           <div className="relative h-[92.1%] w-[89.75%] flex-none rotate-174 -scale-y-100">
             <img
               src="/dashboard/left-leaves.svg"
@@ -574,54 +384,59 @@ export default function Dashboard() {
         </div>
         <Art
           src="/dashboard/right-foreground.svg"
-          className="left-[62.63%] top-[43.69%] h-[108.11%] w-[64.74%]"
+          className="dashboard-right-foreground left-[62.63%] top-[43.69%] h-[108.11%] w-[64.74%]"
         />
         <Art
           src="/dashboard/tree-trunk.svg"
-          className="left-[20.63%] top-[-2.14%] h-[91.45%] w-[58.73%]"
+          className="dashboard-tree-trunk left-[20.63%] top-[-2.14%] h-[91.45%] w-[58.73%]"
         />
         <Art
           src="/dashboard/rocks-left.svg"
-          className="left-[27.65%] top-[84.32%] h-[4.11%] w-[6.68%]"
+          className="dashboard-rocks-left left-[27.65%] top-[84.32%] h-[4.11%] w-[6.68%]"
         />
         <Art
           src="/dashboard/rocks-center.svg"
-          className="left-[57.59%] top-[85.92%] h-[4.87%] w-[9.58%]"
+          className="dashboard-rocks-center left-[57.59%] top-[85.92%] h-[4.87%] w-[9.58%]"
         />
 
-        <h1 className="absolute left-1/2 top-[17.62%] z-10 -translate-x-1/2 whitespace-nowrap font-vcr text-[clamp(32px,4.23vw,64px)] leading-none tracking-[0.02em] [text-shadow:0_0_10px_rgba(255,255,255,.9),0_0_18px_#7075ff]">
+        <h1 className="dashboard-welcome absolute top-[17.62%] z-10 whitespace-nowrap font-vcr text-[clamp(32px,4.23vw,64px)] leading-none tracking-[0.02em] [text-shadow:0_0_10px_rgba(255,255,255,.9),0_0_18px_#7075ff]">
           Welcome back, Hacker
         </h1>
 
         <section
           aria-labelledby="application-status-heading"
-          className="absolute left-[26.26%] top-[30.5%] z-10 h-[30.55%] w-[47.27%]"
+          className="dashboard-status-board absolute left-[26.26%] top-[30.5%] z-10 h-[30.55%] w-[47.27%]"
         >
           <Art
             src="/dashboard/wooden-board.svg"
-            className={
+            className={`dashboard-board ${
               isNotSubmitted
                 ? "inset-0 h-full w-full origin-left scale-x-[1.1446]"
                 : "inset-0 h-full w-full"
-            }
+            }`}
           />
+          <MobileWoodenBoard />
           <Art
             src={
               status === "declined" || status === "rejected"
                 ? "/dashboard/declined-potion.svg"
                 : "/dashboard/status-potion.svg"
             }
-            className={`left-[7.54%] top-[14.52%] h-[79.31%] w-[29.04%] rotate-[-13.27deg] ${current.potionClass}`}
+            className={`dashboard-status-potion left-[7.54%] top-[14.52%] h-[79.31%] w-[29.04%] rotate-[-13.27deg] ${current.potionClass}`}
           />
 
           <h2
             id="application-status-heading"
-            className="absolute left-1/2 top-[12.57%] w-[41.54%] -translate-x-1/2 whitespace-nowrap text-center font-figtree text-[clamp(14px,1.59vw,24px)] font-bold leading-[1.21] [text-shadow:0_0_10px_rgba(255,255,255,.5)]"
+            className="dashboard-status-heading absolute left-1/2 top-[12.57%] w-[41.54%] -translate-x-1/2 whitespace-nowrap text-center font-figtree text-[clamp(14px,1.59vw,24px)] font-bold leading-[1.21] [text-shadow:0_0_10px_rgba(255,255,255,.5)]"
           >
             Current Application Status
           </h2>
           <p
-            className="absolute left-[61.2%] top-[28.59%] w-[41.96%] -translate-x-1/2 whitespace-nowrap text-center font-vcr text-[clamp(34px,4.23vw,64px)] leading-[0.98]"
+            className={`dashboard-status-title absolute left-[61.2%] top-[28.59%] w-[41.96%] -translate-x-1/2 whitespace-nowrap text-center font-vcr text-[clamp(34px,4.23vw,64px)] leading-[0.98] ${
+              current.title === "Not Submitted"
+                ? "dashboard-status-title-long"
+                : ""
+            }`}
             style={{
               color: current.titleColor,
               textShadow: `0 0 7.8px ${current.titleColor}`,
@@ -629,16 +444,15 @@ export default function Dashboard() {
           >
             {current.title}
           </p>
-          <p className="absolute left-[61.2%] top-[54.26%] w-[38.89%] -translate-x-1/2 whitespace-nowrap text-center font-figtree text-[clamp(10px,1.06vw,16px)] leading-[1.2] text-[#cecece]">
+          <p className="dashboard-status-deadline absolute left-[61.2%] top-[54.26%] w-[38.89%] -translate-x-1/2 whitespace-nowrap text-center font-figtree text-[clamp(10px,1.06vw,16px)] leading-[1.2] text-[#cecece]">
             Application deadline: {dashboardData.deadline}
           </p>
-          <div className="absolute left-[44.41%] top-[66.93%] h-[18.67%] w-[33.57%]">
+          <div className="dashboard-status-action absolute left-[44.41%] top-[66.93%] h-[18.67%] w-[33.57%]">
             <Button
               text={current.action}
-              buttonType={current.disabled ? "disabled" : "primary"}
+              state={current.disabled ? "disabled" : "default"}
               width="100%"
-              aspectRatio="240 / 56"
-              artworkVariant="compact"
+              textClassName="font-inter text-sm font-semibold leading-normal"
               onClick={() => router.push("/application")}
             />
           </div>
@@ -652,13 +466,14 @@ export default function Dashboard() {
         )}
       </div>
 
-      <PortalContentStage className="pointer-events-none">
+      <PortalContentStage className="dashboard-portal-stage pointer-events-none">
         <PortalNavbar />
         <PortalBackButton
           text="Log Out"
           width={170}
           tone="danger"
           placement="navbar-end"
+          showArrow={false}
           onClick={() => {
             logout();
             router.replace("/login");

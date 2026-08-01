@@ -28,7 +28,7 @@ export default function BackgroundBook({
       {onBack && (
         <Button
           text="Back"
-          buttonType="direction"
+          variant="direction"
           direction="back"
           onClick={onBack}
           className="absolute bottom-6 left-6 z-10 md:bottom-8 md:left-8"
@@ -60,11 +60,12 @@ export default function BackgroundBook({
       {onNext && (
         <Button
           text={nextLabel}
-          buttonType="direction"
+          variant="direction"
           direction="next"
+          directionTextClassName="font-figtree text-base font-medium leading-normal"
           onClick={onNext}
           disabled={nextDisabled}
-          className="absolute bottom-6 right-6 z-10 md:bottom-8 md:right-8"
+          className="absolute bottom-6 right-6 z-10 px-1 py-[3px] md:bottom-8 md:right-8"
         />
       )}
     </div>

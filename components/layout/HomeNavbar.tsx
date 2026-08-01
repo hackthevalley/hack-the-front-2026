@@ -17,6 +17,13 @@ const DEFAULT_ITEMS: readonly HomeNavItem[] = [
   { key: "about", label: "About", targetId: "about", offsetRatio: 0.18 },
   { key: "faq", label: "FAQ", targetId: "faq", offsetRatio: 0.08 },
   { key: "themes", label: "Themes", targetId: "themes", offsetRatio: 0.16 },
+  {
+    key: "sponsors",
+    label: "Sponsors",
+    targetId: "sponsors",
+    offsetRatio: 0.08,
+  },
+  { key: "team", label: "Team", targetId: "team", offsetRatio: 0.08 },
 ];
 
 const DESKTOP_NAVBAR_HEIGHT = 123.2548828125;
@@ -194,11 +201,7 @@ function MenuButton({
   );
 }
 
-function LogoButton({
-  onClick,
-}: {
-  onClick: () => void;
-}) {
+function LogoButton({ onClick }: { onClick: () => void }) {
   return (
     <button
       type="button"
@@ -206,11 +209,13 @@ function LogoButton({
       aria-label="Hack the Valley home"
       className="inline-flex h-10 w-10 shrink-0 items-center justify-center sparkle-icon md:h-[45px] md:w-[45px]"
     >
-      <MaskIcon
+      <img
         src="/icons/htv-logo.svg"
         width={45}
         height={45}
-        className="h-8 w-8 text-white transition-colors duration-150 hover:text-zinc-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current md:h-[45px] md:w-[45px]"
+        alt=""
+        aria-hidden="true"
+        className="block shrink-0 transition-opacity duration-150 hover:opacity-80"
       />
     </button>
   );
@@ -231,13 +236,13 @@ function NavBarFrame({
 }) {
   return (
     <nav className="mx-auto flex h-[72px] w-full max-w-[1512px] items-center justify-between gap-4 px-4 text-white md:h-[123.2548828125px] md:gap-6 md:px-[clamp(24px,7.9365vw,120px)]">
-      <div className="flex min-w-0 items-center gap-4 md:gap-[clamp(18px,2.8vw,44px)]">
+      <div className="flex min-w-0 items-center gap-4 md:gap-[clamp(18px,2.2vw,34px)]">
         <LogoButton onClick={onLogoClick} />
 
         <SectionLinks
           items={items}
           onSectionClick={onSectionClick}
-          className="hidden flex-wrap items-center gap-x-[clamp(14px,2.2vw,38px)] gap-y-3 md:flex"
+          className="hidden flex-wrap items-center gap-x-[clamp(14px,1.8vw,28px)] gap-y-3 md:flex"
           itemClassName="font-figtree text-[clamp(1rem,1.25vw,1.25rem)] font-semibold tracking-[-0.01em] text-white/88"
         />
       </div>
@@ -375,9 +380,7 @@ function Shell({
           background: `linear-gradient(180deg, rgba(255, 255, 255, ${shellBorderAlpha}) 0%, rgba(255, 255, 255, ${shellBorderAlpha * 0.4}) 10%, rgba(255, 255, 255, ${shellBorderAlpha * 0.12}) 18%, transparent 28%)`,
         }}
       />
-      <div className="relative z-10">
-        {children}
-      </div>
+      <div className="relative z-10">{children}</div>
     </div>
   );
 }
@@ -387,9 +390,7 @@ function Shell({
  * scroll, and gradually gains a floating shell as the page moves away from the
  * hero's top edge.
  */
-export default function HomeNavbar({
-  items = DEFAULT_ITEMS,
-}: HomeNavbarProps) {
+export default function HomeNavbar({ items = DEFAULT_ITEMS }: HomeNavbarProps) {
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -428,7 +429,10 @@ export default function HomeNavbar({
         return;
       }
 
-      if (lastScrollYRef.current <= SCROLL_EPSILON && deltaY >= SCROLL_EPSILON) {
+      if (
+        lastScrollYRef.current <= SCROLL_EPSILON &&
+        deltaY >= SCROLL_EPSILON
+      ) {
         setIsVisible(false);
         upwardTravelRef.current = 0;
         downwardTravelRef.current = 0;
@@ -510,8 +514,9 @@ export default function HomeNavbar({
     );
 
     return (
-      dataTargetMatches.find((element) => element.getClientRects().length > 0) ??
-      exactMatch
+      dataTargetMatches.find(
+        (element) => element.getClientRects().length > 0,
+      ) ?? exactMatch
     );
   };
 
@@ -520,7 +525,8 @@ export default function HomeNavbar({
     if (!target) return;
 
     const offset = window.innerHeight * (item.offsetRatio ?? 0.12);
-    const targetTop = window.scrollY + target.getBoundingClientRect().top - offset;
+    const targetTop =
+      window.scrollY + target.getBoundingClientRect().top - offset;
 
     window.scrollTo({
       top: Math.max(0, targetTop),

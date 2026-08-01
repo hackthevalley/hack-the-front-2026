@@ -212,7 +212,7 @@ export default function MobileHomeSection() {
         <div className="max-w-[19rem]">
           <h1
             id="home-title-mobile"
-            className="m-0 mt-4 text-[4.15rem] font-bold leading-[0.9] text-white"
+            className="m-0 mt-4 font-figtree text-[4.15rem] font-medium leading-[0.9] text-white"
             style={{
               textShadow:
                 "0 0 24px rgba(255, 140, 180, 0.55), 0 0 48px rgba(223, 99, 220, 0.35)",
@@ -262,21 +262,21 @@ export default function MobileHomeSection() {
               About Us
             </h2>
 
-            <p className="m-0 mt-4 text-[clamp(0.92rem,4.05vw,1rem)] leading-[1.58] text-white/90">
+            <p className="m-0 mt-6 font-figtree text-[clamp(0.92rem,4.05vw,1rem)] leading-[1.58] text-[#EAEFFF]">
               Join 750 innovative and creative developers, designers, and
               creators for{" "}
-              <strong className="font-bold text-white">
+              <strong className="font-bold text-[#EAEFFF]">
                 36 hours of hacking
               </strong>
               . You&apos;ll get access to some of the best hardware and APIs on
               the market, plus experienced and awesome mentors.
             </p>
 
-            <p className="m-0 mt-4 text-[clamp(1rem,4.35vw,1.08rem)] font-bold leading-[1.45] text-white">
+            <p className="m-0 mt-6 font-figtree text-[clamp(1rem,4.35vw,1.08rem)] font-bold leading-[1.45] text-[#EAEFFF]">
               All this in just one weekend? I know, it&apos;s hard to believe.
             </p>
 
-            <p className="m-0 mt-4 text-[clamp(0.92rem,4.05vw,1rem)] leading-[1.58] text-white/90">
+            <p className="m-0 mt-6 font-figtree text-[clamp(0.92rem,4.05vw,1rem)] leading-[1.58] text-[#EAEFFF]">
               Remember, you don&apos;t need to be a pro to attend. If this is
               your first hackathon, we can&apos;t wait to expose you to the
               incomparable world of creation.

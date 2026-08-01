@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="62.998" height="104" viewBox="0 0 62.998 104" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Subtract" filter="url(#filter0_f_0_197)">
+<path d="M19.9072 14.5C35.6976 14.5 48.498 31.2893 48.498 52C48.498 72.7107 35.6976 89.5 19.9072 89.5C18.0583 89.5 16.2512 89.2659 14.5 88.8262C27.7035 85.5095 37.6816 70.2847 37.6816 52C37.6816 33.7152 27.7036 18.4894 14.5 15.1729C16.2512 14.7331 18.0583 14.5 19.9072 14.5Z" fill="white" fill-opacity="0.82"/>
+</g>
+<defs>
+<filter id="filter0_f_0_197" x="0" y="0" width="62.998" height="104" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="7.25" result="effect1_foregroundBlur_0_197"/>
+</filter>
+</defs>
+</svg>

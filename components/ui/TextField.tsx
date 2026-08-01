@@ -42,6 +42,8 @@ type TextFieldProps = {
   /** For `type="number"`: maximum accepted value (inclusive). */
   max?: number;
   errorMessages?: ErrorMessages;
+  /** Returns an error message when a non-empty value is invalid, otherwise null. */
+  validateValue?: (value: string) => string | null;
   value?: string;
   onChange?: (value: string) => void;
   /** Fires whenever this field's error status changes, so a parent can track
@@ -90,6 +92,7 @@ function TextField(
     min,
     max,
     errorMessages = {},
+    validateValue,
     value: controlledValue,
     onChange,
     onValidityChange,
@@ -139,6 +142,8 @@ function TextField(
     if (type === "tel" && !isValidPhoneNumber(trimmed)) {
       return errorMessages.invalid ?? "Please enter a valid 10-digit phone number.";
     }
+    const customValidationMessage = validateValue?.(trimmed);
+    if (customValidationMessage) return customValidationMessage;
     return null;
   }
 
