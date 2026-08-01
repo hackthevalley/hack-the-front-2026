@@ -14,7 +14,6 @@ import FaqTitleOverlay from "./faq-themes/faq/FaqTitleOverlay";
 import SponsorsPanels from "./sponsors/SponsorsPanels";
 import MobileHomeSection from "./home/MobileHomeSection";
 import SponsorsBackground from "./sponsors/background/SponsorsBackground";
-import SponsorsForeground from "./sponsors/foreground/SponsorsForeground";
 import SponsorsTextOverlays from "./sponsors/SponsorsTextOverlays";
 import TeamOverlays from "./team/TeamOverlays";
 import TeamBackground from "./team/background/TeamBackground";
