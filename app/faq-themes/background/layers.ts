@@ -495,6 +495,13 @@ export const faqThemesSceneLayers = [
     height: 210.9414,
     zIndex: 40,
     plane: "rear",
+    pulse: {
+      duration: "3.8s",
+      delay: "0s",
+      min: 0.58,
+      glow: "30px",
+      color: "rgba(255, 124, 205, 0.85)",
+    },
   },
   {
     id: "group-137",
@@ -855,6 +862,13 @@ export const faqThemesSceneLayers = [
     height: 135.5002,
     zIndex: 75,
     plane: "rear",
+    pulse: {
+      duration: "4.7s",
+      delay: "-2.9s",
+      min: 0.6,
+      glow: "26px",
+      color: "rgba(168, 66, 229, 0.8)",
+    },
   },
   {
     id: "vector-378",

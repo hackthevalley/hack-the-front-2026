@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import {
   HOME_BACKGROUND_DESIGN_HEIGHT,
   HOME_BACKGROUND_DESIGN_WIDTH,
@@ -23,12 +23,22 @@ function ScenePlane({ layers }: { layers: readonly FaqThemesSceneLayer[] }) {
         const isDesktopOnlyTransitionPiece =
           layer.id === "rectangle-296" || layer.id === "vector-485";
 
+        const pulseStyle: CSSProperties | undefined = layer.pulse
+          ? ({
+              "--decor-duration": layer.pulse.duration,
+              "--decor-delay": layer.pulse.delay,
+              "--decor-pulse-min": layer.pulse.min,
+              "--decor-pulse-glow": layer.pulse.glow,
+              "--decor-pulse-color": layer.pulse.color,
+            } as CSSProperties)
+          : undefined;
+
         return (
           <div
             key={layer.id}
-            className={`pointer-events-none absolute overflow-hidden ${
-              isDesktopOnlyTransitionPiece ? "hidden md:block" : ""
-            }`}
+            className={`pointer-events-none absolute ${
+              layer.pulse ? "" : "overflow-hidden "
+            }${isDesktopOnlyTransitionPiece ? "hidden md:block" : ""}`}
             aria-hidden="true"
             data-figma-id={layer.figmaId}
             data-figma-name={layer.figmaName}
@@ -66,7 +76,10 @@ function ScenePlane({ layers }: { layers: readonly FaqThemesSceneLayer[] }) {
                 loading="lazy"
                 decoding="async"
                 draggable="false"
-                className="h-full w-full max-w-none select-none"
+                className={`h-full w-full max-w-none select-none${
+                  layer.pulse ? " decor-pulse" : ""
+                }`}
+                style={pulseStyle}
               />
             )}
           </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { startTransition, useMemo, useState } from "react";
+import { playChime } from "@/lib/sound";
 import MobileFaqContent from "./faq/MobileFaqContent";
 import FaqPaperPanel from "./faq/FaqPaperPanel";
 import FaqQuestionList from "./faq/FaqQuestionList";
@@ -15,6 +16,10 @@ export default function FaqThemesContentLayer() {
   );
 
   const handleSelect = (id: string) => {
+    if (activeId !== id) {
+      playChime();
+    }
+
     startTransition(() => {
       setActiveId((currentId) => (currentId === id ? null : id));
     });
