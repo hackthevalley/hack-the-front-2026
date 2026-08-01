@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { isUnauthorizedError } from "@/lib/apiClient";
 import {
   hydrateApplicationAnswers,
+  isSupportedApplicationQuestion,
   serializeApplicationAnswers,
   type BackendQuestion,
 } from "./applicationData";
@@ -193,6 +194,7 @@ export function useApplicationWorkflow({
     );
     const missingQuestion = questions.find((question) => {
       if (!question.required) return false;
+      if (!isSupportedApplicationQuestion(question)) return false;
       if (
         question.field_key === "portfolio.resume" ||
         question.label.toLowerCase().includes("resume")

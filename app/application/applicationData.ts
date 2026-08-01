@@ -126,6 +126,17 @@ const FIELD_KEY_BINDINGS = new Map(
   ]),
 );
 
+function normalizeQuestionLabel(label: string): string {
+  return label.trim().replace(/\s+/g, " ").toLowerCase();
+}
+
+const NORMALIZED_LABEL_BINDINGS = new Map(
+  Object.entries(LABEL_BINDINGS).map(([label, binding]) => [
+    normalizeQuestionLabel(label),
+    binding,
+  ]),
+);
+
 function isResumeQuestion(question: BackendQuestion): boolean {
   return (
     question.field_key === "portfolio.resume" ||
@@ -138,24 +149,14 @@ function getQuestionBinding(
 ): AnswerBinding | undefined {
   return (
     (question.field_key ? FIELD_KEY_BINDINGS.get(question.field_key) : undefined) ??
-    LABEL_BINDINGS[question.label]
+    NORMALIZED_LABEL_BINDINGS.get(normalizeQuestionLabel(question.label))
   );
 }
 
-export function assertKnownRequiredQuestions(
-  questions: BackendQuestion[],
-): void {
-  const unknown = questions.filter(
-    (question) =>
-      question.required &&
-      !isResumeQuestion(question) &&
-      !getQuestionBinding(question),
-  );
-  if (unknown.length > 0) {
-    throw new Error(
-      `Unsupported required application questions: ${unknown.map((question) => question.label).join(", ")}`,
-    );
-  }
+export function isSupportedApplicationQuestion(
+  question: BackendQuestion,
+): boolean {
+  return isResumeQuestion(question) || getQuestionBinding(question) !== undefined;
 }
 
 function parseBoolean(value: string): boolean {
@@ -166,7 +167,6 @@ export function hydrateApplicationAnswers(
   questions: BackendQuestion[],
   answers: BackendAnswer[],
 ): WizardFormData {
-  assertKnownRequiredQuestions(questions);
   const hydrated = structuredClone(initialFormData);
   const questionsById = new Map(
     questions.map((question) => [question.question_id, question]),
@@ -196,7 +196,6 @@ export function serializeApplicationAnswers(
   formData: WizardFormData,
   questions: BackendQuestion[],
 ): BackendAnswerUpdate[] {
-  assertKnownRequiredQuestions(questions);
   const updates: BackendAnswerUpdate[] = [];
 
   for (const question of questions) {

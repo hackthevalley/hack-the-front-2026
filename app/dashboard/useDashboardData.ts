@@ -105,28 +105,41 @@ export function useDashboardData({
           accessToken,
           controller.signal,
         );
-        let avatar: AvatarKey | null = null;
-        let accessory: AccessoryKey | null = null;
+        const status = resolveDashboardStatus(
+          user.application_status,
+          registration,
+        );
+        const deadline = formatDeadline(registration.end_at);
+
+        // Status and deadline come from the access context and should remain
+        // usable even if the optional avatar/application data cannot hydrate.
+        setData({ accessory: null, avatar: null, deadline, status });
 
         if (hasApplication(user.application_status)) {
-          const { questions, application } = await loadApplicationRecord(
-            accessToken,
-            controller.signal,
-          );
-          const hydrated = hydrateApplicationAnswers(
-            questions,
-            application.form_answers,
-          );
-          avatar = hydrated.customCharacter.character || null;
-          accessory = hydrated.customAccessory.accessory || null;
+          try {
+            const { questions, application } = await loadApplicationRecord(
+              accessToken,
+              controller.signal,
+            );
+            const hydrated = hydrateApplicationAnswers(
+              questions,
+              application.form_answers,
+            );
+            setData({
+              accessory: hydrated.customAccessory.accessory || null,
+              avatar: hydrated.customCharacter.character || null,
+              deadline,
+              status,
+            });
+          } catch (error) {
+            if (controller.signal.aborted || isUnauthorizedError(error)) {
+              throw error;
+            }
+            // Avatar data is decorative on the dashboard. Keep the valid
+            // application status rather than replacing everything with an
+            // unavailable state when its mapping is stale or malformed.
+          }
         }
-
-        setData({
-          accessory,
-          avatar,
-          deadline: formatDeadline(registration.end_at),
-          status: resolveDashboardStatus(user.application_status, registration),
-        });
       } catch (error) {
         if (controller.signal.aborted) return;
         if (isUnauthorizedError(error)) {
