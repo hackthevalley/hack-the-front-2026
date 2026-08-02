@@ -36,8 +36,9 @@ const GeneralSection = React.forwardRef<
 
       <TextField
         ref={dietaryRef}
-        name="Dietary Restriction"
+        name="Dietary Restrictions"
         placeholder="Type an Answer"
+        required
         theme="application"
         value={value.dietaryRestrictions}
         onChange={(v) => set("dietaryRestrictions", v)}

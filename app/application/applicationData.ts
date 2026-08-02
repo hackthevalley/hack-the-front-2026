@@ -5,6 +5,7 @@ import {
 } from "./sectionConfig";
 
 export type BackendQuestion = {
+  field_key?: string;
   label: string;
   question_id: string;
   required?: boolean;
@@ -25,14 +26,26 @@ export type BackendAnswerUpdate = {
   question_id: string;
 };
 
-type AnswerBinding = {
-  field: string;
-  section: SectionId;
+type AnswerBindingFor<S extends SectionId> = {
+  field: keyof WizardFormData[S] & string;
+  section: S;
   type?: "boolean";
 };
 
-const ANSWER_BINDINGS: Record<string, AnswerBinding> = {
-  "First Name": { section: "about", field: "firstName" },
+type AnswerBinding = {
+  [S in SectionId]: AnswerBindingFor<S>;
+}[SectionId];
+
+function bind<S extends SectionId>(
+  section: S,
+  field: keyof WizardFormData[S] & string,
+  type?: "boolean",
+): AnswerBindingFor<S> {
+  return { section, field, type };
+}
+
+const LABEL_BINDINGS: Record<string, AnswerBinding> = {
+  "First Name": bind("about", "firstName"),
   "Last Name": { section: "about", field: "lastName" },
   Email: { section: "about", field: "email" },
   "Phone Number": { section: "about", field: "phone" },
@@ -106,6 +119,46 @@ const ANSWER_BINDINGS: Record<string, AnswerBinding> = {
   },
 };
 
+const FIELD_KEY_BINDINGS = new Map(
+  Object.values(LABEL_BINDINGS).map((binding) => [
+    `${binding.section}.${binding.field}`,
+    binding,
+  ]),
+);
+
+function normalizeQuestionLabel(label: string): string {
+  return label.trim().replace(/\s+/g, " ").toLowerCase();
+}
+
+const NORMALIZED_LABEL_BINDINGS = new Map(
+  Object.entries(LABEL_BINDINGS).map(([label, binding]) => [
+    normalizeQuestionLabel(label),
+    binding,
+  ]),
+);
+
+function isResumeQuestion(question: BackendQuestion): boolean {
+  return (
+    question.field_key === "portfolio.resume" ||
+    question.label.toLowerCase().includes("resume")
+  );
+}
+
+function getQuestionBinding(
+  question: BackendQuestion,
+): AnswerBinding | undefined {
+  return (
+    (question.field_key ? FIELD_KEY_BINDINGS.get(question.field_key) : undefined) ??
+    NORMALIZED_LABEL_BINDINGS.get(normalizeQuestionLabel(question.label))
+  );
+}
+
+export function isSupportedApplicationQuestion(
+  question: BackendQuestion,
+): boolean {
+  return isResumeQuestion(question) || getQuestionBinding(question) !== undefined;
+}
+
 function parseBoolean(value: string): boolean {
   return ["1", "on", "true", "yes"].includes(value.trim().toLowerCase());
 }
@@ -115,15 +168,15 @@ export function hydrateApplicationAnswers(
   answers: BackendAnswer[],
 ): WizardFormData {
   const hydrated = structuredClone(initialFormData);
-  const labelsById = new Map(
-    questions.map((question) => [question.question_id, question.label]),
+  const questionsById = new Map(
+    questions.map((question) => [question.question_id, question]),
   );
 
   for (const answer of answers) {
     if (answer.answer === null) continue;
 
-    const label = labelsById.get(answer.question_id);
-    const binding = label ? ANSWER_BINDINGS[label] : undefined;
+    const question = questionsById.get(answer.question_id);
+    const binding = question ? getQuestionBinding(question) : undefined;
     if (!binding) continue;
 
     const section = hydrated[binding.section] as unknown as Record<
@@ -143,14 +196,11 @@ export function serializeApplicationAnswers(
   formData: WizardFormData,
   questions: BackendQuestion[],
 ): BackendAnswerUpdate[] {
-  const questionIdsByLabel = new Map(
-    questions.map((question) => [question.label, question.question_id]),
-  );
   const updates: BackendAnswerUpdate[] = [];
 
-  for (const [label, binding] of Object.entries(ANSWER_BINDINGS)) {
-    const questionId = questionIdsByLabel.get(label);
-    if (!questionId) continue;
+  for (const question of questions) {
+    const binding = getQuestionBinding(question);
+    if (!binding) continue;
 
     const section = formData[binding.section] as unknown as Record<
       string,
@@ -158,7 +208,7 @@ export function serializeApplicationAnswers(
     >;
     const value = section[binding.field];
     updates.push({
-      question_id: questionId,
+      question_id: question.question_id,
       answer: typeof value === "boolean" ? String(value) : String(value ?? ""),
     });
   }

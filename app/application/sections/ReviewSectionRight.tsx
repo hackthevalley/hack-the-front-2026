@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import SectionHeading from "./SectionHeading";
 import type { SectionHandle, SectionProps } from "./types";
 import type { ReviewData } from "./data";
 import {

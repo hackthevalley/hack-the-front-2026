@@ -1,55 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import PortalBackButton from "@/components/layout/PortalBackButton";
 import PortalContentStage from "@/components/layout/PortalContentStage";
 import PortalNavbar from "@/components/layout/PortalNavbar";
 import { useAuth } from "@/components/providers/AuthProvider";
 import Button from "@/components/ui/Button";
-import { apiUrl } from "@/lib/auth";
-import {
-  hydrateApplicationAnswers,
-  type BackendApplicationResponse,
-  type BackendQuestion,
-} from "@/app/application/applicationData";
 import {
   ACCESSORIES,
   AVATARS,
   getComboPlacement,
 } from "@/app/application/sections/avatarAssets";
 import type { AccessoryKey, AvatarKey } from "@/app/application/sections/data";
-
-type DashboardStatus =
-  | "apply"
-  | "applying"
-  | "submitted"
-  | "pending"
-  | "waitlisted"
-  | "not-submitted"
-  | "accepted"
-  | "rsvped"
-  | "scanned-in"
-  | "rejected"
-  | "declined"
-  | "loading"
-  | "unavailable";
-
-type UserResponse = {
-  application_status: string | null;
-};
-
-type RegistrationTimeRange = {
-  start_at: string;
-  end_at: string;
-};
-
-type DashboardData = {
-  accessory: AccessoryKey | null;
-  avatar: AvatarKey | null;
-  deadline: string;
-  status: DashboardStatus;
-};
+import { useDashboardData, type DashboardStatus } from "./useDashboardData";
 
 const STATUS_DETAILS: Record<
   DashboardStatus,
@@ -153,55 +117,6 @@ const STATUS_DETAILS: Record<
     potionClass: "grayscale",
   },
 };
-
-const SUBMITTED_STATUSES = new Set(["APPLIED", "WALK_IN_SUBMITTED"]);
-const NO_APPLICATION_STATUSES = new Set(["ACCOUNT_INACTIVE", "NOT_APPLIED"]);
-
-function hasApplication(applicationStatus: string | null): boolean {
-  return (
-    applicationStatus !== null &&
-    !NO_APPLICATION_STATUSES.has(applicationStatus)
-  );
-}
-
-function resolveDashboardStatus(
-  applicationStatus: string | null,
-  registration: RegistrationTimeRange,
-): DashboardStatus {
-  if (SUBMITTED_STATUSES.has(applicationStatus ?? "")) return "submitted";
-  if (applicationStatus === "UNDER_REVIEW") return "pending";
-  if (applicationStatus === "WAITLISTED") return "waitlisted";
-  if (applicationStatus === "ACCEPTED") return "accepted";
-  if (applicationStatus === "ACCEPTED_INVITE") return "rsvped";
-  if (applicationStatus === "SCANNED_IN") return "scanned-in";
-  if (applicationStatus === "REJECTED") return "rejected";
-  if (applicationStatus === "REJECTED_INVITE") return "declined";
-  if (applicationStatus === "WALK_IN") return "apply";
-
-  const now = Date.now();
-  const start = new Date(registration.start_at).getTime();
-  const end = new Date(registration.end_at).getTime();
-  const registrationIsOpen =
-    Number.isFinite(start) && Number.isFinite(end) && now > start && now < end;
-
-  if (applicationStatus === "APPLYING") {
-    return registrationIsOpen ? "applying" : "not-submitted";
-  }
-
-  return registrationIsOpen ? "apply" : "not-submitted";
-}
-
-function formatDeadline(value: string): string {
-  const deadline = new Date(value);
-  if (Number.isNaN(deadline.getTime())) return "Unavailable";
-
-  return new Intl.DateTimeFormat("en-CA", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: "UTC",
-  }).format(deadline);
-}
 
 type ArtProps = {
   src: string;
@@ -334,12 +249,7 @@ function DashboardAvatar({
 export default function Dashboard() {
   const router = useRouter();
   const { logout, token } = useAuth();
-  const [dashboardData, setDashboardData] = useState<DashboardData>({
-    accessory: null,
-    avatar: null,
-    deadline: "Loading...",
-    status: "loading",
-  });
+  const dashboardData = useDashboardData({ logout, token });
   const status = dashboardData.status;
   const current = STATUS_DETAILS[status];
   const isNotSubmitted = status === "applying" || status === "not-submitted";
@@ -349,110 +259,6 @@ export default function Dashboard() {
       router.prefetch("/application");
     }
   }, [router, status]);
-
-  useEffect(() => {
-    if (!token) return;
-
-    const controller = new AbortController();
-
-    async function loadDashboard() {
-      try {
-        const headers = {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        };
-        const [userResponse, registrationResponse] = await Promise.all([
-          fetch(apiUrl("/api/account/me"), {
-            headers,
-            signal: controller.signal,
-          }),
-          fetch(apiUrl("/api/forms/registration-timerange"), {
-            headers,
-            signal: controller.signal,
-          }),
-        ]);
-
-        if (
-          userResponse.status === 401 ||
-          userResponse.status === 403 ||
-          registrationResponse.status === 401 ||
-          registrationResponse.status === 403
-        ) {
-          logout();
-          router.replace("/login");
-          return;
-        }
-
-        if (!userResponse.ok || !registrationResponse.ok) {
-          throw new Error("Unable to load dashboard");
-        }
-
-        const user = (await userResponse.json()) as UserResponse;
-        const registration =
-          (await registrationResponse.json()) as RegistrationTimeRange;
-        let avatar: AvatarKey | null = null;
-        let accessory: AccessoryKey | null = null;
-
-        if (hasApplication(user.application_status)) {
-          const [questionsResponse, applicationResponse] = await Promise.all([
-            fetch(apiUrl("/api/forms/questions"), {
-              headers,
-              signal: controller.signal,
-            }),
-            fetch(apiUrl("/api/forms/application"), {
-              headers,
-              signal: controller.signal,
-            }),
-          ]);
-
-          if (
-            questionsResponse.status === 401 ||
-            questionsResponse.status === 403 ||
-            applicationResponse.status === 401 ||
-            applicationResponse.status === 403
-          ) {
-            logout();
-            router.replace("/login");
-            return;
-          }
-
-          if (questionsResponse.ok && applicationResponse.ok) {
-            const questions =
-              (await questionsResponse.json()) as BackendQuestion[];
-            const application =
-              (await applicationResponse.json()) as BackendApplicationResponse;
-            const hydrated = hydrateApplicationAnswers(
-              questions,
-              application.form_answers,
-            );
-            const savedAvatar = hydrated.customCharacter.character;
-            const savedAccessory = hydrated.customAccessory.accessory;
-
-            avatar = savedAvatar || null;
-            accessory = savedAccessory || null;
-          }
-        }
-
-        setDashboardData({
-          accessory,
-          avatar,
-          deadline: formatDeadline(registration.end_at),
-          status: resolveDashboardStatus(user.application_status, registration),
-        });
-      } catch (error) {
-        if (error instanceof Error && error.name === "AbortError") return;
-        setDashboardData({
-          accessory: null,
-          avatar: null,
-          deadline: "Unavailable",
-          status: "unavailable",
-        });
-      }
-    }
-
-    void loadDashboard();
-    return () => controller.abort();
-  }, [logout, router, token]);
 
   return (
     <main className="dashboard-page relative h-dvh min-h-[520px] overflow-hidden bg-[radial-gradient(circle_at_50%_55%,#171b70_0%,#0d0a46_42%,#07021d_100%)] text-white">
@@ -626,7 +432,11 @@ export default function Dashboard() {
             Current Application Status
           </h2>
           <p
-            className="dashboard-status-title absolute left-[61.2%] top-[28.59%] w-[41.96%] -translate-x-1/2 whitespace-nowrap text-center font-vcr text-[clamp(34px,4.23vw,64px)] leading-[0.98]"
+            className={`dashboard-status-title absolute left-[61.2%] top-[28.59%] w-[41.96%] -translate-x-1/2 whitespace-nowrap text-center font-vcr text-[clamp(34px,4.23vw,64px)] leading-[0.98] ${
+              current.title === "Not Submitted"
+                ? "dashboard-status-title-long"
+                : ""
+            }`}
             style={{
               color: current.titleColor,
               textShadow: `0 0 7.8px ${current.titleColor}`,

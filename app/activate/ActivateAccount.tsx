@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import StatusPage from "@/components/layout/StatusPage";
-import { apiUrl } from "@/lib/auth";
+import { apiFetch } from "@/lib/apiClient";
 
 type ActivationState = "activating" | "success" | "error";
 
@@ -18,7 +18,7 @@ export default function ActivateAccount({ token }: { token?: string }) {
 
     async function activate() {
       try {
-        const response = await fetch(apiUrl("/api/account/activations"), {
+        const response = await apiFetch("/api/account/activations", {
           method: "POST",
           headers: {
             Accept: "application/json",

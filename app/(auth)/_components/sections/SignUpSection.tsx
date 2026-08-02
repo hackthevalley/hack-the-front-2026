@@ -9,7 +9,7 @@ import {
   getPasswordValidationMessage,
   isValidEmail,
 } from "@/components/ui/validation";
-import { apiUrl } from "@/lib/auth";
+import { apiFetch } from "@/lib/apiClient";
 import {
   AUTH_BACKGROUND_DESIGN_HEIGHT,
   AUTH_BACKGROUND_DESIGN_WIDTH,
@@ -162,7 +162,7 @@ export default function SignUpSection({ onNavigate }: AuthSectionProps) {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(apiUrl("/api/account/users"), {
+      const response = await apiFetch("/api/account/users", {
         method: "POST",
         headers: {
           Accept: "application/json",

@@ -7,7 +7,7 @@ import DesignBox from "@/components/layout/DesignBox";
 import Button from "@/components/ui/Button";
 import TextField, { type TextFieldHandle } from "@/components/ui/TextField";
 import { getPasswordValidationMessage } from "@/components/ui/validation";
-import { apiUrl } from "@/lib/auth";
+import { apiFetch } from "@/lib/apiClient";
 import {
   AUTH_BACKGROUND_DESIGN_HEIGHT,
   AUTH_BACKGROUND_DESIGN_WIDTH,
@@ -77,7 +77,7 @@ export default function ResetPasswordForm({ token }: { token?: string }) {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(apiUrl("/api/account/password-resets"), {
+      const response = await apiFetch("/api/account/password-resets", {
         method: "PUT",
         headers: {
           Accept: "application/json",
