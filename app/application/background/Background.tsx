@@ -1,6 +1,6 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 
 type Sticker = {
   id: string;
@@ -267,10 +267,57 @@ const COLUMNS: Column[] = [
 ];
 
 export default function Background() {
+  const candlesRef = useRef<HTMLImageElement>(null);
+  const hoveredCandleRef = useRef<"small" | "large" | null>(null);
+  const [hoveredCandle, setHoveredCandle] = useState<
+    "small" | "large" | null
+  >(null);
+
+  useEffect(() => {
+    function updateCandleHover(event: PointerEvent) {
+      if (event.pointerType === "touch") return;
+
+      const bounds = candlesRef.current?.getBoundingClientRect();
+      let nextHoveredCandle: "small" | "large" | null = null;
+
+      if (bounds) {
+        const x = ((event.clientX - bounds.left) / bounds.width) * 397;
+        const y = ((event.clientY - bounds.top) / bounds.height) * 227;
+
+        if (x >= 35 && x <= 115 && y >= 74 && y <= 227) {
+          nextHoveredCandle = "small";
+        } else if (x >= 235 && x <= 330 && y >= 50 && y <= 227) {
+          nextHoveredCandle = "large";
+        }
+      }
+
+      if (hoveredCandleRef.current !== nextHoveredCandle) {
+        hoveredCandleRef.current = nextHoveredCandle;
+        setHoveredCandle(nextHoveredCandle);
+      }
+    }
+
+    function clearCandleHover() {
+      if (hoveredCandleRef.current) {
+        hoveredCandleRef.current = null;
+        setHoveredCandle(null);
+      }
+    }
+
+    window.addEventListener("pointermove", updateCandleHover, { passive: true });
+    window.addEventListener("blur", clearCandleHover);
+
+    return () => {
+      window.removeEventListener("pointermove", updateCandleHover);
+      window.removeEventListener("blur", clearCandleHover);
+    };
+  }, []);
+
   return (
     <div
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
+      data-candle-hovered={hoveredCandle ?? undefined}
       style={{ background: BACKDROP }}
     >
       {COLUMNS.map((column) => (
@@ -292,6 +339,14 @@ export default function Background() {
           {cluster.stickers.map((sticker) => (
             <img
               key={sticker.id}
+              ref={sticker.id === "candles" ? candlesRef : undefined}
+              data-candle-id={
+                sticker.id === "candle-flame-small"
+                  ? "small"
+                  : sticker.id === "candle-flame-large"
+                    ? "large"
+                    : undefined
+              }
               src={sticker.src}
               alt=""
               draggable="false"

@@ -157,11 +157,10 @@
   animation: decor-flame-flicker var(--decor-duration, 2.4s)
     cubic-bezier(0.37, 0, 0.63, 1) var(--decor-delay, 0s) infinite;
   animation-play-state: paused;
-  transition: --flame-strength 380ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-body:has([data-app-menu-item]:hover) .app-candle-flame,
-body:has([data-app-menu-item]:focus-visible) .app-candle-flame {
+[data-candle-hovered="small"] .app-candle-flame[data-candle-id="small"],
+[data-candle-hovered="large"] .app-candle-flame[data-candle-id="large"] {
   --flame-strength: 1;
   animation-play-state: running;
 }
@@ -175,12 +174,8 @@ body:has([data-app-menu-item]:focus-visible) .app-candle-flame {
     animation: none !important;
   }
 
-  .app-candle-flame {
-    transition: none;
-  }
-
-  body:has([data-app-menu-item]:hover) .app-candle-flame,
-  body:has([data-app-menu-item]:focus-visible) .app-candle-flame {
+  [data-candle-hovered="small"] .app-candle-flame[data-candle-id="small"],
+  [data-candle-hovered="large"] .app-candle-flame[data-candle-id="large"] {
     --flame-strength: 0;
   }
 
