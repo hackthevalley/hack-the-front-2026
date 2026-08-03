@@ -46,6 +46,7 @@ export default function SectionNavbar({
                   type="button"
                   disabled={isLocked}
                   onClick={() => onGroupClick(index)}
+                  data-app-menu-item
                   className={`rounded-full border-2 px-4 py-2 text-center text-xs font-semibold [background:linear-gradient(#030712,#191a3d)_padding-box,linear-gradient(to_bottom_left,#FF7CCD,#7839DC)_border-box] opacity-80 tracking-wide uppercase transition-all duration-300 ease-out lg:flex lg:h-[66px] lg:w-[135px] lg:flex-none lg:items-center lg:justify-center lg:px-3 lg:py-0 lg:text-lg lg:font-bold ${
                     isActive
                       ? "border-transparent text-white hover:scale-105"

@@ -38,6 +38,22 @@ export default function AuthBackground({ children }: AuthBackgroundProps) {
                 }
               : undefined;
 
+            const twinkleStyle: CSSProperties | undefined = layer.twinkle
+              ? ({
+                  "--decor-duration": layer.twinkle.duration,
+                  "--decor-delay": layer.twinkle.delay,
+                  "--decor-twinkle-min": layer.twinkle.min,
+                  "--decor-twinkle-scale-max": layer.twinkle.scaleMax,
+                  "--decor-twinkle-spin": layer.twinkle.spin,
+                } as CSSProperties)
+              : undefined;
+
+            const twinkleClass = layer.twinkle
+              ? layer.twinkle.mode === "breathe"
+                ? " decor-breathe"
+                : " decor-twinkle"
+              : "";
+
             return (
               <div
                 key={layer.id}
@@ -59,12 +75,16 @@ export default function AuthBackground({ children }: AuthBackgroundProps) {
                   src={layer.src}
                   alt=""
                   draggable="false"
-                  className={
+                  className={`${
                     bleed
                       ? "absolute max-w-none select-none"
                       : "h-full w-full max-w-none select-none"
+                  }${twinkleClass}`}
+                  style={
+                    imageStyle || twinkleStyle
+                      ? { ...imageStyle, ...twinkleStyle }
+                      : undefined
                   }
-                  style={imageStyle}
                 />
               </div>
             );

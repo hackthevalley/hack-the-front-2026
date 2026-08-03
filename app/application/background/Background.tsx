@@ -1,9 +1,12 @@
 "use client";
 
+import { useEffect, useRef, useState, type CSSProperties } from "react";
+
 type Sticker = {
   id: string;
   src: string;
   className: string;
+  style?: CSSProperties;
 };
 
 type Cluster = {
@@ -62,6 +65,24 @@ const CLUSTERS: Cluster[] = [
         id: "candles",
         src: "/application/candles.svg",
         className: "absolute right-[15px] top-[-40px] w-[380px]",
+      },
+      {
+        id: "candle-flame-large",
+        src: "/application/candle-flame-large.svg",
+        className:
+          "absolute right-[15px] top-[-40px] w-[380px] app-candle-flame",
+        style: { "--flame-origin": "71% 54%" } as CSSProperties,
+      },
+      {
+        id: "candle-flame-small",
+        src: "/application/candle-flame-small.svg",
+        className:
+          "absolute right-[15px] top-[-40px] w-[380px] app-candle-flame",
+        style: {
+          "--flame-origin": "19% 56%",
+          "--decor-duration": "3s",
+          "--decor-delay": "-320ms",
+        } as CSSProperties,
       },
       {
         id: "top-right-clover1",
@@ -177,11 +198,25 @@ const LOOSE_STICKERS: Sticker[] = [
     id: "top-blueleaf",
     src: "/application/blueLeaf.svg",
     className: "absolute left-[-170px] top-[130px] w-[320px] rotate-6",
+    style: {
+      "--decor-enter-x": "-34px",
+      "--decor-enter-y": "16px",
+      "--decor-enter-rotate": "-7deg",
+      "--decor-duration": "1100ms",
+      "--decor-delay": "80ms",
+    } as CSSProperties,
   },
   {
     id: "left-darkleaf",
     src: "/application/darkLeaf.svg",
     className: "absolute left-[-330px] bottom-[-90px] w-[650px]",
+    style: {
+      "--decor-enter-x": "-40px",
+      "--decor-enter-y": "22px",
+      "--decor-enter-rotate": "-4deg",
+      "--decor-duration": "1250ms",
+      "--decor-delay": "220ms",
+    } as CSSProperties,
   },
   {
     id: "left-clover",
@@ -194,8 +229,21 @@ const LOOSE_STICKERS: Sticker[] = [
     src: "/application/darkLeaf.svg",
     className:
       "absolute right-[-280px] bottom-[170px] w-[550px] scale-x-[-1] rotate-[-30deg] z-10",
+    style: {
+      "--decor-enter-x": "38px",
+      "--decor-enter-y": "18px",
+      "--decor-enter-rotate": "5deg",
+      "--decor-duration": "1200ms",
+      "--decor-delay": "160ms",
+    } as CSSProperties,
   },
 ];
+
+const ENTERING_STICKER_IDS = new Set([
+  "top-blueleaf",
+  "left-darkleaf",
+  "right-darkleaf",
+]);
 
 const BACKDROP =
   "radial-gradient(120% 100% at 50% -10%, #241C6B 0%, #0B0730 55%, #05041C 100%)";
@@ -219,10 +267,57 @@ const COLUMNS: Column[] = [
 ];
 
 export default function Background() {
+  const candlesRef = useRef<HTMLImageElement>(null);
+  const hoveredCandleRef = useRef<"small" | "large" | null>(null);
+  const [hoveredCandle, setHoveredCandle] = useState<
+    "small" | "large" | null
+  >(null);
+
+  useEffect(() => {
+    function updateCandleHover(event: PointerEvent) {
+      if (event.pointerType === "touch") return;
+
+      const bounds = candlesRef.current?.getBoundingClientRect();
+      let nextHoveredCandle: "small" | "large" | null = null;
+
+      if (bounds) {
+        const x = ((event.clientX - bounds.left) / bounds.width) * 397;
+        const y = ((event.clientY - bounds.top) / bounds.height) * 227;
+
+        if (x >= 35 && x <= 115 && y >= 74 && y <= 227) {
+          nextHoveredCandle = "small";
+        } else if (x >= 235 && x <= 330 && y >= 50 && y <= 227) {
+          nextHoveredCandle = "large";
+        }
+      }
+
+      if (hoveredCandleRef.current !== nextHoveredCandle) {
+        hoveredCandleRef.current = nextHoveredCandle;
+        setHoveredCandle(nextHoveredCandle);
+      }
+    }
+
+    function clearCandleHover() {
+      if (hoveredCandleRef.current) {
+        hoveredCandleRef.current = null;
+        setHoveredCandle(null);
+      }
+    }
+
+    window.addEventListener("pointermove", updateCandleHover, { passive: true });
+    window.addEventListener("blur", clearCandleHover);
+
+    return () => {
+      window.removeEventListener("pointermove", updateCandleHover);
+      window.removeEventListener("blur", clearCandleHover);
+    };
+  }, []);
+
   return (
     <div
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
+      data-candle-hovered={hoveredCandle ?? undefined}
       style={{ background: BACKDROP }}
     >
       {COLUMNS.map((column) => (
@@ -244,10 +339,19 @@ export default function Background() {
           {cluster.stickers.map((sticker) => (
             <img
               key={sticker.id}
+              ref={sticker.id === "candles" ? candlesRef : undefined}
+              data-candle-id={
+                sticker.id === "candle-flame-small"
+                  ? "small"
+                  : sticker.id === "candle-flame-large"
+                    ? "large"
+                    : undefined
+              }
               src={sticker.src}
               alt=""
               draggable="false"
               className={`${sticker.className} max-w-none select-none`}
+              style={sticker.style}
             />
           ))}
         </div>
@@ -258,7 +362,10 @@ export default function Background() {
           src={sticker.src}
           alt=""
           draggable="false"
-          className={`${sticker.className} max-w-none select-none`}
+          className={`${sticker.className} max-w-none select-none${
+            ENTERING_STICKER_IDS.has(sticker.id) ? " decor-leaf-enter" : ""
+          }`}
+          style={sticker.style}
         />
       ))}
     </div>

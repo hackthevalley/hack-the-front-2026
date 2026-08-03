@@ -191,6 +191,7 @@ export const authBackgroundLayers: readonly AuthBackgroundLayer[] = [
     width: 117.852,
     height: 117.852,
     zIndex: 16,
+    twinkle: { duration: "2.9s", delay: "-2.1s", min: 0.46, scaleMax: 1.1, mode: "breathe" },
   },
   {
     id: "glow-right-middle-small",
@@ -221,6 +222,7 @@ export const authBackgroundLayers: readonly AuthBackgroundLayer[] = [
     width: 49.5455,
     height: 49.5455,
     zIndex: 19,
+    twinkle: { duration: "2.3s", delay: "-0.8s", min: 0.45, scaleMax: 1.12, mode: "breathe" },
   },
   {
     id: "glow-right-upper-tiny",
@@ -231,6 +233,7 @@ export const authBackgroundLayers: readonly AuthBackgroundLayer[] = [
     width: 38.5455,
     height: 38.5455,
     zIndex: 20,
+    twinkle: { duration: "2.0s", delay: "-1.4s", min: 0.36, scaleMax: 1.18, mode: "breathe" },
   },
   {
     id: "glow-right-lower",
@@ -241,6 +244,7 @@ export const authBackgroundLayers: readonly AuthBackgroundLayer[] = [
     width: 49.5455,
     height: 49.5455,
     zIndex: 21,
+    twinkle: { duration: "3.4s", delay: "-2.7s", min: 0.42, scaleMax: 1.12, mode: "breathe" },
   },
   {
     id: "glow-right-upper",
@@ -251,6 +255,7 @@ export const authBackgroundLayers: readonly AuthBackgroundLayer[] = [
     width: 49.5455,
     height: 49.5455,
     zIndex: 22,
+    twinkle: { duration: "3.1s", delay: "-2.4s", min: 0.4, scaleMax: 1.14, mode: "breathe" },
   },
   {
     id: "glow-left-upper",
@@ -261,6 +266,7 @@ export const authBackgroundLayers: readonly AuthBackgroundLayer[] = [
     width: 47.5455,
     height: 47.5455,
     zIndex: 23,
+    twinkle: { duration: "2.6s", delay: "-1.9s", min: 0.42, scaleMax: 1.14, mode: "breathe" },
   },
   {
     id: "sparkle-right",
@@ -272,6 +278,7 @@ export const authBackgroundLayers: readonly AuthBackgroundLayer[] = [
     height: 111,
     transform: "rotate(9.49deg)",
     zIndex: 24,
+    twinkle: { duration: "2.5s", delay: "-0.6s", min: 0.22, scaleMax: 1.05, spin: "10deg" },
   },
   {
     id: "sparkle-left",
@@ -283,5 +290,6 @@ export const authBackgroundLayers: readonly AuthBackgroundLayer[] = [
     height: 82.1287,
     transform: "rotate(-20.84deg)",
     zIndex: 25,
+    twinkle: { duration: "3.2s", delay: "-1.1s", min: 0.26, scaleMax: 1.05, spin: "-8deg" },
   },
 ];

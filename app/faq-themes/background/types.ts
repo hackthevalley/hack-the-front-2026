@@ -9,6 +9,14 @@ export type FaqThemesVisibleBounds = {
   height: number;
 };
 
+export type FaqThemesPulse = {
+  duration: string;
+  delay: string;
+  min: number;
+  glow: string;
+  color: string;
+};
+
 export type FaqThemesSceneLayer = {
   id: string;
   figmaId: string;
@@ -22,5 +30,6 @@ export type FaqThemesSceneLayer = {
   plane: FaqThemesScenePlane;
   rotation?: number;
   visibleBounds?: FaqThemesVisibleBounds;
+  pulse?: FaqThemesPulse;
 };
 
