@@ -276,7 +276,7 @@ function Shell({
     <div className="relative mx-auto max-w-[1512px]">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute overflow-hidden transition-[inset,border-radius,box-shadow,backdrop-filter,background] duration-300 ease-out"
+        className="pointer-events-none absolute overflow-hidden"
         style={{
           left: `${-shellOutsetX}px`,
           right: `${-shellOutsetX}px`,
@@ -298,7 +298,7 @@ function Shell({
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute overflow-hidden transition-[inset,border-radius,opacity] duration-300 ease-out"
+        className="pointer-events-none absolute overflow-hidden"
         style={{
           left: `${-shellOutsetX}px`,
           right: `${-shellOutsetX}px`,
@@ -324,6 +324,7 @@ export default function HomeNavbar({ items = DEFAULT_ITEMS }: HomeNavbarProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const shellScrollYRef = useRef(0);
   const lastScrollYRef = useRef(0);
   const upwardTravelRef = useRef(0);
   const downwardTravelRef = useRef(0);
@@ -334,13 +335,26 @@ export default function HomeNavbar({ items = DEFAULT_ITEMS }: HomeNavbarProps) {
 
   useEffect(() => {
     lastScrollYRef.current = window.scrollY;
-    setScrollY(window.scrollY);
+    const initialShellScrollY = Math.min(
+      window.scrollY,
+      SHELL_BLEND_DISTANCE,
+    );
+    shellScrollYRef.current = initialShellScrollY;
+    setScrollY(initialShellScrollY);
+    let frameId: number | null = null;
 
-    const handleScroll = () => {
+    const updateFromScroll = () => {
+      frameId = null;
       const currentScrollY = window.scrollY;
       const deltaY = currentScrollY - lastScrollYRef.current;
 
-      setScrollY(currentScrollY);
+      // The shell is visually complete after this point. Keeping the state
+      // capped prevents the navbar from rerendering for the rest of the page.
+      const nextShellScrollY = Math.min(currentScrollY, SHELL_BLEND_DISTANCE);
+      if (shellScrollYRef.current !== nextShellScrollY) {
+        shellScrollYRef.current = nextShellScrollY;
+        setScrollY(nextShellScrollY);
+      }
 
       if (isMenuOpen) {
         setIsVisible(true);
@@ -388,8 +402,19 @@ export default function HomeNavbar({ items = DEFAULT_ITEMS }: HomeNavbarProps) {
       lastScrollYRef.current = currentScrollY;
     };
 
+    const handleScroll = () => {
+      if (frameId === null) {
+        frameId = window.requestAnimationFrame(updateFromScroll);
+      }
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+      }
+    };
   }, [isMenuOpen]);
 
   useEffect(() => {
