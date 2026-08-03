@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useAuth } from "@/components/providers/AuthProvider";
 import Button from "@/components/ui/Button";
 import { apiFetch } from "@/lib/apiClient";
@@ -50,33 +49,15 @@ function isPastApplying(token: string): Promise<boolean> {
 }
 
 export default function HomeApplyButton() {
-  const { isAuthReady, token } = useAuth();
-  const [goesToDashboard, setGoesToDashboard] = useState(false);
-
-  useEffect(() => {
-    if (!isAuthReady || !token) {
-      setGoesToDashboard(false);
-      return;
-    }
-
-    const authenticatedToken = token;
-    let cancelled = false;
-
-    void isPastApplying(authenticatedToken).then((result) => {
-      if (!cancelled) setGoesToDashboard(result);
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [isAuthReady, token]);
+  const { isAuthReady, isAuthenticated } = useAuth();
+  const showDashboard = isAuthReady && isAuthenticated;
 
   return (
     <Button
-      text={goesToDashboard ? "Go to Dashboard" : "Apply Now"}
+      text={showDashboard ? "View Dashboard" : "Apply Now"}
       width="100%"
       aspectRatio="206 / 72"
-      href={goesToDashboard ? "/dashboard" : "/login"}
+      href={showDashboard ? "/dashboard" : "/login"}
     />
   );
 }

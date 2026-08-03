@@ -3,8 +3,6 @@
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import IconLink from "@/components/ui/IconLink";
-import MaskIcon from "@/components/ui/MaskIcon";
 
 export type HomeNavItem = {
   key: string;
@@ -41,33 +39,6 @@ const MOBILE_SHELL_RADIUS = 14;
 const MOBILE_SHELL_SIDE_PADDING = 4;
 const MOBILE_SHELL_TOP_PADDING = 6;
 
-const SOCIAL_LINKS = [
-  {
-    key: "instagram",
-    label: "Instagram",
-    href: "https://www.instagram.com/hackthevalley/",
-    src: "/icons/instagram.svg",
-    width: 30,
-    height: 30,
-  },
-  {
-    key: "linkedin",
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/company/hack-the-valley/",
-    src: "/icons/linkedin.svg",
-    width: 25,
-    height: 25,
-  },
-  {
-    key: "email",
-    label: "Email us",
-    href: "mailto:hello@hackthevalley.io",
-    src: "/icons/email.svg",
-    width: 30,
-    height: 30,
-  },
-] as const;
-
 type HomeNavbarProps = {
   items?: readonly HomeNavItem[];
 };
@@ -96,38 +67,6 @@ function MlhTrustBadge({ fixed = false }: { fixed?: boolean }) {
         className="block w-full"
       />
     </a>
-  );
-}
-
-function SocialLinks({
-  className = "",
-  onLinkClick,
-  showMlhBadge = false,
-}: {
-  className?: string;
-  onLinkClick?: () => void;
-  showMlhBadge?: boolean;
-}) {
-  return (
-    <div className={className}>
-      {SOCIAL_LINKS.map((link) => (
-        <span key={link.key} onClick={onLinkClick}>
-          <IconLink
-            href={link.href}
-            label={link.label}
-            icon={
-              <MaskIcon
-                src={link.src}
-                width={link.width}
-                height={link.height}
-                className="text-white transition-colors duration-150 group-hover:text-zinc-300"
-              />
-            }
-          />
-        </span>
-      ))}
-      {showMlhBadge ? <MlhTrustBadge /> : null}
-    </div>
   );
 }
 
@@ -236,18 +175,14 @@ function NavBarFrame({
 }) {
   return (
     <nav className="mx-auto flex h-[72px] w-full max-w-[1512px] items-center justify-between gap-4 px-4 text-white md:h-[123.2548828125px] md:gap-6 md:px-[clamp(24px,7.9365vw,120px)]">
-      <div className="flex min-w-0 items-center gap-4 md:gap-[clamp(18px,2.2vw,34px)]">
-        <LogoButton onClick={onLogoClick} />
+      <LogoButton onClick={onLogoClick} />
 
-        <SectionLinks
-          items={items}
-          onSectionClick={onSectionClick}
-          className="hidden flex-wrap items-center gap-x-[clamp(14px,1.8vw,28px)] gap-y-3 md:flex"
-          itemClassName="font-figtree text-[clamp(1rem,1.25vw,1.25rem)] font-semibold tracking-[-0.01em] text-white/88"
-        />
-      </div>
-
-      <SocialLinks className="mr-[92px] hidden shrink-0 items-center gap-1 text-zinc-500 dark:text-zinc-400 sm:gap-5 md:flex" />
+      <SectionLinks
+        items={items}
+        onSectionClick={onSectionClick}
+        className="mr-[112.058px] hidden shrink-0 items-center gap-10 md:flex"
+        itemClassName="font-inter text-sm font-semibold text-white"
+      />
 
       <MenuButton isOpen={isMenuOpen} onClick={onMenuToggle} />
     </nav>
@@ -257,12 +192,10 @@ function NavBarFrame({
 function MobileMenuOverlay({
   isOpen,
   items,
-  onClose,
   onSectionClick,
 }: {
   isOpen: boolean;
   items: readonly HomeNavItem[];
-  onClose: () => void;
   onSectionClick: (item: HomeNavItem) => void;
 }) {
   return (
@@ -288,11 +221,7 @@ function MobileMenuOverlay({
 
           <div className="mb-4 mt-12 h-px w-24 bg-white/12" />
 
-          <SocialLinks
-            className="flex items-center justify-center gap-5 text-zinc-500"
-            onLinkClick={onClose}
-            showMlhBadge
-          />
+          <MlhTrustBadge />
         </div>
       </div>
     </div>
@@ -347,7 +276,7 @@ function Shell({
     <div className="relative mx-auto max-w-[1512px]">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute overflow-hidden transition-[inset,border-radius,box-shadow,backdrop-filter,background] duration-300 ease-out"
+        className="pointer-events-none absolute overflow-hidden"
         style={{
           left: `${-shellOutsetX}px`,
           right: `${-shellOutsetX}px`,
@@ -369,7 +298,7 @@ function Shell({
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute overflow-hidden transition-[inset,border-radius,opacity] duration-300 ease-out"
+        className="pointer-events-none absolute overflow-hidden"
         style={{
           left: `${-shellOutsetX}px`,
           right: `${-shellOutsetX}px`,
@@ -395,6 +324,7 @@ export default function HomeNavbar({ items = DEFAULT_ITEMS }: HomeNavbarProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const shellScrollYRef = useRef(0);
   const lastScrollYRef = useRef(0);
   const upwardTravelRef = useRef(0);
   const downwardTravelRef = useRef(0);
@@ -405,13 +335,26 @@ export default function HomeNavbar({ items = DEFAULT_ITEMS }: HomeNavbarProps) {
 
   useEffect(() => {
     lastScrollYRef.current = window.scrollY;
-    setScrollY(window.scrollY);
+    const initialShellScrollY = Math.min(
+      window.scrollY,
+      SHELL_BLEND_DISTANCE,
+    );
+    shellScrollYRef.current = initialShellScrollY;
+    setScrollY(initialShellScrollY);
+    let frameId: number | null = null;
 
-    const handleScroll = () => {
+    const updateFromScroll = () => {
+      frameId = null;
       const currentScrollY = window.scrollY;
       const deltaY = currentScrollY - lastScrollYRef.current;
 
-      setScrollY(currentScrollY);
+      // The shell is visually complete after this point. Keeping the state
+      // capped prevents the navbar from rerendering for the rest of the page.
+      const nextShellScrollY = Math.min(currentScrollY, SHELL_BLEND_DISTANCE);
+      if (shellScrollYRef.current !== nextShellScrollY) {
+        shellScrollYRef.current = nextShellScrollY;
+        setScrollY(nextShellScrollY);
+      }
 
       if (isMenuOpen) {
         setIsVisible(true);
@@ -459,8 +402,19 @@ export default function HomeNavbar({ items = DEFAULT_ITEMS }: HomeNavbarProps) {
       lastScrollYRef.current = currentScrollY;
     };
 
+    const handleScroll = () => {
+      if (frameId === null) {
+        frameId = window.requestAnimationFrame(updateFromScroll);
+      }
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+      }
+    };
   }, [isMenuOpen]);
 
   useEffect(() => {
@@ -577,7 +531,6 @@ export default function HomeNavbar({ items = DEFAULT_ITEMS }: HomeNavbarProps) {
       <MobileMenuOverlay
         isOpen={isMenuOpen}
         items={items}
-        onClose={() => setIsMenuOpen(false)}
         onSectionClick={handleOverlaySectionClick}
       />
     </>
