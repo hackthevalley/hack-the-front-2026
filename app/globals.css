@@ -264,21 +264,7 @@ body {
     min-width: 102px;
     overflow: visible;
     justify-content: flex-start;
-    gap: 9px !important;
-  }
-
-  .dashboard-portal-stage .auth-navbar-end-box > button > span:first-child {
-    width: 20px !important;
-    height: 20px !important;
-  }
-
-  .dashboard-portal-stage
-    .auth-navbar-end-box
-    > button
-    > span:first-child
-    > span {
-    width: 110.68% !important;
-    height: 55.34% !important;
+    padding-left: 29px !important;
   }
 
   .dashboard-portal-stage .auth-navbar-end-box > button > span:last-child {
