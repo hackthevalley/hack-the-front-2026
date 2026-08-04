@@ -33,7 +33,6 @@ const SHELL_BLEND_DISTANCE = 280;
 const MAX_SHELL_INSET = 16;
 const MAX_SHELL_RADIUS = 28;
 const MAX_SHELL_ALPHA = 0.72;
-const MAX_SHELL_BLUR = 10;
 const MAX_SHADOW_ALPHA = 0.22;
 const MOBILE_SHELL_RADIUS = 14;
 const MOBILE_SHELL_SIDE_PADDING = 4;
@@ -262,7 +261,6 @@ function Shell({
   const shellInset = MAX_SHELL_INSET * shellProgress;
   const shellRadius = MAX_SHELL_RADIUS * shellProgress;
   const shellAlpha = MAX_SHELL_ALPHA * shellProgress;
-  const shellBlur = MAX_SHELL_BLUR * shellProgress;
   const shellShadowAlpha = MAX_SHADOW_ALPHA * shellProgress;
   const shellTopPadding = MOBILE_SHELL_TOP_PADDING * shellProgress;
   const shellSidePadding = MOBILE_SHELL_SIDE_PADDING * shellProgress;
@@ -288,8 +286,6 @@ function Shell({
             shellShadowAlpha > 0
               ? `0 18px 40px rgba(0, 0, 0, ${shellShadowAlpha})`
               : "none",
-          backdropFilter: `blur(${shellBlur}px)`,
-          WebkitBackdropFilter: `blur(${shellBlur}px)`,
           maskImage:
             "linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 52%, rgba(0,0,0,.96) 64%, rgba(0,0,0,.88) 74%, rgba(0,0,0,.72) 82%, rgba(0,0,0,.48) 89%, rgba(0,0,0,.22) 95%, transparent 100%)",
           WebkitMaskImage:

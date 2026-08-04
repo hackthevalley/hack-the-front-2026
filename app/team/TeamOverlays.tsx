@@ -396,10 +396,29 @@ export default function TeamOverlays({
 }: {
   teamMembers: Record<string, TeamMember>;
 }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isMarqueeActive, setIsMarqueeActive] = useState(false);
   const [band1, band2, band3] = SHELF_ROW_BANDS;
 
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsMarqueeActive(entry?.isIntersecting ?? false),
+      { rootMargin: "300px 0px" },
+    );
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <>
+    <div
+      ref={containerRef}
+      className="absolute inset-0"
+      data-team-marquee-active={isMarqueeActive}
+    >
       <DesignBox
         designWidth={TEAM_DESIGN_WIDTH}
         designHeight={TEAM_DESIGN_HEIGHT}
@@ -446,6 +465,6 @@ export default function TeamOverlays({
         teamMembers={teamMembers}
         props={SHELF_PROPS.shelf3}
       />
-    </>
+    </div>
   );
 }

@@ -6,7 +6,13 @@ export default function DesktopHomeSection() {
   return (
     <section aria-labelledby="home-title" className="hidden md:block">
       <HomeBackground>
-        <div className="pointer-events-none absolute left-0 top-0 z-[9] h-[10.87%] w-full bg-[rgba(14,22,72,0.35)] blur-[50px]" />
+        <div
+          className="pointer-events-none absolute left-0 top-0 z-[9] h-[10.87%] w-full"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(14,22,72,0.48) 0%, rgba(14,22,72,0.3) 58%, transparent 100%)",
+          }}
+        />
 
         <div
           className="absolute z-20 flex flex-col items-start"

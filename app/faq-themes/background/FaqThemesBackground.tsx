@@ -111,6 +111,7 @@ export default function FaqThemesBackground({
           aspectRatio: `${FAQ_THEMES_DESIGN_WIDTH} / ${FAQ_THEMES_DESIGN_HEIGHT}`,
           background: faqBackground,
           containerType: "inline-size",
+          contentVisibility: "auto",
         }}
       >
         <div
@@ -141,6 +142,7 @@ export default function FaqThemesBackground({
           aspectRatio: `${FAQ_THEMES_DESIGN_WIDTH} / ${FAQ_THEMES_DESIGN_HEIGHT}`,
           background: faqBackground,
           containerType: "inline-size",
+          contentVisibility: "auto",
         }}
       >
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0">

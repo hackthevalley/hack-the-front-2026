@@ -137,7 +137,13 @@ export default function MobileHomeSection() {
           <MobileSceneLayer key={layer.id} layerId={layer.id} />
         ))}
 
-        <div className="pointer-events-none absolute left-0 top-0 z-[9] h-[10.87%] w-full bg-[rgba(14,22,72,0.35)] blur-[50px]" />
+        <div
+          className="pointer-events-none absolute left-0 top-0 z-[9] h-[10.87%] w-full"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(14,22,72,0.48) 0%, rgba(14,22,72,0.3) 58%, transparent 100%)",
+          }}
+        />
 
         <DesignBox
           designWidth={HOME_BACKGROUND_DESIGN_WIDTH}

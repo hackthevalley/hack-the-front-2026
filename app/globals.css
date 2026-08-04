@@ -622,6 +622,7 @@ body {
   animation-duration: var(--marquee-duration);
   animation-timing-function: linear;
   animation-iteration-count: infinite;
+  animation-play-state: paused;
 }
 
 .team-shelf-marquee-item--right {
@@ -630,6 +631,10 @@ body {
 
 .team-shelf-marquee-item--left {
   animation-name: team-shelf-scroll-left;
+}
+
+[data-team-marquee-active="true"] .team-shelf-marquee-item {
+  animation-play-state: running;
 }
 
 .team-shelf-tooltip {

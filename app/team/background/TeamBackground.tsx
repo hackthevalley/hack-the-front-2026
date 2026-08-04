@@ -19,6 +19,7 @@ export default function TeamBackground({ children }: TeamBackgroundProps) {
         style={{
           aspectRatio: `${TEAM_DESIGN_WIDTH} / ${TEAM_DESIGN_HEIGHT}`,
           background: "#040A15",
+          contentVisibility: "auto",
         }}
       >
       <div

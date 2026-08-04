@@ -36,6 +36,7 @@ export default function SponsorsBackground({
           background:
             "linear-gradient(0deg, #040A15 88.61%, #080E32 109.06%)",
           containerType: "inline-size",
+          contentVisibility: "auto",
         }}
       >
         <div className="pointer-events-none absolute inset-0 hidden overflow-hidden md:block">
