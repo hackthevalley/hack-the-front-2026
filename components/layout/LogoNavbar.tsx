@@ -1,4 +1,5 @@
 import Link from "next/link";
+import NavbarLogo from "@/components/layout/NavbarLogo";
 
 /**
  * Minimal top navbar with just the Hack the Valley logo in the top-left
@@ -8,15 +9,11 @@ import Link from "next/link";
 type LogoNavbarProps = {
   className?: string;
   navClassName?: string;
-  logoWidth?: number;
-  logoHeight?: number;
 };
 
 export default function LogoNavbar({
   className = "",
   navClassName = "",
-  logoWidth = 40,
-  logoHeight = 40,
 }: LogoNavbarProps) {
   return (
     <header className={`w-full ${className}`}>
@@ -26,16 +23,9 @@ export default function LogoNavbar({
         <Link
           href="/"
           aria-label="Hack the Valley — home"
-          className="inline-flex sparkle-icon"
+          className="inline-flex h-10 w-10 items-center justify-center sparkle-icon"
         >
-          <img
-            src="/icons/htv-logo.svg"
-            width={logoWidth}
-            height={logoHeight}
-            alt=""
-            aria-hidden="true"
-            className="block shrink-0 transition-opacity duration-150 hover:opacity-80"
-          />
+          <NavbarLogo />
         </Link>
       </nav>
     </header>

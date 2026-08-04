@@ -10,7 +10,6 @@
 
 .sparkle-icon {
   position: relative;
-  transition: transform 0.3s ease;
 }
 
 .sparkle-icon::before,
@@ -34,14 +33,20 @@
   right: -4px;
 }
 
-.sparkle-icon:hover {
-  transform: scale(1.1);
-}
+@media (hover: hover) and (pointer: fine) {
+  .sparkle-icon {
+    transition: transform 0.3s ease;
+  }
 
-.sparkle-icon:hover::before {
-  animation: sparkle-a 0.7s ease forwards;
-}
+  .sparkle-icon:hover {
+    transform: scale(1.1);
+  }
 
-.sparkle-icon:hover::after {
-  animation: sparkle-b 0.8s ease 0.1s forwards;
+  .sparkle-icon:hover::before {
+    animation: sparkle-a 0.7s ease forwards;
+  }
+
+  .sparkle-icon:hover::after {
+    animation: sparkle-b 0.8s ease 0.1s forwards;
+  }
 }

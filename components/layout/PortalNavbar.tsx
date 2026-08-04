@@ -1,4 +1,5 @@
 import Link from "next/link";
+import NavbarLogo from "@/components/layout/NavbarLogo";
 
 export default function PortalNavbar() {
   return (
@@ -9,14 +10,7 @@ export default function PortalNavbar() {
           aria-label="Hack the Valley — home"
           className="sparkle-icon inline-flex h-10 w-10 shrink-0 items-center justify-center md:h-[45px] md:w-[45px]"
         >
-          <img
-            src="/icons/htv-logo.svg"
-            width={45}
-            height={45}
-            alt=""
-            aria-hidden="true"
-            className="block shrink-0 transition-opacity duration-150 hover:opacity-80"
-          />
+          <NavbarLogo />
         </Link>
       </nav>
     </header>

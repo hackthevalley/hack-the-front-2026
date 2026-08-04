@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import NavbarLogo from "@/components/layout/NavbarLogo";
 
 export type HomeNavItem = {
   key: string;
@@ -147,14 +148,7 @@ function LogoButton({ onClick }: { onClick: () => void }) {
       aria-label="Hack the Valley home"
       className="inline-flex h-10 w-10 shrink-0 items-center justify-center sparkle-icon md:h-[45px] md:w-[45px]"
     >
-      <img
-        src="/icons/htv-logo.svg"
-        width={45}
-        height={45}
-        alt=""
-        aria-hidden="true"
-        className="block shrink-0 transition-opacity duration-150 hover:opacity-80"
-      />
+      <NavbarLogo />
     </button>
   );
 }
@@ -501,15 +495,14 @@ export default function HomeNavbar({ items = DEFAULT_ITEMS }: HomeNavbarProps) {
   };
 
   const shellProgress = clamp(scrollY / SHELL_BLEND_DISTANCE, 0, 1);
-  const translateY = isVisible
-    ? 0
-    : -(Math.max(MOBILE_NAVBAR_HEIGHT, DESKTOP_NAVBAR_HEIGHT) + 24);
+  const hiddenTop =
+    -(Math.max(MOBILE_NAVBAR_HEIGHT, DESKTOP_NAVBAR_HEIGHT) + 24);
 
   return (
     <>
       <header
-        className="fixed inset-x-0 top-0 z-[80] w-full transition-transform duration-300 ease-out"
-        style={{ transform: `translateY(${translateY}px)` }}
+        className="fixed inset-x-0 z-[80] w-full transition-[top] duration-300 ease-out"
+        style={{ top: isVisible ? 0 : hiddenTop }}
       >
         <MlhTrustBadge fixed />
 
