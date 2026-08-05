@@ -4,7 +4,7 @@ import SectionHeading from "./SectionHeading";
 
 export default function WelcomeSection({ children }: { children: ReactNode }) {
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-8 text-center">
+    <div className="flex h-full -translate-y-6 flex-col items-center justify-center gap-8 text-center md:-translate-y-10">
       <Image
         src="/application/stamp.svg"
         alt=""
