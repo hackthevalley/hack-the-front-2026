@@ -142,6 +142,7 @@ function FileUpload(
         <input
           id={fieldId}
           type="file"
+          required={required}
           accept={accept}
           onChange={handleChange}
           className="sr-only"

@@ -17,7 +17,7 @@ const ReviewSectionLeft = React.forwardRef<SectionHandle, ReviewSectionLeftProps
     }));
 
     return (
-      <div className="mt-[42px] flex flex-col gap-3">
+      <div className="flex flex-col gap-3">
         <SectionHeading className="text-xl">Review</SectionHeading>
         <ReviewGroupList groups={LEFT_GROUPS} formData={formData} />
       </div>
