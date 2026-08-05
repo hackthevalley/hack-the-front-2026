@@ -49,13 +49,18 @@ export default function PortalBackButton({
         showDirectionIcon={showArrow}
         directionAppearance="plain"
         directionIconSrc="/auth/back-chevron.svg"
-        directionIconColor={tone === "danger" ? "#ff6068" : undefined}
+        directionIconColor={tone === "danger" ? "#e05359" : undefined}
         directionIconSize="77.871cqh"
         directionGap="17.778cqh"
+        directionTextClassName={
+          placement === "navbar-end"
+            ? "font-figtree text-[55.556cqh] font-normal leading-normal"
+            : undefined
+        }
         fontSize={placement === "navbar-end" ? "55.556cqh" : 37}
         onClick={onClick ?? (() => router.push(href))}
         className={`h-full w-full whitespace-nowrap ${
-          tone === "danger" ? "!text-[#ff6068]" : ""
+          tone === "danger" ? "!text-[#e05359]" : ""
         }`}
       />
     </DesignBox>
