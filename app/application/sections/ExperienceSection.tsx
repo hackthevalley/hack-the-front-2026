@@ -31,8 +31,8 @@ const ExperienceSection = React.forwardRef<SectionHandle, SectionProps<Experienc
     }
 
     return (
-      <div className="flex flex-col gap-6">
-        <SectionHeading>Experience Info</SectionHeading>
+      <div className="flex flex-col gap-1">
+        <SectionHeading className="mb-3 text-2xl">Experience Info</SectionHeading>
 
         <TextField
           ref={hackathonCountRef}

@@ -108,10 +108,10 @@ export const teamMembers: Record<string, TeamMember> = {
     linkedinUrl: "https://www.linkedin.com/in/svbernal/",
   },
   "shelf-2-jar-5": {
-    id: "james",
-    name: "James Liang",
+    id: "abigail",
+    name: "Abigail Liang",
     role: "Co-Director of Sponsorships",
-    avatarSrc: resolvePhoto("james"),
+    avatarSrc: resolvePhoto("abigail"),
     linkedinUrl: "https://www.linkedin.com/in/james-liang-/",
   },
   "shelf-2-jar-6": {

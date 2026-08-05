@@ -48,6 +48,7 @@ const PortfolioSection = React.forwardRef<SectionHandle, SectionProps<PortfolioD
           ref={resumeRef}
           name="Attach Resume"
           placeholder="Attach Resume"
+          required
           accept=".pdf,application/pdf"
           maxSizeBytes={5 * 1024 * 1024}
           value={value.resume}

@@ -38,7 +38,7 @@ export default function SectionNavbar({
               <li key={group.id} className="flex items-center gap-1 lg:gap-2">
                 <span
                   aria-hidden="true"
-                  className={`hidden h-0 w-0 shrink-0 border-y-[7px] border-l-[9px] border-y-transparent transition-opacity lg:block ${
+                  className={`hidden h-0 w-0 shrink-0 border-y-[9px] border-l-[12px] border-y-transparent transition-opacity lg:block ${
                     isActive ? "border-l-[#DF63DC] opacity-100" : "opacity-0"
                   }`}
                 />
