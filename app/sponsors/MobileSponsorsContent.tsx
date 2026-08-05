@@ -21,7 +21,7 @@ const TIER_STYLES: Record<
 
 export default function MobileSponsorsContent() {
   return (
-    <div className="relative z-10 px-4 pb-24 pt-20 md:hidden">
+    <div className="relative z-10 px-4 pb-24 pt-20 lg:hidden">
       <h1
         id="sponsors-title-mobile"
         className="m-0 text-center font-vcr text-[clamp(2.5rem,12vw,4rem)] font-normal leading-none text-white"
@@ -103,7 +103,7 @@ export default function MobileSponsorsContent() {
         <p className="mt-3 font-figtree text-sm font-bold italic min-[390px]:text-base">
           Send us an inquiry @ sponsorships@hackthevalley.io
         </p>
-        <div className="mt-7 flex justify-center">
+        <div className="mx-auto mt-7 w-full max-w-[13rem]">
           <SponsorCtaButton />
         </div>
       </div>

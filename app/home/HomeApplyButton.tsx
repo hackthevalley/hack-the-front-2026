@@ -51,12 +51,13 @@ function isPastApplying(token: string): Promise<boolean> {
 export default function HomeApplyButton() {
   const { isAuthReady, isAuthenticated } = useAuth();
   const showDashboard = isAuthReady && isAuthenticated;
+  const width = showDashboard ? 190 : 175;
 
   return (
     <Button
       text={showDashboard ? "View Dashboard" : "Apply Now"}
-      width="100%"
-      aspectRatio="206 / 72"
+      width={width}
+      aspectRatio={`${width} / 56`}
       href={showDashboard ? "/dashboard" : "/login"}
     />
   );

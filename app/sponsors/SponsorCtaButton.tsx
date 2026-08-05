@@ -13,7 +13,6 @@ export default function SponsorCtaButton({
     <Button
       className={className}
       text="Become a Sponsor"
-      width={206}
       onClick={() => {
         window.location.href = "mailto:sponsorships@hackthevalley.io";
       }}

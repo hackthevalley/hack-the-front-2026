@@ -29,7 +29,7 @@ export default function SponsorsBackground({
       }}
     >
       <div
-        className="relative left-1/2 -translate-x-1/2 overflow-visible max-md:!w-full max-md:!aspect-auto"
+        className="relative left-1/2 -translate-x-1/2 overflow-visible max-lg:!w-full max-lg:!aspect-auto"
         style={{
           width: resolvedStageWidth,
           aspectRatio: `${SPONSORS_DESIGN_WIDTH} / ${SPONSORS_DESIGN_HEIGHT}`,
@@ -39,7 +39,7 @@ export default function SponsorsBackground({
           contentVisibility: "auto",
         }}
       >
-        <div className="pointer-events-none absolute inset-0 hidden overflow-hidden md:block">
+        <div className="pointer-events-none absolute inset-0 hidden overflow-hidden lg:block">
           <div
             aria-hidden="true"
             className="absolute"
@@ -84,7 +84,7 @@ export default function SponsorsBackground({
         </div>
 
         <MobileSponsorsContent />
-        <div className="hidden md:contents">{children}</div>
+        <div className="hidden lg:contents">{children}</div>
       </div>
     </div>
   );

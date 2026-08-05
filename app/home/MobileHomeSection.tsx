@@ -238,7 +238,7 @@ export default function MobileHomeSection() {
 
           <div
             data-nav-target="apply"
-            className="pointer-events-auto mt-7 w-full max-w-[11.35rem]"
+            className="pointer-events-auto mt-7"
           >
             <HomeApplyButton />
           </div>
