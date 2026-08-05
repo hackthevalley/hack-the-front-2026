@@ -31,7 +31,7 @@ const ExperienceSection = React.forwardRef<SectionHandle, SectionProps<Experienc
     }
 
     return (
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2">
         <SectionHeading>Experience Info</SectionHeading>
 
         <TextField
