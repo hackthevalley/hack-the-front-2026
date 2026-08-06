@@ -106,6 +106,8 @@ function Dropdown(
     top: number;
     left: number;
     width: number;
+    maxHeight: number;
+    opensUpward: boolean;
   } | null>(null);
 
   const fieldId = React.useId();
@@ -154,10 +156,24 @@ function Dropdown(
     function updateRect() {
       const rect = triggerRef.current?.getBoundingClientRect();
       if (rect) {
+        const viewportGutter = 12;
+        const menuGap = 6;
+        const preferredMaxHeight = 240;
+        const spaceBelow = window.innerHeight - rect.bottom - viewportGutter;
+        const spaceAbove = rect.top - viewportGutter;
+        const opensUpward =
+          spaceBelow < preferredMaxHeight && spaceAbove > spaceBelow;
+        const availableSpace = opensUpward ? spaceAbove : spaceBelow;
+
         setListRect({
-          top: rect.bottom + 6,
+          top: opensUpward ? rect.top - menuGap : rect.bottom + menuGap,
           left: rect.left,
           width: rect.width,
+          maxHeight: Math.max(
+            0,
+            Math.min(preferredMaxHeight, availableSpace - menuGap),
+          ),
+          opensUpward,
         });
       }
     }
@@ -336,12 +352,16 @@ function Dropdown(
               aria-multiselectable={multiple || undefined}
               aria-labelledby={fieldId}
               onKeyDown={handleKeyDown}
-              className="fixed z-20 max-h-60 overflow-y-auto rounded-[10px] border-2 border-transparent p-1.5 shadow-[0px_4px_10px_rgba(0,0,0,0.35)]"
+              className="fixed z-50 overflow-y-auto rounded-[10px] border-2 border-transparent p-1.5 shadow-[0px_4px_10px_rgba(0,0,0,0.35)]"
               style={{
                 background: BORDER_GRADIENT_BACKGROUND,
                 top: listRect.top,
                 left: listRect.left,
                 width: listRect.width,
+                maxHeight: listRect.maxHeight,
+                transform: listRect.opensUpward
+                  ? "translateY(-100%)"
+                  : undefined,
               }}
             >
               {options.map((option, index) => (
