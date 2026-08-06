@@ -221,8 +221,10 @@ export function ReviewGroupList({
                 key={row.label}
                 className="flex items-baseline justify-between gap-4 border-b border-white/10 py-0.5"
               >
-                <dt className="text-xs text-white/60">{row.label}</dt>
-                <dd className="text-right text-xs text-white">
+                <dt className="shrink-0 text-xs text-white/60">
+                  {row.label}
+                </dt>
+                <dd className="min-w-0 flex-1 text-right text-xs break-all text-white">
                   {row.get(formData)}
                 </dd>
               </div>

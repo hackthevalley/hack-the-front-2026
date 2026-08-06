@@ -54,7 +54,7 @@ export const COMBO_PLACEMENTS: ComboPlacement[] = [
   {
     character: "owl",
     accessory: "book",
-    left: 62,
+    left: 54,
     top: 50,
     width: 42,
     rotate: -4,
@@ -110,7 +110,7 @@ export const COMBO_PLACEMENTS: ComboPlacement[] = [
   {
     character: "raccoon",
     accessory: "book",
-    left: 0,
+    left: 6,
     top: 48,
     width: 42,
     rotate: 4,

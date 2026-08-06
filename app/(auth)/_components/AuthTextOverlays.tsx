@@ -268,7 +268,7 @@ export default function AuthTextOverlays() {
         designWidth={AUTH_BACKGROUND_DESIGN_WIDTH}
         designHeight={AUTH_BACKGROUND_DESIGN_HEIGHT}
         left={887}
-        top={661}
+        top={690}
         width={219}
         height={33}
         zIndex={40}
@@ -289,7 +289,7 @@ export default function AuthTextOverlays() {
         designWidth={AUTH_BACKGROUND_DESIGN_WIDTH}
         designHeight={AUTH_BACKGROUND_DESIGN_HEIGHT}
         left={408}
-        top={710.56}
+        top={733}
         width={203}
         height={72.716}
         zIndex={40}
@@ -313,7 +313,7 @@ export default function AuthTextOverlays() {
         designWidth={AUTH_BACKGROUND_DESIGN_WIDTH}
         designHeight={AUTH_BACKGROUND_DESIGN_HEIGHT}
         left={408}
-        top={801.64}
+        top={824.08}
         width={420}
         height={33}
         zIndex={40}
