@@ -229,7 +229,9 @@ function DashboardAvatar({
                   left: "13.09%",
                   top: "12.72%",
                   width: "66.61%",
-                  transform: "rotate(-35.07deg)",
+                  transform: placement.rotate
+                    ? `rotate(${placement.rotate}deg)`
+                    : undefined,
                 }
               : {
                   left: `${23.64 + placement.left * 0.7636}%`,

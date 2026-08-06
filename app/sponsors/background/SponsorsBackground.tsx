@@ -10,11 +10,13 @@ import {
 type SponsorsBackgroundProps = {
   children?: ReactNode;
   stageWidth?: string;
+  className?: string;
 };
 
 export default function SponsorsBackground({
   children,
   stageWidth,
+  className = "",
 }: SponsorsBackgroundProps) {
   const resolvedStageWidth =
     stageWidth ??
@@ -22,10 +24,9 @@ export default function SponsorsBackground({
 
   return (
     <div
-      className="relative min-h-dvh w-full overflow-visible"
+      className={`relative min-h-dvh w-full overflow-visible ${className}`}
       style={{
-        background:
-          "linear-gradient(0deg, #040A15 88.61%, #080E32 109.06%)",
+        background: "linear-gradient(0deg, #040A15 88.61%, #080E32 109.06%)",
       }}
     >
       <div
@@ -33,8 +34,7 @@ export default function SponsorsBackground({
         style={{
           width: resolvedStageWidth,
           aspectRatio: `${SPONSORS_DESIGN_WIDTH} / ${SPONSORS_DESIGN_HEIGHT}`,
-          background:
-            "linear-gradient(0deg, #040A15 88.61%, #080E32 109.06%)",
+          background: "linear-gradient(0deg, #040A15 88.61%, #080E32 109.06%)",
           containerType: "inline-size",
           contentVisibility: "auto",
         }}

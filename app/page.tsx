@@ -26,16 +26,16 @@ export default function Home() {
   const faqStageWidth = `max(100vw, calc(100dvh * ${HOME_BACKGROUND_DESIGN_WIDTH} / ${HOME_BACKGROUND_DESIGN_HEIGHT}))`;
 
   return (
-    <main className="relative w-full overflow-x-hidden bg-[#040142]">
+    <main className="relative w-full overflow-x-hidden bg-[#030712]">
       <HomeNavbar />
-      <HomeToFaqTransition className="pointer-events-none z-30" />
+      <HomeToFaqTransition className="pointer-events-none z-30 mt-6" />
 
       <div className="relative">
         <MobileHomeSection />
         <DesktopHomeSection />
       </div>
 
-      <section id="faq" aria-label="FAQ and themes" className="relative">
+      <section id="faq" aria-label="FAQ and themes" className="relative mt-6">
         <FaqThemesBackground>
           <DeferredFaqThemesContent />
         </FaqThemesBackground>
@@ -74,8 +74,8 @@ export default function Home() {
         className="relative"
         style={{ marginTop: "-2px" }}
       >
+        <FaqToSponsorsTransition className="pointer-events-none z-30 hidden lg:block" />
         <SponsorsBackground stageWidth={faqStageWidth}>
-          <FaqToSponsorsTransition className="pointer-events-none z-[2]" />
           <SponsorsPanels />
           <SponsorsTextOverlays />
         </SponsorsBackground>

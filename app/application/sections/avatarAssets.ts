@@ -59,7 +59,7 @@ export const COMBO_PLACEMENTS: ComboPlacement[] = [
     width: 42,
     rotate: -4,
   },
-  { character: "owl", accessory: "potion", left: 60, top: 48, width: 22 },
+  { character: "owl", accessory: "potion", left: 60, top: 48, width: 20 },
 
   // Bear — sits with front paws together, holding the potion centered low.
   {
@@ -84,9 +84,9 @@ export const COMBO_PLACEMENTS: ComboPlacement[] = [
   {
     character: "chipmunk",
     accessory: "hat",
-    left: 15,
-    top: -15,
-    width: 72.36,
+    left: 27,
+    top: 8,
+    width: 46,
   },
   {
     character: "chipmunk",
@@ -102,10 +102,10 @@ export const COMBO_PLACEMENTS: ComboPlacement[] = [
   {
     character: "raccoon",
     accessory: "hat",
-    left: -5,
-    top: -24,
-    width: 90,
-    rotate: -1,
+    left: 16,
+    top: 6,
+    width: 52,
+    rotate: -2,
   },
   {
     character: "raccoon",
@@ -120,8 +120,8 @@ export const COMBO_PLACEMENTS: ComboPlacement[] = [
     accessory: "potion",
     left: 36.95,
     top: 63.67,
-    width: 18.6,
-    rotate: 0.76,
+    width: 15,
+    rotate: 1,
   },
 ];
 

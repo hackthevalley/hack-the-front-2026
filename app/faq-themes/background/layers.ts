@@ -25,7 +25,7 @@ export const faqThemesSceneLayers = [
     top: 2047.5107,
     width: 308.5142,
     height: 1263.4893,
-    zIndex: 1,
+    zIndex: 92,
     plane: "foreground",
   },
   {
