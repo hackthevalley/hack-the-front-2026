@@ -53,7 +53,7 @@ function MlhTrustBadge({ fixed = false }: { fixed?: boolean }) {
       href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=white"
       target="_blank"
       rel="noopener noreferrer"
-      className={fixed ? "fixed top-0 z-[10000] hidden md:block" : "block"}
+      className={fixed ? "absolute top-0 z-[10000] hidden md:block" : "block"}
       style={{
         maxWidth: 100,
         minWidth: 60,
