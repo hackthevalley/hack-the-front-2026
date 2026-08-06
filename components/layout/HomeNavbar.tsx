@@ -146,7 +146,7 @@ function LogoButton({ onClick }: { onClick: () => void }) {
       type="button"
       onClick={onClick}
       aria-label="Hack the Valley home"
-      className="inline-flex h-10 w-10 shrink-0 items-center justify-center sparkle-icon md:h-[45px] md:w-[45px]"
+      className="inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center sparkle-icon md:h-[45px] md:w-[45px]"
     >
       <NavbarLogo />
     </button>
