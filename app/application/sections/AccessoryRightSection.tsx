@@ -77,58 +77,30 @@ const AccessoryRightSection = React.forwardRef<
         )}
 
         {avatar && displayedAccessory && placement && (
-          <Image
+          <div
             key={`${avatar.key}-${displayedAccessory.key}`}
-            src={displayedAccessory.src}
-            alt={displayedAccessory.label}
-            width={100}
-            height={100}
-            className={`pointer-events-none absolute h-auto select-none ${
-              isExiting ? "accessory-pop-out" : "accessory-pop-in"
-            }`}
+            className="pointer-events-none absolute h-auto select-none"
             style={{
               left: `${placement.left}%`,
               top: `${placement.top}%`,
               width: `${placement.width}%`,
-              "--accessory-rotate": `${placement.rotate ?? 0}deg`,
-            } as React.CSSProperties}
-          />
+              transform: placement.rotate
+                ? `rotate(${placement.rotate}deg)`
+                : undefined,
+            }}
+          >
+            <Image
+              src={displayedAccessory.src}
+              alt={displayedAccessory.label}
+              width={100}
+              height={100}
+              className={`h-auto w-full select-none ${
+                isExiting ? "accessory-pop-out" : "accessory-pop-in"
+              }`}
+            />
+          </div>
         )}
       </AvatarFrame>
-
-      <style jsx>{`
-        @keyframes accessory-pop-in {
-          0% {
-            transform: scale(0) rotate(var(--accessory-rotate, 0deg));
-            opacity: 0;
-          }
-          60% {
-            transform: scale(1.12) rotate(var(--accessory-rotate, 0deg));
-            opacity: 1;
-          }
-          100% {
-            transform: scale(1) rotate(var(--accessory-rotate, 0deg));
-            opacity: 1;
-          }
-        }
-        @keyframes accessory-pop-out {
-          0% {
-            transform: scale(1) rotate(var(--accessory-rotate, 0deg));
-            opacity: 1;
-          }
-          100% {
-            transform: scale(0.6) rotate(var(--accessory-rotate, 0deg));
-            opacity: 0;
-          }
-        }
-        .accessory-pop-in {
-          animation: accessory-pop-in 350ms cubic-bezier(0.34, 1.56, 0.64, 1)
-            forwards;
-        }
-        .accessory-pop-out {
-          animation: accessory-pop-out ${EXIT_DURATION_MS}ms ease-in forwards;
-        }
-      `}</style>
     </div>
   );
 });

@@ -145,13 +145,19 @@ export default function FaqThemesBackground({
           contentVisibility: "auto",
         }}
       >
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-0"
+        >
           <ScenePlane layers={rearSceneLayers} />
         </div>
 
         <div className="absolute inset-0 z-30">{children}</div>
 
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-20">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-20"
+        >
           <ScenePlane layers={foregroundSceneLayers} />
         </div>
 
