@@ -123,7 +123,7 @@ export const teamMembers: Record<string, TeamMember> = {
   },
   "shelf-2-jar-7": {
     id: "josephine",
-    name: "Josephine Thjia",
+    name: "Josephine Tjhia",
     role: "Sponsorships Coordinator",
     avatarSrc: resolvePhoto("josephine"),
     linkedinUrl: "https://www.linkedin.com/in/josephine-tjhia/",
