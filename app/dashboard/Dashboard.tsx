@@ -155,6 +155,20 @@ function MobileWoodenBoard() {
   );
 }
 
+// dashboard-avatar--right pairs with dashboard-right-foreground's >=768px
+// translateX rule in globals.css, keeping the owl/chipmunk spot aligned to
+// that background art on wide screens.
+const AVATAR_FRAME_POSITION: Record<AvatarKey, string> = {
+  raccoon: "left-[42.06%] top-[69.96%] w-[16.2%]",
+  bear: "left-[59.92%] top-[67.62%] w-[16.73%]",
+  owl: "dashboard-avatar--right left-[78.64%] top-[42.87%] w-[22.21%]",
+  chipmunk: "dashboard-avatar--right left-[78.64%] top-[42.87%] w-[22.21%]",
+};
+
+// Square, unstyled frame — mirrors AvatarFrame's layout (avatar fills the
+// frame via object-contain, accessory placed with getComboPlacement's raw
+// percentages) so accessory positions stay consistent with avatarAssets.ts's
+// COMBO_PLACEMENTS instead of drifting under a per-avatar custom transform.
 function DashboardAvatar({
   accessoryKey,
   avatarKey,
@@ -168,54 +182,18 @@ function DashboardAvatar({
     avatar && accessory
       ? getComboPlacement(avatar.key, accessory.key)
       : undefined;
-  const isFigmaOwlHat = avatar?.key === "owl" && accessory?.key === "hat";
-  const underTreeClass =
-    avatar?.key === "raccoon"
-      ? "left-[42.06%] top-[69.96%] w-[16.2%]"
-      : avatar?.key === "bear"
-        ? "left-[59.92%] top-[67.62%] w-[16.73%]"
-        : null;
 
   if (!avatar) return null;
 
-  if (underTreeClass) {
-    return (
-      <div
-        className={`dashboard-avatar pointer-events-none absolute z-10 aspect-square select-none ${underTreeClass}`}
-      >
-        <img
-          src={avatar.src}
-          alt={`${avatar.label} avatar`}
-          draggable="false"
-          className="absolute inset-0 size-full max-w-none object-contain"
-        />
-        {accessory && placement && (
-          <img
-            src={accessory.src}
-            alt={`${accessory.label} accessory`}
-            draggable="false"
-            className="absolute h-auto max-w-none object-contain"
-            style={{
-              left: `${placement.left}%`,
-              top: `${placement.top}%`,
-              width: `${placement.width}%`,
-              transform: placement.rotate
-                ? `rotate(${placement.rotate}deg)`
-                : undefined,
-            }}
-          />
-        )}
-      </div>
-    );
-  }
-
   return (
-    <div className="dashboard-avatar dashboard-avatar--right pointer-events-none absolute left-[78.64%] top-[42.87%] z-10 aspect-[335.84/345.63] w-[22.21%] select-none">
+    <div
+      className={`dashboard-avatar pointer-events-none absolute z-10 aspect-square select-none ${AVATAR_FRAME_POSITION[avatar.key]}`}
+    >
       <img
         src={avatar.src}
         alt={`${avatar.label} avatar`}
         draggable="false"
-        className="absolute left-[23.64%] top-[25.8%] h-auto w-[76.36%] max-w-none object-contain"
+        className="absolute inset-0 size-full max-w-none object-contain p-[9%]"
       />
       {accessory && placement && (
         <img
@@ -223,25 +201,14 @@ function DashboardAvatar({
           alt={`${accessory.label} accessory`}
           draggable="false"
           className="absolute h-auto max-w-none object-contain"
-          style={
-            isFigmaOwlHat
-              ? {
-                  left: "13.09%",
-                  top: "12.72%",
-                  width: "66.61%",
-                  transform: placement.rotate
-                    ? `rotate(${placement.rotate}deg)`
-                    : undefined,
-                }
-              : {
-                  left: `${23.64 + placement.left * 0.7636}%`,
-                  top: `${25.8 + placement.top * 0.7419}%`,
-                  width: `${placement.width * 0.7636}%`,
-                  transform: placement.rotate
-                    ? `rotate(${placement.rotate}deg)`
-                    : undefined,
-                }
-          }
+          style={{
+            left: `${placement.left}%`,
+            top: `${placement.top}%`,
+            width: `${placement.width}%`,
+            transform: placement.rotate
+              ? `rotate(${placement.rotate}deg)`
+              : undefined,
+          }}
         />
       )}
     </div>
