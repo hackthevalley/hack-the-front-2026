@@ -112,7 +112,7 @@ export const teamMembers: Record<string, TeamMember> = {
     name: "Abigail Liang",
     role: "Co-Director of Sponsorships",
     avatarSrc: resolvePhoto("abigail"),
-    linkedinUrl: "https://www.linkedin.com/in/james-liang-/",
+    linkedinUrl: "https://www.linkedin.com/in/abliang/",
   },
   "shelf-2-jar-6": {
     id: "john",
