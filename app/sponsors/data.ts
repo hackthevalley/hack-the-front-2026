@@ -63,7 +63,7 @@ export const sponsorTiers: readonly SponsorTier[] = [
   },
   {
     id: "in-kind",
-    title: "In-Kind Sponsors",
+    title: "Our In-Kind Sponsors",
     sponsors: [
       {
         id: "nordvpn",
