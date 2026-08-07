@@ -7,7 +7,7 @@ export type Sponsor = {
 };
 
 export type SponsorTier = {
-  id: "gold" | "silver" | "bronze";
+  id: "gold" | "silver" | "bronze" | "in-kind";
   title: string;
   sponsors: Sponsor[];
 };
@@ -60,5 +60,10 @@ export const sponsorTiers: readonly SponsorTier[] = [
         logoSrc: "/sponsors/logos/fdm.svg",
       },
     ],
+  },
+  {
+    id: "in-kind",
+    title: "In-Kind Sponsors",
+    sponsors: [],
   },
 ] as const;

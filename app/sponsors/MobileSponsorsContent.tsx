@@ -3,7 +3,7 @@ import { sponsorTiers, type SponsorTier } from "./data";
 
 const TIER_STYLES: Record<
   SponsorTier["id"],
-  { frame: string; badge: string }
+  { frame: string; badge?: string }
 > = {
   gold: {
     frame: "bg-[#715844]",
@@ -16,6 +16,9 @@ const TIER_STYLES: Record<
   bronze: {
     frame: "bg-[#4A382B]",
     badge: "/sponsors/foreground/badges/bronzestar.svg",
+  },
+  "in-kind": {
+    frame: "border-4 border-black bg-black",
   },
 };
 
@@ -44,15 +47,17 @@ export default function MobileSponsorsContent() {
               className={`relative rounded-2xl p-3 pt-12 shadow-[0_8px_24px_rgba(0,0,0,.28)] ${tierStyle.frame}`}
             >
               <div className="absolute left-1/2 top-0 flex h-16 w-[min(88%,25rem)] -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-[#12184E] px-12">
-                <span className="absolute left-0 top-1/2 flex size-16 -translate-x-1/3 -translate-y-1/2 items-center justify-center rounded-full bg-[#12184E]">
-                  <img
-                    src={tierStyle.badge}
-                    alt=""
-                    aria-hidden="true"
-                    draggable="false"
-                    className="size-10 select-none object-contain"
-                  />
-                </span>
+                {tierStyle.badge ? (
+                  <span className="absolute left-0 top-1/2 flex size-16 -translate-x-1/3 -translate-y-1/2 items-center justify-center rounded-full bg-[#12184E]">
+                    <img
+                      src={tierStyle.badge}
+                      alt=""
+                      aria-hidden="true"
+                      draggable="false"
+                      className="size-10 select-none object-contain"
+                    />
+                  </span>
+                ) : null}
                 <h2
                   id={`mobile-${tier.id}-sponsors`}
                   className="m-0 whitespace-nowrap text-center font-figtree text-sm font-semibold text-white min-[390px]:text-base"

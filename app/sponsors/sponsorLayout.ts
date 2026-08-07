@@ -3,7 +3,7 @@ import { sponsorTiers, type SponsorTier } from "./data";
 export type TierVariant = {
   outerFill: string;
   innerFill: string;
-  badgeSrc: string;
+  badgeSrc?: string;
   outerHeightForRows: (rows: number) => number;
   outerRadius: number;
   innerRadius: number;
@@ -33,6 +33,7 @@ export const TIER_TITLE_GLOW_RADIUS = 23.5711669921875 / 2;
 export const GOLD_TOP = 232;
 export const GAP_AFTER_GOLD = 66;
 export const GAP_AFTER_SILVER = 71;
+export const GAP_AFTER_BRONZE = 71;
 export const CTA_GAP = 50;
 
 export const CTA_HEADING_LEFT = PANEL_LEFT + 1.5918079614639282;
@@ -109,6 +110,25 @@ export const TIER_VARIANTS: Record<SponsorTier["id"], TierVariant> = {
     cardHeight: 144,
     rowGap: 12,
   },
+  "in-kind": {
+    outerFill: "#000000",
+    innerFill:
+      "radial-gradient(50% 50% at 50% 50%, #B64CE1 0%, #080E2D 100%)",
+    outerHeightForRows: (rows) => 164 + rows * 156,
+    outerRadius: 0,
+    innerRadius: 0,
+    innerLeft: 234,
+    innerWidth: 1045,
+    innerTopInset: 36,
+    innerBottomInset: 41,
+    plaqueOffsetTop: -21,
+    contentTop: 86,
+    maxColumns: 3,
+    cardWidth: 280,
+    columnGap: 18.5,
+    cardHeight: 144,
+    rowGap: 12,
+  },
 };
 
 export function rowsForTier(tier: SponsorTier) {
@@ -120,8 +140,9 @@ export function getSponsorsLayout(tiers: readonly SponsorTier[] = sponsorTiers) 
   const goldTier = tiers.find((tier) => tier.id === "gold");
   const silverTier = tiers.find((tier) => tier.id === "silver");
   const bronzeTier = tiers.find((tier) => tier.id === "bronze");
+  const inKindTier = tiers.find((tier) => tier.id === "in-kind");
 
-  if (!goldTier || !silverTier || !bronzeTier) {
+  if (!goldTier || !silverTier || !bronzeTier || !inKindTier) {
     return null;
   }
 
@@ -134,15 +155,21 @@ export function getSponsorsLayout(tiers: readonly SponsorTier[] = sponsorTiers) 
   const bronzeTop = silverBottom + GAP_AFTER_SILVER;
   const bronzeBottom =
     bronzeTop + TIER_VARIANTS.bronze.outerHeightForRows(rowsForTier(bronzeTier));
-  const ctaTop = bronzeBottom + CTA_GAP;
+  const inKindTop = bronzeBottom + GAP_AFTER_BRONZE;
+  const inKindBottom =
+    inKindTop +
+    TIER_VARIANTS["in-kind"].outerHeightForRows(rowsForTier(inKindTier));
+  const ctaTop = inKindBottom + CTA_GAP;
 
   return {
     goldTier,
     silverTier,
     bronzeTier,
+    inKindTier,
     goldTop,
     silverTop,
     bronzeTop,
+    inKindTop,
     ctaTop,
     ctaEmailTop: ctaTop + CTA_EMAIL_OFFSET_TOP,
     ctaButtonLeft: PANEL_LEFT + CTA_BUTTON_OFFSET_LEFT,
