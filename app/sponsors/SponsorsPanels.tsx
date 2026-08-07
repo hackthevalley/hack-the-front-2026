@@ -194,11 +194,9 @@ function SponsorTierPanel({
         />
       </DesignBox>
 
-      <TierBadge
-        left={badgeLeft}
-        top={badgeTop}
-        src={variant.badgeSrc}
-      />
+      {variant.badgeSrc ? (
+        <TierBadge left={badgeLeft} top={badgeTop} src={variant.badgeSrc} />
+      ) : null}
 
       <DesignBox
         designWidth={SPONSORS_DESIGN_WIDTH}
@@ -212,9 +210,10 @@ function SponsorTierPanel({
         style={{ background: "#12184E" }}
       >
         <div
-          className="absolute inset-y-0 right-0 flex items-center justify-center text-center font-figtree font-semibold"
+          className="absolute inset-y-0 flex items-center justify-center text-center font-figtree font-semibold"
           style={{
-            left: `${(56 / PLAQUE_WIDTH) * 100}%`,
+            left: variant.badgeSrc ? `${(56 / PLAQUE_WIDTH) * 100}%` : 0,
+            right: 0,
             fontSize: cqh(TIER_TITLE_FONT_SIZE, PLAQUE_HEIGHT),
             color: "#FFFFFF",
             textShadow: `0 0 ${cqh(TIER_TITLE_GLOW_RADIUS, PLAQUE_HEIGHT)} #FFE6CC`,
@@ -243,6 +242,7 @@ export default function SponsorsPanels() {
       <SponsorTierPanel tier={layout.goldTier} top={layout.goldTop} />
       <SponsorTierPanel tier={layout.silverTier} top={layout.silverTop} />
       <SponsorTierPanel tier={layout.bronzeTier} top={layout.bronzeTop} />
+      <SponsorTierPanel tier={layout.inKindTier} top={layout.inKindTop} />
     </>
   );
 }

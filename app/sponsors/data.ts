@@ -7,7 +7,7 @@ export type Sponsor = {
 };
 
 export type SponsorTier = {
-  id: "gold" | "silver" | "bronze";
+  id: "gold" | "silver" | "bronze" | "in-kind";
   title: string;
   sponsors: Sponsor[];
 };
@@ -58,6 +58,36 @@ export const sponsorTiers: readonly SponsorTier[] = [
         name: "FDM",
         href: "https://www.fdmgroup.com/",
         logoSrc: "/sponsors/logos/fdm.svg",
+      },
+    ],
+  },
+  {
+    id: "in-kind",
+    title: "In-Kind Sponsors",
+    sponsors: [
+      {
+        id: "nordvpn",
+        name: "NordVPN",
+        href: "https://nordvpn.com/hackathons",
+        logoSrc: "/sponsors/logos/nordvpn.svg",
+      },
+      {
+        id: "nordpass",
+        name: "NordPass",
+        href: "https://nordpass.com/",
+        logoSrc: "/sponsors/logos/nordpass.svg",
+      },
+      {
+        id: "incogni",
+        name: "Incogni",
+        href: "https://incogni.com/",
+        logoSrc: "/sponsors/logos/incogni.svg",
+      },
+      {
+        id: "saily",
+        name: "Saily",
+        href: "https://saily.com/",
+        logoSrc: "/sponsors/logos/saily.svg",
       },
     ],
   },
