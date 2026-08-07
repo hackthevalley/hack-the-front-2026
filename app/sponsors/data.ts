@@ -64,6 +64,31 @@ export const sponsorTiers: readonly SponsorTier[] = [
   {
     id: "in-kind",
     title: "In-Kind Sponsors",
-    sponsors: [],
+    sponsors: [
+      {
+        id: "nordvpn",
+        name: "NordVPN",
+        href: "https://nordvpn.com/hackathons",
+        logoSrc: "/sponsors/logos/nordvpn.svg",
+      },
+      {
+        id: "nordpass",
+        name: "NordPass",
+        href: "https://nordpass.com/",
+        logoSrc: "/sponsors/logos/nordpass.svg",
+      },
+      {
+        id: "incogni",
+        name: "Incogni",
+        href: "https://incogni.com/",
+        logoSrc: "/sponsors/logos/incogni.svg",
+      },
+      {
+        id: "saily",
+        name: "Saily",
+        href: "https://saily.com/",
+        logoSrc: "/sponsors/logos/saily.svg",
+      },
+    ],
   },
 ] as const;
