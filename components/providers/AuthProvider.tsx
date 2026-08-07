@@ -70,7 +70,7 @@ export default function AuthProvider({
 
       const response = await apiFetch("/api/account/tokens", {
         method: "POST",
-        signal: AbortSignal.timeout(10_000),
+        timeoutMs: 10_000,
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${currentToken}`,

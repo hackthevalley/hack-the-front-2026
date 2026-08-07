@@ -31,19 +31,33 @@ export async function apiFetch(
     ...init
   }: ApiRequestOptions = {},
 ): Promise<Response> {
-  const timeoutSignal = AbortSignal.timeout(timeoutMs);
-  const requestSignal = signal
-    ? AbortSignal.any([signal, timeoutSignal])
-    : timeoutSignal;
-  return fetch(apiUrl(path), {
-    ...init,
-    headers: {
-      Accept: "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...headers,
-    },
-    signal: requestSignal,
-  });
+  // AbortSignal.any() is unavailable before Safari/iOS 17.4. Combining the
+  // caller signal and timeout with an AbortController keeps API requests
+  // working across every iOS 17 release supported by the site.
+  const controller = new AbortController();
+  const abortRequest = () => controller.abort();
+  const timeoutId = globalThis.setTimeout(abortRequest, timeoutMs);
+
+  if (signal?.aborted) {
+    abortRequest();
+  } else {
+    signal?.addEventListener("abort", abortRequest, { once: true });
+  }
+
+  try {
+    return await fetch(apiUrl(path), {
+      ...init,
+      headers: {
+        Accept: "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...headers,
+      },
+      signal: controller.signal,
+    });
+  } finally {
+    globalThis.clearTimeout(timeoutId);
+    signal?.removeEventListener("abort", abortRequest);
+  }
 }
 
 export async function apiRequest(
