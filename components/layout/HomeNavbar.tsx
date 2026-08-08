@@ -218,7 +218,7 @@ function MobileMenuOverlay({
 
           <div className="mb-4 mt-12 h-px w-24 bg-white/12" />
 
-          <MlhTrustBadge />
+          {isOpen ? <MlhTrustBadge /> : null}
         </div>
       </div>
     </div>
@@ -316,11 +316,21 @@ function Shell({
 export default function HomeNavbar({ items = DEFAULT_ITEMS }: HomeNavbarProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const shellScrollYRef = useRef(0);
   const lastScrollYRef = useRef(0);
   const upwardTravelRef = useRef(0);
   const downwardTravelRef = useRef(0);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 768px)");
+    const updateViewport = () => setIsDesktop(mediaQuery.matches);
+
+    updateViewport();
+    mediaQuery.addEventListener("change", updateViewport);
+    return () => mediaQuery.removeEventListener("change", updateViewport);
+  }, []);
 
   useEffect(() => {
     lastScrollYRef.current = window.scrollY;
@@ -507,7 +517,7 @@ export default function HomeNavbar({ items = DEFAULT_ITEMS }: HomeNavbarProps) {
             : `translate3d(0, ${hiddenTop}px, 0)`,
         }}
       >
-        <MlhTrustBadge fixed />
+        {isDesktop ? <MlhTrustBadge fixed /> : null}
 
         <Shell shellProgress={isMenuOpen ? 0 : shellProgress}>
           <NavContents
