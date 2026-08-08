@@ -15,12 +15,14 @@ export default function HomeLayerArtwork({
     : undefined;
 
   const twinkleClass = layer.twinkle ? " decor-twinkle" : "";
+  const loading =
+    layer.src === "/home/background/upper-sparkles.svg" ? "eager" : "lazy";
 
   const image = layer.visibleBounds ? (
     <Image
       src={layer.src}
       alt=""
-      loading="lazy"
+      loading={loading}
       decoding="async"
       draggable="false"
       className={`absolute max-w-none select-none${twinkleClass}`}
@@ -36,7 +38,7 @@ export default function HomeLayerArtwork({
     <Image
       src={layer.src}
       alt=""
-      loading="lazy"
+      loading={loading}
       decoding="async"
       draggable="false"
       className={`${

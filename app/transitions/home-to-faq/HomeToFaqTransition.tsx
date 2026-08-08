@@ -55,7 +55,11 @@ function TransitionBand({
             <Image
               src={layer.src}
               alt=""
-              loading="lazy"
+              loading={
+                layer.src === "/transitions/home-to-faq/upperwall.svg"
+                  ? "eager"
+                  : "lazy"
+              }
               decoding="async"
               draggable="false"
               className={

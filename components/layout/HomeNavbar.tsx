@@ -65,9 +65,10 @@ function MlhTrustBadge({ fixed = false }: { fixed?: boolean }) {
       <Image
         src="https://logged-assets.s3.amazonaws.com/trust-badge/2027/mlh-trust-badge-2027-white.svg"
         alt="Major League Hacking 2026 Hackathon Season"
-        width={72}
-        height={130}
+        width={393}
+        height={688}
         className="block w-full"
+        style={{ height: "auto" }}
       />
     </a>
   );

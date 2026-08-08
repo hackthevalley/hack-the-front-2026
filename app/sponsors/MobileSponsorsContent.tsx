@@ -91,7 +91,7 @@ export default function MobileSponsorsContent() {
                         width={320}
                         height={120}
                         draggable="false"
-                        className="max-h-16 max-w-[85%] object-contain"
+                        className="h-auto w-auto max-h-16 max-w-[85%] object-contain"
                       />
                     ) : (
                       <span className="text-center font-figtree font-semibold text-[#1D2357]">

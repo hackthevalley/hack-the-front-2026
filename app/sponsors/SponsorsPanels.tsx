@@ -81,7 +81,7 @@ function SponsorCard({
       width={320}
       height={120}
       draggable="false"
-      className="max-h-[56%] max-w-[72%] object-contain"
+      className="h-auto w-auto max-h-[56%] max-w-[72%] object-contain"
     />
   ) : (
     <span
