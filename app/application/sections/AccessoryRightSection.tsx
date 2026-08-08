@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 import AvatarFrame from "./AvatarFrame";
 import SectionHeading from "./SectionHeading";
 import type { SectionHandle, SectionProps } from "./types";

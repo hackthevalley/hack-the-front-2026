@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
+import Image from "@/components/ui/OptimizedImage";
 import PortalContentStage from "@/components/layout/PortalContentStage";
 import {
   AUTH_BACKGROUND_DESIGN_HEIGHT,
@@ -71,7 +72,7 @@ export default function AuthBackground({ children }: AuthBackgroundProps) {
                   zIndex: layer.zIndex,
                 }}
               >
-                <img
+                <Image
                   src={layer.src}
                   alt=""
                   draggable="false"

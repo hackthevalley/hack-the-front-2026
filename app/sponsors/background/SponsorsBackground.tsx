@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Image from "@/components/ui/OptimizedImage";
 import MobileSponsorsContent from "../MobileSponsorsContent";
 import {
   SPONSORS_BACKGROUND_LAYER,
@@ -52,7 +53,7 @@ export default function SponsorsBackground({
               height: `${(SPONSORS_BACKGROUND_LAYER.height / SPONSORS_DESIGN_HEIGHT) * 100}%`,
             }}
           >
-            <img
+            <Image
               src={SPONSORS_BACKGROUND_LAYER.src}
               alt=""
               draggable="false"
@@ -74,7 +75,7 @@ export default function SponsorsBackground({
               transformOrigin: "center",
             }}
           >
-            <img
+            <Image
               src={SPONSORS_TEAM_WAVE_LAYER.src}
               alt=""
               draggable="false"

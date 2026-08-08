@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "@/components/ui/OptimizedImage";
 import NavbarLogo from "@/components/layout/NavbarLogo";
 
 export type HomeNavItem = {
@@ -61,9 +62,11 @@ function MlhTrustBadge({ fixed = false }: { fixed?: boolean }) {
         width: 72.0580062866211,
       }}
     >
-      <img
+      <Image
         src="https://logged-assets.s3.amazonaws.com/trust-badge/2027/mlh-trust-badge-2027-white.svg"
         alt="Major League Hacking 2026 Hackathon Season"
+        width={72}
+        height={130}
         className="block w-full"
       />
     </a>

@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import Image from "@/components/ui/OptimizedImage";
 import type { HomeBackgroundLayer } from "./types";
 
 export default function HomeLayerArtwork({
@@ -16,7 +17,7 @@ export default function HomeLayerArtwork({
   const twinkleClass = layer.twinkle ? " decor-twinkle" : "";
 
   const image = layer.visibleBounds ? (
-    <img
+    <Image
       src={layer.src}
       alt=""
       loading="lazy"
@@ -32,7 +33,7 @@ export default function HomeLayerArtwork({
       }}
     />
   ) : (
-    <img
+    <Image
       src={layer.src}
       alt=""
       loading="lazy"

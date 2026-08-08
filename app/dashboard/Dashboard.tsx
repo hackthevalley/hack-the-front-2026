@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "@/components/ui/OptimizedImage";
 import PortalBackButton from "@/components/layout/PortalBackButton";
 import PortalContentStage from "@/components/layout/PortalContentStage";
 import PortalNavbar from "@/components/layout/PortalNavbar";
@@ -125,7 +126,7 @@ type ArtProps = {
 
 function Art({ src, className }: ArtProps) {
   return (
-    <img
+    <Image
       src={src}
       alt=""
       aria-hidden="true"
@@ -142,7 +143,7 @@ function MobileWoodenBoard() {
       aria-hidden="true"
     >
       {Array.from({ length: 5 }, (_, index) => (
-        <img
+        <Image
           key={index}
           src="/dashboard/wooden-board.svg"
           alt=""
@@ -189,14 +190,14 @@ function DashboardAvatar({
     <div
       className={`dashboard-avatar pointer-events-none absolute z-10 aspect-square select-none ${AVATAR_FRAME_POSITION[avatar.key]}`}
     >
-      <img
+      <Image
         src={avatar.src}
         alt={`${avatar.label} avatar`}
         draggable="false"
         className="absolute inset-0 size-full max-w-none object-contain p-[9%]"
       />
       {accessory && placement && (
-        <img
+        <Image
           src={accessory.src}
           alt={`${accessory.label} accessory`}
           draggable="false"
@@ -256,7 +257,7 @@ export default function Dashboard() {
           className="dashboard-rear-trunk-right left-[93.85%] top-[-4.89%] h-[117.48%] w-[6.15%]"
         />
         <div className="dashboard-back-tree pointer-events-none absolute left-[24.41%] top-[-4.8%] h-[107.96%] w-[13.86%] origin-top-left rotate-[7.3251deg]">
-          <img
+          <Image
             src="/dashboard/back-tree.svg"
             alt=""
             aria-hidden="true"
@@ -281,14 +282,14 @@ export default function Dashboard() {
           className="dashboard-small-mushroom left-[2.78%] top-[88.55%] h-[44.25%] w-[25.58%]"
         />
         <div className="dashboard-desktop-decoration pointer-events-none absolute left-[15.55%] top-[69.05%] h-[12%] w-[7.8%]">
-          <img
+          <Image
             src="/dashboard/glow-orange.svg"
             alt=""
             aria-hidden="true"
             draggable="false"
             className="absolute inset-0 h-full w-full"
           />
-          <img
+          <Image
             src="/dashboard/star-left.svg"
             alt=""
             aria-hidden="true"
@@ -297,14 +298,14 @@ export default function Dashboard() {
           />
         </div>
         <div className="dashboard-board-star pointer-events-none absolute left-[81.35%] top-[44.1%] h-[12.41%] w-[8.06%]">
-          <img
+          <Image
             src="/dashboard/glow-cream.svg"
             alt=""
             aria-hidden="true"
             draggable="false"
             className="absolute inset-0 h-full w-full"
           />
-          <img
+          <Image
             src="/dashboard/star-right.svg"
             alt=""
             aria-hidden="true"
@@ -342,7 +343,7 @@ export default function Dashboard() {
         />
         <div className="dashboard-left-leaves pointer-events-none absolute left-[-9.66%] top-[70.95%] flex h-[43.57%] w-[25.35%] items-center justify-center">
           <div className="relative h-[92.1%] w-[89.75%] flex-none rotate-174 -scale-y-100">
-            <img
+            <Image
               src="/dashboard/left-leaves.svg"
               alt=""
               aria-hidden="true"

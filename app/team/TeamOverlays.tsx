@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 import type { CSSProperties, ReactNode, Ref } from "react";
 import { useEffect, useRef, useState } from "react";
 import DesignBox from "@/components/layout/DesignBox";
@@ -33,7 +33,7 @@ const MARQUEE_SPEED_PX_PER_SEC = TEAM_DESIGN_WIDTH / 40;
 function TeamJar({ color, member }: { color: JarColor; member?: TeamMember }) {
   return (
     <div className="relative h-full w-full" style={{ containerType: "size" }}>
-      <img
+      <Image
         src={JAR_SRC_BY_COLOR[color]}
         alt=""
         draggable="false"
@@ -198,7 +198,7 @@ function ShelfProp({
       zIndex={6}
       direction={direction}
     >
-      <img
+      <Image
         src={src}
         alt=""
         draggable="false"

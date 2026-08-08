@@ -1,4 +1,5 @@
 import DesignBox from "@/components/layout/DesignBox";
+import Image from "@/components/ui/OptimizedImage";
 import {
   SPONSORS_DESIGN_HEIGHT,
   SPONSORS_DESIGN_WIDTH,
@@ -44,7 +45,7 @@ function TierBadge({
       className="pointer-events-none"
     >
       <div className="relative h-full w-full overflow-visible rounded-full bg-[#12184E]">
-        <img
+        <Image
           src={src}
           alt=""
           aria-hidden="true"
@@ -74,9 +75,11 @@ function SponsorCard({
   height: number;
 }) {
   const content = sponsor.logoSrc ? (
-    <img
+    <Image
       src={sponsor.logoSrc}
       alt={sponsor.name}
+      width={320}
+      height={120}
       draggable="false"
       className="max-h-[56%] max-w-[72%] object-contain"
     />

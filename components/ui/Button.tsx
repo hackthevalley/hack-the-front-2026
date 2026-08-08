@@ -2,6 +2,7 @@
 
 import type { CSSProperties } from "react";
 import Link from "next/link";
+import Image from "@/components/ui/OptimizedImage";
 
 type CommonButtonProps = {
   className?: string;
@@ -166,9 +167,11 @@ export default function Button(props: ButtonProps) {
             }}
           />
         ) : directionIconSrc ? (
-          <img
+          <Image
             src={directionIconSrc}
             alt=""
+            width={64}
+            height={64}
             aria-hidden="true"
             className="block max-w-none"
             style={{
@@ -256,25 +259,25 @@ export default function Button(props: ButtonProps) {
     <>
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[62.5%] bg-gradient-to-b from-transparent to-[#8da8ff] opacity-60" />
       <div className="pointer-events-none absolute inset-[2px] rounded-full border border-[#df63dc] blur-[0.65px]" />
-      <img
+      <Image
         src="/landing/button/spray.svg"
         alt=""
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 h-full w-full max-w-none select-none object-fill mix-blend-screen"
       />
-      <img
+      <Image
         src="/landing/button/stars.svg"
         alt=""
         aria-hidden="true"
         className="pointer-events-none absolute left-[4.58%] top-[14.29%] h-[43.08%] w-[70.42%] max-w-none select-none object-fill"
       />
-      <img
+      <Image
         src="/landing/button/subtract.svg"
         alt=""
         aria-hidden="true"
         className="pointer-events-none absolute left-[87.08%] top-[-16.07%] h-[133.93%] w-[14.17%] max-w-none select-none object-fill"
       />
-      <img
+      <Image
         src="/dashboard/button-cloud.svg"
         alt=""
         aria-hidden="true"
@@ -298,9 +301,11 @@ export default function Button(props: ButtonProps) {
         {text}
         {stateIcon ? (
           <span className="flex size-5 shrink-0 items-center justify-center">
-            <img
+            <Image
               src={stateIcon}
               alt=""
+              width={17}
+              height={17}
               aria-hidden="true"
               className={`block max-h-[17px] max-w-[17px] ${
                 state === "loading" ? "motion-safe:animate-spin" : ""

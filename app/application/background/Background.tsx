@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
+import Image from "@/components/ui/OptimizedImage";
 
 type Sticker = {
   id: string;
@@ -337,7 +338,7 @@ export default function Background() {
       {CLUSTERS.map((cluster) => (
         <div key={cluster.id} className={cluster.wrapperClassName}>
           {cluster.stickers.map((sticker) => (
-            <img
+            <Image
               key={sticker.id}
               ref={sticker.id === "candles" ? candlesRef : undefined}
               data-candle-id={
@@ -357,7 +358,7 @@ export default function Background() {
         </div>
       ))}
       {LOOSE_STICKERS.map((sticker) => (
-        <img
+        <Image
           key={sticker.id}
           src={sticker.src}
           alt=""

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Image from "@/components/ui/OptimizedImage";
 import {
   HOME_BACKGROUND_DESIGN_HEIGHT,
   HOME_BACKGROUND_DESIGN_WIDTH,
@@ -51,7 +52,7 @@ function TransitionBand({
               zIndex: layer.zIndex,
             }}
           >
-            <img
+            <Image
               src={layer.src}
               alt=""
               loading="lazy"
