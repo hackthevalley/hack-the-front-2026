@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
+import Image from "@/components/ui/OptimizedImage";
 import {
   HOME_BACKGROUND_DESIGN_HEIGHT,
   HOME_BACKGROUND_DESIGN_WIDTH,
@@ -55,7 +56,7 @@ function ScenePlane({ layers }: { layers: readonly FaqThemesSceneLayer[] }) {
             }}
           >
             {layer.visibleBounds ? (
-              <img
+              <Image
                 src={layer.src}
                 alt=""
                 loading="lazy"
@@ -70,7 +71,7 @@ function ScenePlane({ layers }: { layers: readonly FaqThemesSceneLayer[] }) {
                 }}
               />
             ) : (
-              <img
+              <Image
                 src={layer.src}
                 alt=""
                 loading="lazy"

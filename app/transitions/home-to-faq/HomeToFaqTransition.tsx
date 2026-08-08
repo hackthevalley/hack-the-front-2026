@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Image from "@/components/ui/OptimizedImage";
 import {
   HOME_BACKGROUND_DESIGN_HEIGHT,
   HOME_BACKGROUND_DESIGN_WIDTH,
@@ -51,10 +52,14 @@ function TransitionBand({
               zIndex: layer.zIndex,
             }}
           >
-            <img
+            <Image
               src={layer.src}
               alt=""
-              loading="lazy"
+              loading={
+                layer.src === "/transitions/home-to-faq/upperwall.svg"
+                  ? "eager"
+                  : "lazy"
+              }
               decoding="async"
               draggable="false"
               className={

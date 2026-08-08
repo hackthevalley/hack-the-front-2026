@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "@/components/ui/OptimizedImage";
 import { toScale, toStageHeight, toStageWidth, toStageX, toStageY } from "../faq/faqStage";
 
 export const THEMES = [
@@ -188,7 +189,7 @@ function ThemeCard({
           height: toScale(theme.iconHeight),
         }}
       >
-        <img
+        <Image
           src={theme.iconSrc}
           alt=""
           loading="lazy"
@@ -283,7 +284,7 @@ export function MobileThemesTextOverlays() {
             >
               <div className="flex items-start gap-4">
                 <div className="grid h-[3.25rem] w-[3.25rem] shrink-0 place-items-center">
-                  <img
+                  <Image
                     src={theme.iconSrc}
                     alt=""
                     loading="lazy"

@@ -1,3 +1,5 @@
+import Image from "@/components/ui/OptimizedImage";
+
 const FOOTER_LINKS = [
   {
     label: "hackthevalley on LinkedIn",
@@ -33,9 +35,11 @@ export default function SiteFooter() {
               aria-label={link.label}
               className="flex items-center gap-2.5 whitespace-nowrap font-vcr text-xl text-white no-underline drop-shadow-[0_4px_4px_rgba(255,255,255,0.25)] transition-opacity hover:opacity-80 focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white md:text-2xl"
             >
-              <img
+              <Image
                 src={link.icon}
                 alt=""
+                width={28}
+                height={28}
                 aria-hidden="true"
                 draggable="false"
                 className={`${link.iconClassName} shrink-0 select-none object-contain`}

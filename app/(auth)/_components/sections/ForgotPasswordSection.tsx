@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "@/components/ui/OptimizedImage";
 import DesignBox from "@/components/layout/DesignBox";
 import Button from "@/components/ui/Button";
 import TextField, { type TextFieldHandle } from "@/components/ui/TextField";
@@ -178,9 +179,11 @@ export default function ForgotPasswordSection() {
         compactOrder={50}
         className="flex items-center gap-[0.952cqw] font-figtree font-normal leading-[normal] text-[#FFDADA]"
       >
-        <img
+        <Image
           src="/icons/news-signup-error.svg"
           alt=""
+          width={20}
+          height={20}
           aria-hidden="true"
           className={`h-[87.5cqh] w-auto shrink-0 ${emailError ? "" : "invisible"}`}
         />

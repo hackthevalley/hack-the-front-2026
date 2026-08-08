@@ -1,4 +1,5 @@
 import SponsorCtaButton from "./SponsorCtaButton";
+import Image from "@/components/ui/OptimizedImage";
 import { sponsorTiers, type SponsorTier } from "./data";
 
 const TIER_STYLES: Record<
@@ -49,9 +50,11 @@ export default function MobileSponsorsContent() {
               <div className="absolute left-1/2 top-0 flex h-16 w-[min(88%,25rem)] -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-[#12184E] px-12">
                 {tierStyle.badge ? (
                   <span className="absolute left-0 top-1/2 flex size-16 -translate-x-1/3 -translate-y-1/2 items-center justify-center rounded-full bg-[#12184E]">
-                    <img
+                    <Image
                       src={tierStyle.badge}
                       alt=""
+                      width={40}
+                      height={40}
                       aria-hidden="true"
                       draggable="false"
                       className="size-10 select-none object-contain"
@@ -82,11 +85,13 @@ export default function MobileSponsorsContent() {
                     }`}
                   >
                     {sponsor.logoSrc ? (
-                      <img
+                      <Image
                         src={sponsor.logoSrc}
                         alt={sponsor.name}
+                        width={320}
+                        height={120}
                         draggable="false"
-                        className="max-h-16 max-w-[85%] object-contain"
+                        className="h-auto w-auto max-h-16 max-w-[85%] object-contain"
                       />
                     ) : (
                       <span className="text-center font-figtree font-semibold text-[#1D2357]">

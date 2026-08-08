@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "@/components/ui/OptimizedImage";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import DesignBox from "@/components/layout/DesignBox";
@@ -248,9 +249,11 @@ export default function AuthTextOverlays() {
         compactOrder={60}
         className="flex items-center gap-[2cqw] font-figtree font-normal leading-[normal] text-[#FFDADA]"
       >
-        <img
+        <Image
           src="/icons/news-signup-error.svg"
           alt=""
+          width={20}
+          height={20}
           aria-hidden="true"
           className={`h-[68.966cqh] w-auto shrink-0 ${credentialError ? "" : "invisible"}`}
         />

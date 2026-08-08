@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 
 export type CheckboxHandle = {
   /** Runs validation, updates the error state, returns whether the field is valid. */

@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
+import Image from "@/components/ui/OptimizedImage";
 import { toast } from "sonner";
 import DesignBox from "@/components/layout/DesignBox";
 import Button from "@/components/ui/Button";
@@ -215,9 +216,11 @@ export default function ResetPasswordForm({ token }: { token?: string }) {
         compactOrder={50}
         className="flex items-center gap-[0.603cqw] font-figtree font-normal leading-[normal] text-[#FFDADA]"
       >
-        <img
+        <Image
           src="/icons/news-signup-error.svg"
           alt=""
+          width={20}
+          height={20}
           aria-hidden="true"
           className={`h-[87.5cqh] w-auto shrink-0 ${formError ? "" : "invisible"}`}
         />

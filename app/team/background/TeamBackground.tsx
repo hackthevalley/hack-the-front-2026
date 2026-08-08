@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Image from "@/components/ui/OptimizedImage";
 import {
   BACKGROUND_GLOW,
   EDGE_VIGNETTE,
@@ -48,7 +49,7 @@ export default function TeamBackground({ children }: TeamBackgroundProps) {
             zIndex: layer.zIndex ?? 0,
           }}
         >
-          <img
+          <Image
             src={layer.src}
             alt=""
             draggable="false"

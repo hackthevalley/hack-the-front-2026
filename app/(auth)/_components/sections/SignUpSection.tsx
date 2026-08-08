@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "@/components/ui/OptimizedImage";
 import { toast } from "sonner";
 import DesignBox from "@/components/layout/DesignBox";
 import Button from "@/components/ui/Button";
@@ -43,9 +44,11 @@ function ErrorMessage({ message }: ErrorMessageProps) {
       className="flex h-full items-center gap-[1cqw] font-figtree font-normal leading-[normal] text-[#FFDADA]"
       aria-hidden={!message}
     >
-      <img
+      <Image
         src="/icons/news-signup-error.svg"
         alt=""
+        width={20}
+        height={20}
         aria-hidden="true"
         className={`h-[75cqh] w-auto shrink-0 ${message ? "" : "invisible"}`}
       />

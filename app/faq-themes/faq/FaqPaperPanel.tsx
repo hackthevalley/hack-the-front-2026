@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import Image from "@/components/ui/OptimizedImage";
 import {
   FAQ_DEFAULT_CARD,
   type FaqDefaultCard,
@@ -41,7 +42,7 @@ function renderRuns(runs: readonly FaqTextRun[]) {
 function PaperAsset() {
   return (
     <div className="absolute inset-0 overflow-hidden">
-      <img
+      <Image
         src="/faq-themes/faq/paper.png"
         alt=""
         loading="lazy"
@@ -71,7 +72,7 @@ function Stamp({
   scale: number;
 }) {
   return (
-    <img
+    <Image
       src="/faq-themes/faq/stamp.png"
       alt=""
       loading="lazy"
