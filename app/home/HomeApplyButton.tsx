@@ -14,6 +14,7 @@ export default function HomeApplyButton() {
       width={width}
       aspectRatio={`${width} / 56`}
       href={showDashboard ? "/dashboard" : "/login"}
+      prefetch={false}
     />
   );
 }

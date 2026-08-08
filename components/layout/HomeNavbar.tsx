@@ -2,7 +2,6 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import Image from "@/components/ui/OptimizedImage";
 import NavbarLogo from "@/components/layout/NavbarLogo";
 
@@ -314,7 +313,6 @@ function Shell({
  * hero's top edge.
  */
 export default function HomeNavbar({ items = DEFAULT_ITEMS }: HomeNavbarProps) {
-  const router = useRouter();
   const [isVisible, setIsVisible] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
@@ -322,10 +320,6 @@ export default function HomeNavbar({ items = DEFAULT_ITEMS }: HomeNavbarProps) {
   const lastScrollYRef = useRef(0);
   const upwardTravelRef = useRef(0);
   const downwardTravelRef = useRef(0);
-
-  useEffect(() => {
-    router.prefetch("/login");
-  }, [router]);
 
   useEffect(() => {
     lastScrollYRef.current = window.scrollY;
@@ -505,8 +499,12 @@ export default function HomeNavbar({ items = DEFAULT_ITEMS }: HomeNavbarProps) {
   return (
     <>
       <header
-        className="fixed inset-x-0 z-[80] w-full transition-[top] duration-300 ease-out"
-        style={{ top: isVisible ? 0 : hiddenTop }}
+        className="fixed inset-x-0 top-0 z-[80] w-full will-change-transform transition-transform duration-300 ease-out"
+        style={{
+          transform: isVisible
+            ? "translate3d(0, 0, 0)"
+            : `translate3d(0, ${hiddenTop}px, 0)`,
+        }}
       >
         <MlhTrustBadge fixed />
 
