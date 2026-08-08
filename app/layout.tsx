@@ -35,7 +35,6 @@ export default function RootLayout({
         <link
           rel="preconnect"
           href="https://logged-assets.s3.amazonaws.com"
-          crossOrigin="anonymous"
         />
       </head>
       <body className="min-h-full flex flex-col">
