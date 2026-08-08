@@ -97,7 +97,7 @@ function MobileStatLabel({
       width={width}
       height={height}
       zIndex={8}
-      className="flex flex-col items-center justify-center text-center text-white"
+      className="defer-offscreen-content flex flex-col items-center justify-center text-center text-white"
     >
       <p
         className="m-0 font-vcr leading-none"
@@ -246,7 +246,7 @@ export default function MobileHomeSection() {
       </div>
 
       <div
-        className="absolute inset-x-0 z-10 px-6 text-white"
+        className="defer-offscreen-content absolute inset-x-0 z-10 px-6 text-white"
         style={{
           top: MOBILE_ABOUT_ZONE_TOP,
           bottom: MOBILE_ABOUT_ZONE_BOTTOM,

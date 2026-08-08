@@ -1,5 +1,6 @@
 import HomeNavbar from "@/components/layout/HomeNavbar";
 import SectionAnimationController from "@/components/layout/SectionAnimationController";
+import { preload } from "react-dom";
 import {
   HOME_BACKGROUND_DESIGN_HEIGHT,
   HOME_BACKGROUND_DESIGN_WIDTH,
@@ -24,6 +25,12 @@ import FaqToSponsorsTransition from "./transitions/faq-to-sponsors/FaqToSponsors
 import HomeToFaqTransition from "./transitions/home-to-faq/HomeToFaqTransition";
 
 export default function Home() {
+  preload("/fonts/VCROSDMono.woff2", {
+    as: "font",
+    type: "font/woff2",
+    crossOrigin: "anonymous",
+  });
+
   const faqStageWidth = `max(100vw, calc(100dvh * ${HOME_BACKGROUND_DESIGN_WIDTH} / ${HOME_BACKGROUND_DESIGN_HEIGHT}))`;
 
   return (
@@ -44,7 +51,7 @@ export default function Home() {
         </FaqThemesBackground>
 
         <div className="pointer-events-none absolute inset-0 z-40">
-          <div className="absolute inset-x-0 top-[2.2%] flex justify-center md:hidden">
+          <div className="defer-offscreen-content absolute inset-x-0 top-[2.2%] flex justify-center md:hidden">
             <h1
               data-nav-target="faq"
               className="m-0 select-text font-vcr leading-none text-white"

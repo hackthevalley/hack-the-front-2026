@@ -31,12 +31,6 @@ export default function RootLayout({
       lang="en"
       className={`${figtree.variable} ${inter.variable} h-full antialiased`}
     >
-      <head>
-        <link
-          rel="preconnect"
-          href="https://logged-assets.s3.amazonaws.com"
-        />
-      </head>
       <body className="min-h-full flex flex-col">
         <AuthProvider>{children}</AuthProvider>
         <RouteToaster />

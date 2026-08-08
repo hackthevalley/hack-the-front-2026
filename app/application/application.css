@@ -1,0 +1,35 @@
+@keyframes accessory-pop-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes accessory-pop-out {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+}
+
+/* Durations must match EXIT_DURATION_MS / the pop-in duration in AccessoryRightSection.tsx. */
+.accessory-pop-in {
+  animation: accessory-pop-in 350ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.accessory-pop-out {
+  animation: accessory-pop-out 150ms ease-in forwards;
+}
+

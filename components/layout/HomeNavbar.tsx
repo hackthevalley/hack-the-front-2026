@@ -66,6 +66,7 @@ function MlhTrustBadge({ fixed = false }: { fixed?: boolean }) {
         alt="Major League Hacking 2026 Hackathon Season"
         width={393}
         height={688}
+        loading="lazy"
         className="block w-full"
         style={{ height: "auto" }}
       />
