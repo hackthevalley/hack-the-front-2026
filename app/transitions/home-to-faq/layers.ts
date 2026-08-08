@@ -1,7 +1,6 @@
 import type { HomeToFaqTransitionLayer } from "./types";
 
 export const HOME_TO_FAQ_DESIGN_WIDTH = 1512;
-export const HOME_TO_FAQ_DESIGN_HEIGHT = 10013;
 const HOME_TO_FAQ_BAND_PADDING_TOP = 160;
 const HOME_TO_FAQ_BAND_PADDING_BOTTOM = 160;
 

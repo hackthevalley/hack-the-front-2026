@@ -4,7 +4,7 @@ const CHIME_VOLUME = 0.22;
 
 const MIN_INTERVAL_MS = 350;
 
-export const SOUND_PREFERENCE_KEY = "htv:sound";
+const SOUND_PREFERENCE_KEY = "htv:sound";
 
 let element: HTMLAudioElement | null = null;
 let lastPlayedAt = 0;
@@ -15,17 +15,6 @@ export function isSoundMuted(): boolean {
     return window.localStorage.getItem(SOUND_PREFERENCE_KEY) === "off";
   } catch {
     return false;
-  }
-}
-
-export function setSoundMuted(muted: boolean): void {
-  try {
-    window.localStorage.setItem(SOUND_PREFERENCE_KEY, muted ? "off" : "on");
-  } catch {
-  }
-  if (muted && element) {
-    element.pause();
-    element.currentTime = 0;
   }
 }
 

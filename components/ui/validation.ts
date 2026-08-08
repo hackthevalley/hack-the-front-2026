@@ -28,11 +28,6 @@ export function getPasswordValidationMessage(value: string): string | null {
   return null;
 }
 
-/** Mirrors the backend password policy. */
-export function isValidPassword(value: string): boolean {
-  return getPasswordValidationMessage(value) === null;
-}
-
 /** True when `value` contains exactly 10 digits (US phone number, formatting ignored). */
 export function isValidPhoneNumber(value: string): boolean {
   return /^\d{10}$/.test(value.replace(/\D/g, ""));
