@@ -151,15 +151,6 @@ export const homeBackgroundLayers: readonly HomeBackgroundLayer[] = [
     zIndex: 2.25,
   },
   {
-    id: "upper-grass",
-    src: "/home/background/upper-grass.svg",
-    left: -133.65,
-    top: 351.8623046875,
-    width: 402.41,
-    height: 1191.31,
-    zIndex: 2.75,
-  },
-  {
     id: "left-mushroom",
     src: "/home/background/left-mushroom.svg",
     left: -69.02,
