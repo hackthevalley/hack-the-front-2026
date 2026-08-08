@@ -17,12 +17,17 @@ export default function HomeLayerArtwork({
   const twinkleClass = layer.twinkle ? " decor-twinkle" : "";
   const loading =
     layer.src === "/home/background/upper-sparkles.svg" ? "eager" : "lazy";
+  const lcpProps =
+    layer.src === "/home/background/upper-sparkles.svg"
+      ? { width: 1674, height: 3237, fetchPriority: "high" as const }
+      : {};
 
   const image = layer.visibleBounds ? (
     <Image
       src={layer.src}
       alt=""
       loading={loading}
+      {...lcpProps}
       decoding="async"
       draggable="false"
       className={`absolute max-w-none select-none${twinkleClass}`}
@@ -39,6 +44,7 @@ export default function HomeLayerArtwork({
       src={layer.src}
       alt=""
       loading={loading}
+      {...lcpProps}
       decoding="async"
       draggable="false"
       className={`${

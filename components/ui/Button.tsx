@@ -22,6 +22,8 @@ type PrimaryButtonProps = CommonButtonProps & {
   state?: PrimaryButtonState;
   /** Uses Next.js client navigation and automatic route prefetching. */
   href?: string;
+  /** Allows above-the-fold links to avoid downloading another route before interaction. */
+  prefetch?: boolean;
   /** Native button behavior. Form actions should explicitly use "submit". */
   htmlType?: "button" | "submit";
   width?: number | string;
@@ -225,6 +227,7 @@ export default function Button(props: ButtonProps) {
     text,
     state = "default",
     href,
+    prefetch,
     htmlType = "button",
     onClick,
     className = "",
@@ -319,7 +322,7 @@ export default function Button(props: ButtonProps) {
 
   if (href && isInteractive) {
     return (
-      <Link href={href} className={rootClassName} style={rootStyle}>
+      <Link href={href} prefetch={prefetch} className={rootClassName} style={rootStyle}>
         {content}
       </Link>
     );

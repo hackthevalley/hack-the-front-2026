@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Figtree, Inter } from "next/font/google";
-import { Toaster } from "sonner";
 import AuthProvider from "@/components/providers/AuthProvider";
+import RouteToaster from "@/components/providers/RouteToaster";
 import "./globals.css";
 
 const figtree = Figtree({
@@ -31,20 +31,15 @@ export default function RootLayout({
       lang="en"
       className={`${figtree.variable} ${inter.variable} h-full antialiased`}
     >
+      <head>
+        <link
+          rel="preconnect"
+          href="https://logged-assets.s3.amazonaws.com"
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <AuthProvider>{children}</AuthProvider>
-        <Toaster
-          position="bottom-right"
-          richColors
-          closeButton
-          toastOptions={{
-            duration: 6000,
-            style: {
-              background: "#0E0D5B",
-              color: "#FFFFFF",
-            },
-          }}
-        />
+        <RouteToaster />
       </body>
     </html>
   );
