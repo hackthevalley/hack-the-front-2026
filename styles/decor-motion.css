@@ -90,6 +90,14 @@
     var(--decor-delay, 0s) infinite;
 }
 
+[data-animations-active="false"] .decor-twinkle,
+[data-animations-active="false"] .decor-breathe,
+[data-animations-active="false"] .decor-sway,
+[data-animations-active="false"] .decor-pulse,
+[data-animations-active="false"] .decor-leaf-enter {
+  animation-play-state: paused;
+}
+
 @keyframes decor-leaf-enter {
   from {
     opacity: 0;

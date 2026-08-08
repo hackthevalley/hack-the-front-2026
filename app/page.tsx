@@ -1,4 +1,5 @@
 import HomeNavbar from "@/components/layout/HomeNavbar";
+import SectionAnimationController from "@/components/layout/SectionAnimationController";
 import {
   HOME_BACKGROUND_DESIGN_HEIGHT,
   HOME_BACKGROUND_DESIGN_WIDTH,
@@ -31,11 +32,13 @@ export default function Home() {
       <HomeToFaqTransition className="pointer-events-none z-30 mt-6" />
 
       <div className="relative">
+        <SectionAnimationController />
         <MobileHomeSection />
         <DesktopHomeSection />
       </div>
 
       <section id="faq" aria-label="FAQ and themes" className="relative mt-6">
+        <SectionAnimationController />
         <FaqThemesBackground>
           <DeferredFaqThemesContent />
         </FaqThemesBackground>
@@ -74,6 +77,7 @@ export default function Home() {
         className="relative"
         style={{ marginTop: "-2px" }}
       >
+        <SectionAnimationController />
         <FaqToSponsorsTransition className="pointer-events-none z-30 hidden lg:block" />
         <SponsorsBackground stageWidth={faqStageWidth}>
           <SponsorsPanels />
@@ -87,6 +91,7 @@ export default function Home() {
         className="relative"
         style={{ marginTop: "-2px" }}
       >
+        <SectionAnimationController />
         <TeamBackground>
           <TeamOverlays teamMembers={teamMembers} />
         </TeamBackground>
