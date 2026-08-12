@@ -41,18 +41,18 @@ export const sponsorTiers: readonly SponsorTier[] = [
         href: "https://www.fidelity.com/",
         logoSrc: "/sponsors/logos/fidelity.svg",
       },
-    ],
-  },
-  {
-    id: "bronze",
-    title: "Our Bronze Tier Sponsors",
-    sponsors: [
       {
         id: "dell",
         name: "Dell",
         href: "https://www.dell.com/",
         logoSrc: "/sponsors/logos/dell.svg",
       },
+    ],
+  },
+  {
+    id: "bronze",
+    title: "Our Bronze Tier Sponsors",
+    sponsors: [
       {
         id: "fdm",
         name: "FDM",
