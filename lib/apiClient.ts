@@ -47,6 +47,7 @@ export async function apiFetch(
   try {
     return await fetch(apiUrl(path), {
       ...init,
+      credentials: init.credentials ?? "include",
       headers: {
         Accept: "application/json",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),

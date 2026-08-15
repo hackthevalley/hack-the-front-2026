@@ -1,10 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  ACCESS_TOKEN_KEY,
-  type TokenResponse,
-} from "@/lib/auth";
+import type { TokenResponse } from "@/lib/auth";
 import { apiFetch } from "@/lib/apiClient";
 
 const REFRESH_LEEWAY_MS = 5 * 60 * 1000;
@@ -47,12 +44,13 @@ export default function AuthProvider({
   const refreshPromiseRef = React.useRef<Promise<string | null> | null>(null);
 
   const logout = React.useCallback(() => {
-    localStorage.removeItem(ACCESS_TOKEN_KEY);
     setToken(null);
+    void apiFetch("/api/account/tokens", { method: "DELETE" }).catch(() => {
+      // Local logout must still complete if the API is unavailable.
+    });
   }, []);
 
   const login = React.useCallback((accessToken: string) => {
-    localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
     setToken(accessToken);
   }, []);
 
@@ -62,19 +60,9 @@ export default function AuthProvider({
     }
 
     const request = (async () => {
-      const currentToken = localStorage.getItem(ACCESS_TOKEN_KEY);
-      if (!currentToken) {
-        setToken(null);
-        return null;
-      }
-
       const response = await apiFetch("/api/account/tokens", {
         method: "POST",
         timeoutMs: 10_000,
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${currentToken}`,
-        },
       });
 
       if (response.status === 401 || response.status === 403) {
@@ -108,35 +96,17 @@ export default function AuthProvider({
     let cancelled = false;
 
     function initializeAuth() {
-      const storedToken = localStorage.getItem(ACCESS_TOKEN_KEY);
-      if (!storedToken) {
-        if (!cancelled) setIsAuthReady(true);
-        return;
-      }
-
-      // Restore synchronously so protected pages can perform their own
-      // authenticated load without waiting on a refresh request that may have
-      // been suspended when a browser tab was closed and restored.
-      setToken(storedToken);
-      setIsAuthReady(true);
-      void refreshToken().catch(() => {
-        // A network failure should not deadlock route rendering. The protected
-        // page request will independently validate the stored token.
-      });
-    }
-
-    function handleStorage(event: StorageEvent) {
-      if (event.key === ACCESS_TOKEN_KEY) {
-        setToken(event.newValue);
-        setIsAuthReady(true);
-      }
+      localStorage.removeItem("access_token");
+      void refreshToken()
+        .catch(() => null)
+        .finally(() => {
+          if (!cancelled) setIsAuthReady(true);
+        });
     }
 
     initializeAuth();
-    window.addEventListener("storage", handleStorage);
     return () => {
       cancelled = true;
-      window.removeEventListener("storage", handleStorage);
     };
   }, [refreshToken]);
 
@@ -150,7 +120,7 @@ export default function AuthProvider({
       try {
         await refreshToken();
       } catch {
-        if (!cancelled && localStorage.getItem(ACCESS_TOKEN_KEY)) {
+        if (!cancelled) {
           timeoutId = window.setTimeout(runRefresh, REFRESH_RETRY_MS);
         }
       }
