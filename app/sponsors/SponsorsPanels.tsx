@@ -78,8 +78,8 @@ function SponsorCard({
     <Image
       src={sponsor.logoSrc}
       alt={sponsor.name}
-      width={320}
-      height={120}
+      width={sponsor.logoWidth ?? 320}
+      height={sponsor.logoHeight ?? 120}
       draggable="false"
       className="h-auto w-auto max-h-[56%] max-w-[72%] object-contain"
     />

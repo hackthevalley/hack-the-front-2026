@@ -3,6 +3,8 @@ export type Sponsor = {
   name: string;
   href?: string;
   logoSrc?: string;
+  logoWidth?: number;
+  logoHeight?: number;
   placeholder?: boolean;
 };
 
@@ -21,7 +23,9 @@ export const sponsorTiers: readonly SponsorTier[] = [
         id: "school-of-cities",
         name: "School of Cities",
         href: "https://schoolofcities.utoronto.ca/",
-        logoSrc: "/sponsors/logos/school-of-cities.svg",
+        logoSrc: "/sponsors/logos/school-of-cities.png",
+        logoWidth: 2614,
+        logoHeight: 586,
       },
     ],
   },
