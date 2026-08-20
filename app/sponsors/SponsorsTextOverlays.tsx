@@ -1,9 +1,11 @@
 import DesignBox from "@/components/layout/DesignBox";
 import { SPONSORS_DESIGN_HEIGHT, SPONSORS_DESIGN_WIDTH } from "./background/layers";
 import SponsorCtaButton from "./SponsorCtaButton";
+import VolunteerCtaButton from "./VolunteerCtaButton";
 import { sponsorTiers } from "./data";
 import {
   CTA_BLUR_RADIUS,
+  CTA_BUTTON_GAP,
   CTA_BUTTON_HEIGHT,
   CTA_BUTTON_WIDTH,
   CTA_EMAIL_HEIGHT,
@@ -91,6 +93,7 @@ export default function SponsorsTextOverlays() {
           Interested in supporting Hack the Valley?
         </p>
         <p
+          data-nav-target="support"
           className="relative m-0 whitespace-nowrap font-figtree font-bold leading-normal"
           style={{ fontSize: cqh(36, CTA_HEADING_HEIGHT) }}
         >
@@ -129,14 +132,20 @@ export default function SponsorsTextOverlays() {
       <DesignBox
         designWidth={SPONSORS_DESIGN_WIDTH}
         designHeight={SPONSORS_DESIGN_HEIGHT}
-        left={layout.ctaButtonLeft}
+        left={layout.ctaButtonsRowLeft}
         top={layout.ctaButtonTop}
-        width={CTA_BUTTON_WIDTH}
+        width={layout.ctaButtonsRowWidth}
         height={CTA_BUTTON_HEIGHT}
         zIndex={8}
         className="relative"
       >
-        <SponsorCtaButton className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+        <div
+          className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2"
+          style={{ gap: `${(CTA_BUTTON_GAP / CTA_BUTTON_WIDTH) * 100}cqw` }}
+        >
+          <SponsorCtaButton />
+          <VolunteerCtaButton />
+        </div>
       </DesignBox>
     </>
   );

@@ -22,6 +22,7 @@ const DEFAULT_ITEMS: readonly HomeNavItem[] = [
     targetId: "sponsors",
     offsetRatio: 0.08,
   },
+  { key: "support", label: "Support", targetId: "support", offsetRatio: 0.08 },
   { key: "team", label: "Team", targetId: "team", offsetRatio: 0.08 },
 ];
 

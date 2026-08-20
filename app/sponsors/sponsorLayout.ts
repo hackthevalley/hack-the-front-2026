@@ -44,6 +44,7 @@ export const CTA_EMAIL_HEIGHT = 29;
 export const CTA_EMAIL_WIDTH = 1080.8375244140625;
 export const CTA_BUTTON_WIDTH = 240;
 export const CTA_BUTTON_HEIGHT = 72;
+export const CTA_BUTTON_GAP = 32;
 export const CTA_BLUR_RADIUS = 13.199999809265137 / 2;
 export const CTA_EMAIL_OFFSET_TOP = 30;
 export const CTA_BUTTON_OFFSET_LEFT = 443.5;
@@ -174,5 +175,12 @@ export function getSponsorsLayout(tiers: readonly SponsorTier[] = sponsorTiers) 
     ctaEmailTop: ctaTop + CTA_EMAIL_OFFSET_TOP,
     ctaButtonLeft: PANEL_LEFT + CTA_BUTTON_OFFSET_LEFT,
     ctaButtonTop: ctaTop + CTA_BUTTON_OFFSET_TOP,
+    ctaButtonsRowLeft:
+      PANEL_LEFT +
+      CTA_BUTTON_OFFSET_LEFT +
+      CTA_BUTTON_WIDTH / 2 -
+      CTA_BUTTON_WIDTH -
+      CTA_BUTTON_GAP / 2,
+    ctaButtonsRowWidth: CTA_BUTTON_WIDTH * 2 + CTA_BUTTON_GAP,
   };
 }

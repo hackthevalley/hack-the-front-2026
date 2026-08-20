@@ -1,4 +1,5 @@
 import SponsorCtaButton from "./SponsorCtaButton";
+import VolunteerCtaButton from "./VolunteerCtaButton";
 import Image from "@/components/ui/OptimizedImage";
 import { sponsorTiers, type SponsorTier } from "./data";
 
@@ -107,14 +108,19 @@ export default function MobileSponsorsContent() {
       </div>
 
       <div className="mx-auto mt-16 max-w-xl text-center text-white">
-        <p className="m-0 font-figtree text-2xl font-bold">
+        <p data-nav-target="support" className="m-0 font-figtree text-2xl font-bold">
           Interested in supporting Hack the Valley?
         </p>
         <p className="mt-3 font-figtree text-sm font-bold italic min-[390px]:text-base">
           Send us an inquiry @ sponsorships@hackthevalley.io
         </p>
-        <div className="mx-auto mt-7 w-full max-w-[13rem]">
-          <SponsorCtaButton />
+        <div className="mx-auto mt-7 flex w-full max-w-2xl flex-col items-center gap-4 min-[480px]:flex-row min-[480px]:justify-center">
+          <div className="w-full max-w-[13rem]">
+            <SponsorCtaButton />
+          </div>
+          <div className="w-full max-w-[13rem]">
+            <VolunteerCtaButton />
+          </div>
         </div>
       </div>
     </div>
