@@ -89,8 +89,8 @@ export default function MobileSponsorsContent() {
                       <Image
                         src={sponsor.logoSrc}
                         alt={sponsor.name}
-                        width={320}
-                        height={120}
+                        width={sponsor.logoWidth ?? 320}
+                        height={sponsor.logoHeight ?? 120}
                         draggable="false"
                         className="h-auto w-auto max-h-16 max-w-[85%] object-contain"
                       />
