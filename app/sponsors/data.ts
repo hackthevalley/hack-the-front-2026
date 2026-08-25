@@ -70,6 +70,12 @@ export const sponsorTiers: readonly SponsorTier[] = [
     title: "Our In-Kind Sponsors",
     sponsors: [
       {
+        id: "greenhouse",
+        name: "Greenhouse",
+        href: "https://www.greenhouse.ca/",
+        logoSrc: "/sponsors/logos/greenhouse.svg",
+      },
+      {
         id: "nordvpn",
         name: "NordVPN",
         href: "https://nordvpn.com/hackathons",
