@@ -30,6 +30,12 @@ function cqh(value: number, boxHeight: number) {
   return `${(value / boxHeight) * 100}cqh`;
 }
 
+// Use the stage width for vertical dimensions to avoid WebKit's indefinite
+// percentage heights in the aspect-ratio stage. Apply only to stage children.
+function stageLength(value: number) {
+  return `${(value / SPONSORS_DESIGN_WIDTH) * 100}cqw`;
+}
+
 /**
  * Editable foreground copy for the section heading and CTA.
  */
@@ -81,6 +87,10 @@ export default function SponsorsTextOverlays() {
         height={CTA_HEADING_HEIGHT}
         zIndex={7}
         className="relative select-text text-center text-white"
+        style={{
+          top: stageLength(layout.ctaTop),
+          height: stageLength(CTA_HEADING_HEIGHT),
+        }}
       >
         <p
           aria-hidden="true"
@@ -110,6 +120,10 @@ export default function SponsorsTextOverlays() {
         height={CTA_EMAIL_HEIGHT}
         zIndex={7}
         className="relative select-text text-center text-white"
+        style={{
+          top: stageLength(layout.ctaEmailTop),
+          height: stageLength(CTA_EMAIL_HEIGHT),
+        }}
       >
         <p
           aria-hidden="true"
@@ -138,6 +152,7 @@ export default function SponsorsTextOverlays() {
         height={CTA_BUTTON_HEIGHT}
         zIndex={8}
         className="relative"
+        style={{ top: stageLength(layout.ctaButtonTop) }}
       >
         <div
           className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2"
