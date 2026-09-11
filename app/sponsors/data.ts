@@ -99,6 +99,14 @@ export const sponsorTiers: readonly SponsorTier[] = [
         href: "https://saily.com/",
         logoSrc: "/sponsors/logos/saily.svg",
       },
+      {
+        id: "papiers",
+        name: "Papiers",
+        href: "https://papiers.ai/",
+        logoSrc: "/sponsors/logos/papiers.png",
+        logoWidth: 2204,
+        logoHeight: 338,
+      },
     ],
   },
 ] as const;
