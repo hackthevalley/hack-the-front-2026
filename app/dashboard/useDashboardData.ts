@@ -75,7 +75,7 @@ function formatDeadline(value: string): string {
     year: "numeric",
     month: "long",
     day: "numeric",
-    timeZone: "UTC",
+    timeZone: "America/Toronto",
   }).format(deadline);
 }
 
