@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { isUnauthorizedError } from "@/lib/apiClient";
+import { ApiError, isUnauthorizedError } from "@/lib/apiClient";
 import {
   hydrateApplicationAnswers,
   isSupportedApplicationQuestion,
@@ -167,9 +167,9 @@ export function useApplicationWorkflow({
 
       saveQueueRef.current = operation.catch((error) => {
         if (!handleRequestError(error)) {
-          toast.error("Autosave failed", {
+          toast.error(error instanceof ApiError && error.detail ? error.detail : "Autosave failed. Please check your connection and try again.", {
             id: AUTOSAVE_TOAST_ID,
-            duration: 900,
+            duration: 8000,
           });
         }
       });
@@ -206,9 +206,9 @@ export function useApplicationWorkflow({
     });
 
     if (missingQuestion) {
-      toast.error(`Please complete: ${missingQuestion.label}`, {
+      toast.error(`${missingQuestion.label}: This question is required. Please complete it before submitting.`, {
         id: AUTOSAVE_TOAST_ID,
-        duration: 2500,
+        duration: 10000,
       });
       return false;
     }
@@ -238,9 +238,13 @@ export function useApplicationWorkflow({
       return true;
     } catch (error) {
       if (!handleRequestError(error)) {
-        toast.error("Submission failed. Please review your application.", {
+        toast.error(
+          error instanceof ApiError && error.detail
+            ? `Could not submit: ${error.detail}`
+            : "Could not submit your application. Please check your connection and try again. If the problem continues, contact support.",
+          {
           id: AUTOSAVE_TOAST_ID,
-          duration: 2500,
+          duration: 10000,
         });
       }
       setIsSubmitting(false);

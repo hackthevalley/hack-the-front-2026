@@ -57,6 +57,10 @@ export function getProfileUrlValidationMessage(
   value: string,
   platform: ProfilePlatform,
 ): string | null {
+  if (!value.trim().toLowerCase().startsWith("https://")) {
+    return `${platform}: Your profile URL must start with https:// (for example, https://${PROFILE_HOSTS[platform]}/your-profile).`;
+  }
+
   let url: URL;
 
   try {
