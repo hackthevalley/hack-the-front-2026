@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import Image from "@/components/ui/OptimizedImage";
 import PortalBackButton from "@/components/layout/PortalBackButton";
 import PortalContentStage from "@/components/layout/PortalContentStage";
@@ -14,7 +15,14 @@ import {
   getComboPlacement,
 } from "@/app/application/sections/avatarAssets";
 import type { AccessoryKey, AvatarKey } from "@/app/application/sections/data";
+import { ApiError, apiJson } from "@/lib/apiClient";
 import { useDashboardData, type DashboardStatus } from "./useDashboardData";
+
+type RsvpChoice = "ACCEPTED_INVITE" | "REJECTED_INVITE";
+
+type RsvpResponse = {
+  new_status: RsvpChoice;
+};
 
 const STATUS_DETAILS: Record<
   DashboardStatus,
@@ -71,8 +79,8 @@ const STATUS_DETAILS: Record<
   accepted: {
     title: "Accepted",
     titleColor: "#71e4bc",
-    action: "Application Closed",
-    disabled: true,
+    action: "RSVP",
+    disabled: false,
     potionClass: "",
   },
   rsvped: {
@@ -220,9 +228,31 @@ export default function Dashboard() {
   const router = useRouter();
   const { logout, token } = useAuth();
   const dashboardData = useDashboardData({ logout, token });
-  const status = dashboardData.status;
+  const [rsvpStatus, setRsvpStatus] = useState<DashboardStatus | null>(null);
+  const [pendingRsvp, setPendingRsvp] = useState<RsvpChoice | null>(null);
+  const status = rsvpStatus ?? dashboardData.status;
   const current = STATUS_DETAILS[status];
   const isNotSubmitted = status === "applying" || status === "not-submitted";
+
+  async function updateRsvp(choice: RsvpChoice) {
+    if (!token || pendingRsvp) return;
+
+    setPendingRsvp(choice);
+    try {
+      const response = await apiJson<RsvpResponse>(
+        `/api/account/rsvp-status?status=${choice}`,
+        { method: "PATCH", token },
+      );
+      const accepted = response.new_status === "ACCEPTED_INVITE";
+      setRsvpStatus(accepted ? "rsvped" : "declined");
+      toast.success(accepted ? "RSVP confirmed!" : "RSVP declined.");
+    } catch (error) {
+      const detail = error instanceof ApiError ? error.detail : undefined;
+      toast.error(detail ?? "We could not update your RSVP. Please try again.");
+    } finally {
+      setPendingRsvp(null);
+    }
+  }
 
   useEffect(() => {
     if (status === "apply" || status === "applying") {
@@ -417,12 +447,46 @@ export default function Dashboard() {
           <p className="dashboard-status-deadline absolute left-[61.2%] top-[54.26%] w-[38.89%] -translate-x-1/2 whitespace-nowrap text-center font-figtree text-[clamp(10px,1.06vw,16px)] leading-[1.2] text-[#cecece]">
             Application deadline: {dashboardData.deadline}
           </p>
-          <div className="dashboard-status-action absolute left-[44.41%] top-[66.93%] h-[18.67%] w-[33.57%]">
-            <Button
-              text={current.action}
-              state={current.disabled ? "disabled" : "default"}
-              onClick={() => router.push("/application")}
-            />
+          <div
+            className={`dashboard-status-action absolute top-[66.93%] h-[18.67%] ${
+              status === "accepted"
+                ? "dashboard-rsvp-actions left-[38.5%] w-[45%]"
+                : "left-[44.41%] w-[33.57%]"
+            }`}
+          >
+            {status === "accepted" ? (
+              <>
+                <Button
+                  text="RSVP"
+                  state={
+                    pendingRsvp === "ACCEPTED_INVITE"
+                      ? "loading"
+                      : pendingRsvp
+                        ? "disabled"
+                        : "default"
+                  }
+                  onClick={() => void updateRsvp("ACCEPTED_INVITE")}
+                  width="100%"
+                  className="h-full"
+                  aspectRatio="auto"
+                  textClassName="font-figtree text-[clamp(13px,1.2vw,18px)] font-semibold leading-normal"
+                />
+                <button
+                  type="button"
+                  disabled={pendingRsvp !== null}
+                  onClick={() => void updateRsvp("REJECTED_INVITE")}
+                  className="dashboard-rsvp-decline h-full w-full rounded-full border border-[#ff9aa0]/70 bg-[linear-gradient(110deg,#ef4444_13%,#7f1d1d_114%)] font-figtree text-[clamp(13px,1.2vw,18px)] font-semibold text-white shadow-[inset_0_2px_3.7px_rgba(255,255,255,.75)] transition disabled:cursor-not-allowed disabled:opacity-55"
+                >
+                  {pendingRsvp === "REJECTED_INVITE" ? "Declining…" : "Decline"}
+                </button>
+              </>
+            ) : (
+              <Button
+                text={current.action}
+                state={current.disabled ? "disabled" : "default"}
+                onClick={() => router.push("/application")}
+              />
+            )}
           </div>
         </section>
 
