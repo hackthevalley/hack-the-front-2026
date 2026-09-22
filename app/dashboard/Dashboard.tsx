@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Image from "@/components/ui/OptimizedImage";
@@ -132,7 +132,7 @@ type ArtProps = {
   className: string;
 };
 
-function Art({ src, className }: ArtProps) {
+const Art = memo(function Art({ src, className }: ArtProps) {
   return (
     <Image
       src={src}
@@ -142,27 +142,22 @@ function Art({ src, className }: ArtProps) {
       className={`pointer-events-none absolute max-w-none select-none ${className}`}
     />
   );
-}
+});
 
-function MobileWoodenBoard() {
+const MobileWoodenBoard = memo(function MobileWoodenBoard() {
   return (
-    <div
-      className="dashboard-board-mobile pointer-events-none absolute inset-0"
+    <Image
+      src="/dashboard/wooden-board-mobile.webp"
+      alt=""
+      width={776}
+      height={886}
+      className="dashboard-board-mobile pointer-events-none absolute inset-0 h-full w-full max-w-none"
       aria-hidden="true"
-    >
-      {Array.from({ length: 5 }, (_, index) => (
-        <Image
-          key={index}
-          src="/dashboard/wooden-board.svg"
-          alt=""
-          draggable="false"
-          className="dashboard-board-plank absolute left-0 w-full max-w-none select-none"
-          style={{ top: `${index * 20}%` }}
-        />
-      ))}
-    </div>
+      draggable="false"
+      sizes="(max-width: 767px) 82vw, 1px"
+    />
   );
-}
+});
 
 // dashboard-avatar--right pairs with dashboard-right-foreground's >=768px
 // translateX rule in globals.css, keeping the owl/chipmunk spot aligned to
@@ -178,7 +173,7 @@ const AVATAR_FRAME_POSITION: Record<AvatarKey, string> = {
 // frame via object-contain, accessory placed with getComboPlacement's raw
 // percentages) so accessory positions stay consistent with avatarAssets.ts's
 // COMBO_PLACEMENTS instead of drifting under a per-avatar custom transform.
-function DashboardAvatar({
+const DashboardAvatar = memo(function DashboardAvatar({
   accessoryKey,
   avatarKey,
 }: {
@@ -222,7 +217,7 @@ function DashboardAvatar({
       )}
     </div>
   );
-}
+});
 
 export default function Dashboard() {
   const router = useRouter();
@@ -475,7 +470,7 @@ export default function Dashboard() {
                   type="button"
                   disabled={pendingRsvp !== null}
                   onClick={() => void updateRsvp("REJECTED_INVITE")}
-                  className="dashboard-rsvp-decline h-full w-full rounded-full border border-[#ff9aa0]/70 bg-[linear-gradient(110deg,#ef4444_13%,#7f1d1d_114%)] font-figtree text-[clamp(13px,1.2vw,18px)] font-semibold text-white shadow-[inset_0_2px_3.7px_rgba(255,255,255,.75)] transition disabled:cursor-not-allowed disabled:opacity-55"
+                  className="dashboard-rsvp-decline h-full w-full cursor-pointer rounded-full border border-[#ff9aa0]/70 bg-[linear-gradient(110deg,#ef4444_13%,#7f1d1d_114%)] font-figtree text-[clamp(13px,1.2vw,18px)] font-semibold text-white shadow-[inset_0_2px_3.7px_rgba(255,255,255,.75)] transition disabled:cursor-not-allowed disabled:opacity-55"
                 >
                   {pendingRsvp === "REJECTED_INVITE" ? "Declining…" : "Decline"}
                 </button>

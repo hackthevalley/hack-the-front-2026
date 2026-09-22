@@ -3,6 +3,10 @@
   transform: translateX(-50%);
 }
 
+.dashboard-scene {
+  contain: layout paint;
+}
+
 .dashboard-board-mobile {
   display: none;
 }
@@ -79,11 +83,6 @@
   .dashboard-board-mobile {
     display: block;
     filter: drop-shadow(0 10px 0 rgba(19, 5, 15, 0.45));
-  }
-
-  .dashboard-board-plank {
-    height: 20.75%;
-    object-fit: fill;
   }
 
   .dashboard-tree-trunk {
