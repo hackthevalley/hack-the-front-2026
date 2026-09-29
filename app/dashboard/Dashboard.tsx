@@ -395,7 +395,7 @@ export default function Dashboard() {
         />
 
         <h1 className="dashboard-welcome absolute top-[17.62%] z-10 whitespace-nowrap font-vcr text-[clamp(32px,4.23vw,64px)] leading-none tracking-[0.02em] [text-shadow:0_0_10px_rgba(255,255,255,.9),0_0_18px_#7075ff]">
-          Welcome back, Hacker
+          Welcome back, {dashboardData.firstName || "Hacker"}
         </h1>
 
         <section
