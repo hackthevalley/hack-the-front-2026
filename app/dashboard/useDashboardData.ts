@@ -30,6 +30,7 @@ export type DashboardData = {
   accessory: AccessoryKey | null;
   avatar: AvatarKey | null;
   deadline: string;
+  firstName: string;
   status: DashboardStatus;
 };
 
@@ -91,6 +92,7 @@ export function useDashboardData({
     accessory: null,
     avatar: null,
     deadline: "Loading...",
+    firstName: "",
     status: "loading",
   });
 
@@ -113,7 +115,13 @@ export function useDashboardData({
 
         // Status and deadline come from the access context and should remain
         // usable even if the optional avatar/application data cannot hydrate.
-        setData({ accessory: null, avatar: null, deadline, status });
+        setData({
+          accessory: null,
+          avatar: null,
+          deadline,
+          firstName: "",
+          status,
+        });
 
         if (hasApplication(user.application_status)) {
           try {
@@ -129,6 +137,7 @@ export function useDashboardData({
               accessory: hydrated.customAccessory.accessory || null,
               avatar: hydrated.customCharacter.character || null,
               deadline,
+              firstName: hydrated.about.firstName.trim(),
               status,
             });
           } catch (error) {
@@ -151,6 +160,7 @@ export function useDashboardData({
           accessory: null,
           avatar: null,
           deadline: "Unavailable",
+          firstName: "",
           status: "unavailable",
         });
       }
