@@ -105,12 +105,10 @@ export default function AuthProvider({
   }, [login, logout]);
 
   React.useEffect(() => {
-    let cancelled = false;
-
     function initializeAuth() {
       const storedToken = localStorage.getItem(ACCESS_TOKEN_KEY);
       if (!storedToken) {
-        if (!cancelled) setIsAuthReady(true);
+        setIsAuthReady(true);
         return;
       }
 
@@ -135,7 +133,6 @@ export default function AuthProvider({
     initializeAuth();
     window.addEventListener("storage", handleStorage);
     return () => {
-      cancelled = true;
       window.removeEventListener("storage", handleStorage);
     };
   }, [refreshToken]);
