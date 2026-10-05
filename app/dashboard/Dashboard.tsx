@@ -440,7 +440,10 @@ export default function Dashboard() {
             {current.title}
           </p>
           <p className="dashboard-status-deadline absolute left-[61.2%] top-[54.26%] w-[38.89%] -translate-x-1/2 whitespace-nowrap text-center font-figtree text-[clamp(10px,1.06vw,16px)] leading-[1.2] text-[#cecece]">
-            Application deadline: {dashboardData.deadline}
+            {status === "accepted" || status === "rsvped" || status === "declined"
+              ? "RSVP deadline"
+              : "Application deadline"}
+            : {dashboardData.deadline}
           </p>
           <div
             className={`dashboard-status-action absolute top-[66.93%] h-[18.67%] ${

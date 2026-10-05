@@ -36,6 +36,11 @@ export type DashboardData = {
 
 const SUBMITTED_STATUSES = new Set(["APPLIED", "WALK_IN_SUBMITTED"]);
 const NO_APPLICATION_STATUSES = new Set(["ACCOUNT_INACTIVE", "NOT_APPLIED"]);
+const RSVP_STATUSES = new Set<DashboardStatus>([
+  "accepted",
+  "rsvped",
+  "declined",
+]);
 
 function hasApplication(applicationStatus: string | null): boolean {
   return (
@@ -70,7 +75,7 @@ function resolveDashboardStatus(
 }
 
 function formatDeadline(value: string): string {
-  const deadline = new Date(value);
+  const deadline = new Date(value.includes("T") ? value : `${value}T12:00:00Z`);
   if (Number.isNaN(deadline.getTime())) return "Unavailable";
   return new Intl.DateTimeFormat("en-CA", {
     year: "numeric",
@@ -111,7 +116,11 @@ export function useDashboardData({
           user.application_status,
           registration,
         );
-        const deadline = formatDeadline(registration.end_at);
+        const deadline = formatDeadline(
+          RSVP_STATUSES.has(status)
+            ? registration.rsvp_due_date
+            : registration.end_at,
+        );
 
         // Status and deadline come from the access context and should remain
         // usable even if the optional avatar/application data cannot hydrate.

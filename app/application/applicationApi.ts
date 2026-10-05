@@ -12,6 +12,7 @@ export type UserResponse = {
 export type RegistrationTimeRange = {
   start_at: string;
   end_at: string;
+  rsvp_due_date: string;
 };
 
 export async function loadAccessContext(token: string, signal?: AbortSignal) {
