@@ -163,6 +163,13 @@ export const sponsorTiers: readonly SponsorTier[] = [
         logoWidth: 581,
         logoHeight: 72,
       },
+      {
+        id: "clay-moo",
+        name: "Clay Moo",
+        logoSrc: "/sponsors/logos/clay-moo.svg",
+        logoWidth: 462,
+        logoHeight: 356,
+      },
     ],
   },
 ] as const;
