@@ -103,6 +103,14 @@ export const sponsorTiers: readonly SponsorTier[] = [
         logoWidth: 200,
         logoHeight: 200,
       },
+      {
+        id: "papiers",
+        name: "Papiers",
+        href: "https://papiers.ai/",
+        logoSrc: "/sponsors/logos/papiers.png",
+        logoWidth: 2204,
+        logoHeight: 338,
+      },
     ],
   },
   {
@@ -140,14 +148,6 @@ export const sponsorTiers: readonly SponsorTier[] = [
         logoSrc: "/sponsors/logos/saily.svg",
       },
       {
-        id: "papiers",
-        name: "Papiers",
-        href: "https://papiers.ai/",
-        logoSrc: "/sponsors/logos/papiers.png",
-        logoWidth: 2204,
-        logoHeight: 338,
-      },
-      {
         id: "fgf-brands",
         name: "FGF Brands",
         href: "https://www.fgfbrands.com/",
@@ -166,6 +166,7 @@ export const sponsorTiers: readonly SponsorTier[] = [
       {
         id: "clay-moo",
         name: "Clay Moo",
+        href: "https://claymoo.com/",
         logoSrc: "/sponsors/logos/clay-moo.svg",
         logoWidth: 462,
         logoHeight: 356,
