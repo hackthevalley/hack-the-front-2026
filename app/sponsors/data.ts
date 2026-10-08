@@ -111,6 +111,14 @@ export const sponsorTiers: readonly SponsorTier[] = [
         logoWidth: 2204,
         logoHeight: 338,
       },
+      {
+        id: "fgf-brands",
+        name: "FGF Brands",
+        href: "https://www.fgfbrands.com/",
+        logoSrc: "/sponsors/logos/fgf-brands.svg",
+        logoWidth: 288,
+        logoHeight: 288,
+      },
     ],
   },
   {
@@ -146,14 +154,6 @@ export const sponsorTiers: readonly SponsorTier[] = [
         name: "Saily",
         href: "https://saily.com/",
         logoSrc: "/sponsors/logos/saily.svg",
-      },
-      {
-        id: "fgf-brands",
-        name: "FGF Brands",
-        href: "https://www.fgfbrands.com/",
-        logoSrc: "/sponsors/logos/fgf-brands.svg",
-        logoWidth: 288,
-        logoHeight: 288,
       },
       {
         id: "backboard-io",
