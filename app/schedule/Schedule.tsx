@@ -11,6 +11,7 @@ import {
   HOUR_MS,
   layoutSchedule,
   MIN_EVENT_BLOCK_MS,
+  timelineOffset,
   type ScheduleEvent,
 } from "./layoutSchedule";
 
@@ -65,6 +66,7 @@ export default function Schedule() {
   const { logout, token } = useAuth();
   const [events, setEvents] = useState<ScheduleEvent[] | null>(null);
   const [error, setError] = useState(false);
+  const [currentTime, setCurrentTime] = useState<number | null>(null);
   const scheduleEvents = events ?? [];
   const scheduleDays = layoutSchedule(scheduleEvents);
 
@@ -93,6 +95,13 @@ export default function Schedule() {
 
     return () => controller.abort();
   }, [logout, router, token]);
+
+  useEffect(() => {
+    const updateCurrentTime = () => setCurrentTime(Date.now());
+    updateCurrentTime();
+    const interval = window.setInterval(updateCurrentTime, 30_000);
+    return () => window.clearInterval(interval);
+  }, []);
 
   return (
     <main className="min-h-dvh bg-[radial-gradient(circle_at_50%_0%,#29227c_0%,#0d0a46_42%,#07021d_100%)] text-white">
@@ -131,6 +140,12 @@ export default function Schedule() {
               const timelineHeight =
                 ((day.endAt - day.startAt) / HOUR_MS) * PIXELS_PER_HOUR;
               const hourCount = (day.endAt - day.startAt) / HOUR_MS;
+              const currentOffset =
+                currentTime === null ? null : timelineOffset(currentTime, day);
+              const currentTimeIso =
+                currentTime === null
+                  ? undefined
+                  : new Date(currentTime).toISOString();
               return (
                 <section key={day.key}>
                   <h2 className="mb-5 border-b border-white/15 pb-3 font-vcr text-xl text-[#f6c7fc] md:text-2xl">
@@ -241,6 +256,25 @@ export default function Schedule() {
                           );
                         })}
                       </div>
+                      {currentOffset !== null && (
+                        <div
+                          className="pointer-events-none absolute left-0 right-0 z-30 flex items-center"
+                          style={{
+                            top:
+                              TIMELINE_PADDING +
+                              currentOffset * PIXELS_PER_HOUR,
+                          }}
+                        >
+                          <time
+                            dateTime={currentTimeIso}
+                            className="w-16 shrink-0 text-right font-vcr text-xs font-bold text-rose-300"
+                          >
+                            Now
+                          </time>
+                          <span className="ml-2 size-2 shrink-0 animate-pulse rounded-full bg-rose-400 shadow-[0_0_10px_rgba(251,113,133,.9)]" />
+                          <span className="h-0.5 flex-1 bg-rose-400 shadow-[0_0_8px_rgba(251,113,133,.7)]" />
+                        </div>
+                      )}
                     </div>
                   </div>
                 </section>

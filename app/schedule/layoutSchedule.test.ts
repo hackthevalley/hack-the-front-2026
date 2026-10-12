@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { HOUR_MS, layoutSchedule, type ScheduleEvent } from "./layoutSchedule.ts";
+import {
+  HOUR_MS,
+  layoutSchedule,
+  timelineOffset,
+  type ScheduleEvent,
+} from "./layoutSchedule.ts";
 
 const event = (id: string, startsAt: string, endsAt: string): ScheduleEvent => ({
   id,
@@ -51,4 +56,14 @@ test("short events receive enough layout space to remain readable", () => {
   ]);
 
   assert.deepEqual(day.events.map(({ columns }) => columns), [2, 2]);
+});
+
+test("current time is positioned only inside its schedule day", () => {
+  const [day] = layoutSchedule([
+    event("event", "2026-10-17T17:00:00-04:00", "2026-10-17T19:00:00-04:00"),
+  ]);
+
+  assert.equal(timelineOffset(day.startAt + 30 * 60 * 1000, day), 0.5);
+  assert.equal(timelineOffset(day.startAt - 1, day), null);
+  assert.equal(timelineOffset(day.endAt + 1, day), null);
 });

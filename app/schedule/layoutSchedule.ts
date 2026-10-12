@@ -26,6 +26,11 @@ export const HOUR_MS = 60 * 60 * 1000;
 export const MIN_EVENT_BLOCK_MS = 30 * 60 * 1000;
 export const DEADLINE_BLOCK_MS = 45 * 60 * 1000;
 
+export function timelineOffset(now: number, day: ScheduleDay): number | null {
+  if (now < day.startAt || now > day.endAt) return null;
+  return (now - day.startAt) / HOUR_MS;
+}
+
 const dayFormatter = new Intl.DateTimeFormat("en-CA", {
   year: "numeric",
   month: "2-digit",
