@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import PortalNavbar from "@/components/layout/PortalNavbar";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { apiJson, isUnauthorizedError } from "@/lib/apiClient";
-import { groupScheduleEvents, type ScheduleEvent } from "./groupScheduleEvents";
+import { HOUR_MS, layoutSchedule, type ScheduleEvent } from "./layoutSchedule";
 
 type ScheduleResponse = {
   events: ScheduleEvent[];
@@ -25,13 +25,15 @@ const timeFormatter = new Intl.DateTimeFormat("en-CA", {
   timeZone: "America/Toronto",
 });
 
+const PIXELS_PER_HOUR = 112;
+
 export default function Schedule() {
   const router = useRouter();
   const { logout, token } = useAuth();
   const [events, setEvents] = useState<ScheduleEvent[] | null>(null);
   const [error, setError] = useState(false);
   const scheduleEvents = events ?? [];
-  const scheduleGroups = groupScheduleEvents(scheduleEvents);
+  const scheduleDays = layoutSchedule(scheduleEvents);
 
   useEffect(() => {
     if (!token) return;
@@ -62,7 +64,7 @@ export default function Schedule() {
   return (
     <main className="min-h-dvh bg-[radial-gradient(circle_at_50%_0%,#29227c_0%,#0d0a46_42%,#07021d_100%)] text-white">
       <PortalNavbar />
-      <div className="mx-auto w-full max-w-4xl px-5 pb-16 pt-8 md:px-8 md:pt-12">
+      <div className="mx-auto w-full max-w-6xl px-5 pb-16 pt-8 md:px-8 md:pt-12">
         <div className="mb-10 flex items-end justify-between gap-4">
           <div>
             <p className="mb-2 font-vcr text-sm uppercase tracking-[0.18em] text-[#b8c8ff]">
@@ -91,65 +93,86 @@ export default function Schedule() {
             No events have been scheduled yet.
           </p>
         ) : (
-          <div className="space-y-8">
-            {scheduleGroups.map((group, index) => {
-              const firstEvent = group[0];
-              const date = dateFormatter.format(new Date(firstEvent.starts_at));
-              const previousDate =
-                index > 0
-                  ? dateFormatter.format(
-                      new Date(scheduleGroups[index - 1][0].starts_at),
-                    )
-                  : null;
-              const concurrent = group.length > 1;
+          <div className="space-y-12">
+            {scheduleDays.map((day) => {
+              const timelineHeight =
+                ((day.endAt - day.startAt) / HOUR_MS) * PIXELS_PER_HOUR;
+              const hourCount = (day.endAt - day.startAt) / HOUR_MS;
               return (
-                <section key={firstEvent.starts_at}>
-                  {date !== previousDate && (
-                    <h2 className="mb-4 border-b border-white/15 pb-3 font-vcr text-xl text-[#f6c7fc] md:text-2xl">
-                      {date}
-                    </h2>
-                  )}
-                  <div
-                    className={
-                      concurrent
-                        ? "rounded-3xl border border-[#f6c7fc]/45 bg-[#f6c7fc]/[0.06] p-3 md:p-4"
-                        : ""
-                    }
-                  >
-                    <div className={concurrent ? "grid gap-3 md:grid-cols-2" : ""}>
-                      {group.map((event) => (
-                        <article
-                          key={event.id}
-                          className={`grid gap-2 rounded-2xl border bg-white/[0.07] p-5 md:gap-6 md:p-6 ${
-                            concurrent
-                              ? "border-[#f6c7fc]/25"
-                              : "mb-3 border-white/10 md:grid-cols-[170px_1fr]"
-                          }`}
-                        >
-                          <time
-                            dateTime={event.starts_at}
-                            className="font-vcr text-sm text-[#b8c8ff]"
+                <section key={day.key}>
+                  <h2 className="mb-5 border-b border-white/15 pb-3 font-vcr text-xl text-[#f6c7fc] md:text-2xl">
+                    {dateFormatter.format(new Date(day.events[0].event.starts_at))}
+                  </h2>
+                  <div className="overflow-x-auto pb-2">
+                    <div
+                      className="relative min-w-[680px]"
+                      style={{ height: timelineHeight }}
+                    >
+                      {Array.from({ length: hourCount + 1 }, (_, hour) => {
+                        const timestamp = day.startAt + hour * HOUR_MS;
+                        return (
+                          <div
+                            key={timestamp}
+                            className="absolute left-0 right-0 border-t border-white/10"
+                            style={{ top: hour * PIXELS_PER_HOUR }}
                           >
-                            {timeFormatter.format(new Date(event.starts_at))} –{" "}
-                            {timeFormatter.format(new Date(event.ends_at))}
-                          </time>
-                          <div>
-                            <h3 className="font-figtree text-xl font-bold text-white">
-                              {event.title}
-                            </h3>
-                            {event.location && (
-                              <p className="mt-1 font-figtree font-semibold text-[#8df2cb]">
-                                {event.location}
-                              </p>
-                            )}
-                            {event.description && (
-                              <p className="mt-2 whitespace-pre-wrap font-figtree leading-7 text-[#d5dced]">
-                                {event.description}
-                              </p>
-                            )}
+                            <time
+                              dateTime={new Date(timestamp).toISOString()}
+                              className="absolute -top-2.5 left-0 w-16 font-vcr text-xs text-[#8997c4]"
+                            >
+                              {timeFormatter.format(new Date(timestamp))}
+                            </time>
                           </div>
-                        </article>
-                      ))}
+                        );
+                      })}
+
+                      <div className="absolute bottom-0 left-[72px] right-0 top-0">
+                        {day.events.map(({ event, column, columns }) => {
+                          const startsAt = new Date(event.starts_at).getTime();
+                          const endsAt = new Date(event.ends_at).getTime();
+                          const top =
+                            ((startsAt - day.startAt) / HOUR_MS) * PIXELS_PER_HOUR;
+                          const height =
+                            ((endsAt - startsAt) / HOUR_MS) * PIXELS_PER_HOUR;
+                          const gap = 8;
+                          const left = `calc(${(column / columns) * 100}% + ${(column * gap) / columns}px)`;
+                          const width = `calc(${100 / columns}% - ${((columns - 1) * gap) / columns}px)`;
+
+                          return (
+                            <article
+                              key={event.id}
+                              className="absolute overflow-hidden rounded-xl border border-[#f6c7fc]/30 bg-[#211b67]/95 p-3 shadow-[0_8px_24px_rgba(3,1,20,.28)] md:p-4"
+                              style={{
+                                top,
+                                left,
+                                width,
+                                height: Math.max(height - 6, 1),
+                              }}
+                            >
+                              <time
+                                dateTime={event.starts_at}
+                                className="font-vcr text-xs text-[#b8c8ff]"
+                              >
+                                {timeFormatter.format(new Date(event.starts_at))} –{" "}
+                                {timeFormatter.format(new Date(event.ends_at))}
+                              </time>
+                              <h3 className="mt-1 font-figtree text-lg font-bold leading-tight text-white md:text-xl">
+                                {event.title}
+                              </h3>
+                              {event.location && (
+                                <p className="mt-1 font-figtree text-sm font-semibold text-[#8df2cb]">
+                                  {event.location}
+                                </p>
+                              )}
+                              {event.description && (
+                                <p className="mt-2 line-clamp-3 whitespace-pre-wrap font-figtree text-sm leading-5 text-[#d5dced]">
+                                  {event.description}
+                                </p>
+                              )}
+                            </article>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 </section>
