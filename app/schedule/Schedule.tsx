@@ -26,6 +26,7 @@ const timeFormatter = new Intl.DateTimeFormat("en-CA", {
 });
 
 const PIXELS_PER_HOUR = 112;
+const TIMELINE_PADDING = 16;
 
 export default function Schedule() {
   const router = useRouter();
@@ -106,7 +107,7 @@ export default function Schedule() {
                   <div className="overflow-x-auto pb-2">
                     <div
                       className="relative min-w-[680px]"
-                      style={{ height: timelineHeight }}
+                      style={{ height: timelineHeight + TIMELINE_PADDING * 2 }}
                     >
                       {Array.from({ length: hourCount + 1 }, (_, hour) => {
                         const timestamp = day.startAt + hour * HOUR_MS;
@@ -114,7 +115,9 @@ export default function Schedule() {
                           <div
                             key={timestamp}
                             className="absolute left-0 right-0 border-t border-white/10"
-                            style={{ top: hour * PIXELS_PER_HOUR }}
+                            style={{
+                              top: TIMELINE_PADDING + hour * PIXELS_PER_HOUR,
+                            }}
                           >
                             <time
                               dateTime={new Date(timestamp).toISOString()}
@@ -131,6 +134,7 @@ export default function Schedule() {
                           const startsAt = new Date(event.starts_at).getTime();
                           const endsAt = new Date(event.ends_at).getTime();
                           const top =
+                            TIMELINE_PADDING +
                             ((startsAt - day.startAt) / HOUR_MS) * PIXELS_PER_HOUR;
                           const height =
                             ((endsAt - startsAt) / HOUR_MS) * PIXELS_PER_HOUR;
