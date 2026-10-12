@@ -43,3 +43,12 @@ test("deadlines receive visible timeline space", () => {
   assert.equal(day.endAt - day.startAt, HOUR_MS);
   assert.equal(day.events[0].columns, 1);
 });
+
+test("short events receive enough layout space to remain readable", () => {
+  const [day] = layoutSchedule([
+    event("short", "2026-10-17T17:00:00-04:00", "2026-10-17T17:10:00-04:00"),
+    event("next", "2026-10-17T17:15:00-04:00", "2026-10-17T18:00:00-04:00"),
+  ]);
+
+  assert.deepEqual(day.events.map(({ columns }) => columns), [2, 2]);
+});

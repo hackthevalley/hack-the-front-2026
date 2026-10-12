@@ -10,6 +10,7 @@ import {
   DEADLINE_BLOCK_MS,
   HOUR_MS,
   layoutSchedule,
+  MIN_EVENT_BLOCK_MS,
   type ScheduleEvent,
 } from "./layoutSchedule";
 
@@ -30,7 +31,7 @@ const timeFormatter = new Intl.DateTimeFormat("en-CA", {
   timeZone: "America/Toronto",
 });
 
-const PIXELS_PER_HOUR = 112;
+const PIXELS_PER_HOUR = 144;
 const TIMELINE_PADDING = 16;
 
 const EVENT_TYPE_STYLES: Record<
@@ -165,11 +166,15 @@ export default function Schedule() {
                           const startsAt = new Date(event.starts_at).getTime();
                           const endsAt = new Date(event.ends_at).getTime();
                           const isDeadline = startsAt === endsAt;
+                          const isCompact = endsAt - startsAt <= MIN_EVENT_BLOCK_MS;
                           const top =
                             TIMELINE_PADDING +
                             ((startsAt - day.startAt) / HOUR_MS) * PIXELS_PER_HOUR;
                           const height =
-                            (((isDeadline ? DEADLINE_BLOCK_MS : endsAt - startsAt) /
+                            ((Math.max(
+                              isDeadline ? DEADLINE_BLOCK_MS : endsAt - startsAt,
+                              MIN_EVENT_BLOCK_MS,
+                            ) /
                               HOUR_MS) *
                               PIXELS_PER_HOUR);
                           const gap = 8;
@@ -180,9 +185,11 @@ export default function Schedule() {
                           return (
                             <article
                               key={event.id}
-                              className={`absolute overflow-hidden rounded-xl border p-3 shadow-[0_8px_24px_rgba(3,1,20,.28)] md:p-4 ${typeStyle.card} ${
+                              className={`absolute overflow-hidden rounded-xl border shadow-[0_8px_24px_rgba(3,1,20,.28)] ${typeStyle.card} ${
+                                isCompact ? "p-2" : "p-3 md:p-4"
+                              } ${
                                 event.is_important
-                                  ? "ring-2 ring-amber-300 ring-offset-2 ring-offset-[#0d0a46]"
+                                  ? "ring-2 ring-inset ring-amber-300"
                                   : ""
                               }`}
                               style={{
@@ -192,35 +199,40 @@ export default function Schedule() {
                                 height: Math.max(height - 6, 1),
                               }}
                             >
-                              <div className="flex flex-wrap items-center justify-between gap-2">
+                              <div className="flex min-w-0 items-center justify-between gap-2">
                                 <time
                                   dateTime={event.starts_at}
-                                  className="font-vcr text-xs text-[#b8c8ff]"
+                                  className="min-w-0 truncate font-vcr text-xs text-[#b8c8ff]"
                                 >
                                   {isDeadline
                                     ? `Due ${timeFormatter.format(new Date(event.starts_at))}`
                                     : `${timeFormatter.format(new Date(event.starts_at))} – ${timeFormatter.format(new Date(event.ends_at))}`}
                                 </time>
                                 <span
-                                  className={`font-figtree text-xs font-bold uppercase tracking-wide ${typeStyle.label}`}
+                                  className={`shrink-0 font-figtree text-xs font-bold uppercase tracking-wide ${typeStyle.label}`}
                                 >
+                                  {event.is_important && "★ "}
                                   {event.event_type}
                                 </span>
                               </div>
-                              <h3 className="mt-1 font-figtree text-lg font-bold leading-tight text-white md:text-xl">
+                              <h3
+                                className={`mt-1 truncate font-figtree font-bold leading-tight text-white ${
+                                  isCompact ? "text-base" : "text-lg md:text-xl"
+                                }`}
+                              >
                                 {event.title}
                               </h3>
-                              {event.is_important && (
+                              {event.is_important && !isCompact && (
                                 <p className="mt-1 font-figtree text-xs font-bold uppercase tracking-wide text-amber-200">
                                   Important
                                 </p>
                               )}
-                              {event.location && (
+                              {event.location && !isCompact && (
                                 <p className="mt-1 font-figtree text-sm font-semibold text-[#8df2cb]">
                                   {event.location}
                                 </p>
                               )}
-                              {event.description && (
+                              {event.description && !isCompact && (
                                 <p className="mt-2 line-clamp-3 whitespace-pre-wrap font-figtree text-sm leading-5 text-[#d5dced]">
                                   {event.description}
                                 </p>

@@ -23,6 +23,7 @@ export type ScheduleDay = {
 };
 
 export const HOUR_MS = 60 * 60 * 1000;
+export const MIN_EVENT_BLOCK_MS = 30 * 60 * 1000;
 export const DEADLINE_BLOCK_MS = 45 * 60 * 1000;
 
 const dayFormatter = new Intl.DateTimeFormat("en-CA", {
@@ -35,7 +36,10 @@ const dayFormatter = new Intl.DateTimeFormat("en-CA", {
 function layoutEnd(event: ScheduleEvent): number {
   const startsAt = new Date(event.starts_at).getTime();
   const endsAt = new Date(event.ends_at).getTime();
-  return startsAt === endsAt ? startsAt + DEADLINE_BLOCK_MS : endsAt;
+  return startsAt + Math.max(
+    startsAt === endsAt ? DEADLINE_BLOCK_MS : endsAt - startsAt,
+    MIN_EVENT_BLOCK_MS,
+  );
 }
 
 function layoutOverlaps(events: ScheduleEvent[]): TimelineEvent[] {
