@@ -6,15 +6,7 @@ import { useRouter } from "next/navigation";
 import PortalNavbar from "@/components/layout/PortalNavbar";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { apiJson, isUnauthorizedError } from "@/lib/apiClient";
-
-type ScheduleEvent = {
-  id: string;
-  title: string;
-  description: string | null;
-  location: string | null;
-  starts_at: string;
-  ends_at: string;
-};
+import { groupScheduleEvents, type ScheduleEvent } from "./groupScheduleEvents";
 
 type ScheduleResponse = {
   events: ScheduleEvent[];
@@ -39,6 +31,7 @@ export default function Schedule() {
   const [events, setEvents] = useState<ScheduleEvent[] | null>(null);
   const [error, setError] = useState(false);
   const scheduleEvents = events ?? [];
+  const scheduleGroups = groupScheduleEvents(scheduleEvents);
 
   useEffect(() => {
     if (!token) return;
@@ -99,45 +92,66 @@ export default function Schedule() {
           </p>
         ) : (
           <div className="space-y-8">
-            {scheduleEvents.map((event, index) => {
-              const date = dateFormatter.format(new Date(event.starts_at));
+            {scheduleGroups.map((group, index) => {
+              const firstEvent = group[0];
+              const date = dateFormatter.format(new Date(firstEvent.starts_at));
               const previousDate =
                 index > 0
                   ? dateFormatter.format(
-                      new Date(scheduleEvents[index - 1].starts_at),
+                      new Date(scheduleGroups[index - 1][0].starts_at),
                     )
                   : null;
+              const concurrent = group.length > 1;
               return (
-                <section key={event.id}>
+                <section key={firstEvent.starts_at}>
                   {date !== previousDate && (
                     <h2 className="mb-4 border-b border-white/15 pb-3 font-vcr text-xl text-[#f6c7fc] md:text-2xl">
                       {date}
                     </h2>
                   )}
-                  <article className="mb-3 grid gap-2 rounded-2xl border border-white/10 bg-white/[0.07] p-5 md:grid-cols-[170px_1fr] md:gap-6 md:p-6">
-                    <time
-                      dateTime={event.starts_at}
-                      className="font-vcr text-sm text-[#b8c8ff]"
-                    >
-                      {timeFormatter.format(new Date(event.starts_at))} –{" "}
-                      {timeFormatter.format(new Date(event.ends_at))}
-                    </time>
-                    <div>
-                      <h3 className="font-figtree text-xl font-bold text-white">
-                        {event.title}
-                      </h3>
-                      {event.location && (
-                        <p className="mt-1 font-figtree font-semibold text-[#8df2cb]">
-                          {event.location}
-                        </p>
-                      )}
-                      {event.description && (
-                        <p className="mt-2 whitespace-pre-wrap font-figtree leading-7 text-[#d5dced]">
-                          {event.description}
-                        </p>
-                      )}
+                  <div
+                    className={
+                      concurrent
+                        ? "rounded-3xl border border-[#f6c7fc]/45 bg-[#f6c7fc]/[0.06] p-3 md:p-4"
+                        : ""
+                    }
+                  >
+                    <div className={concurrent ? "grid gap-3 md:grid-cols-2" : ""}>
+                      {group.map((event) => (
+                        <article
+                          key={event.id}
+                          className={`grid gap-2 rounded-2xl border bg-white/[0.07] p-5 md:gap-6 md:p-6 ${
+                            concurrent
+                              ? "border-[#f6c7fc]/25"
+                              : "mb-3 border-white/10 md:grid-cols-[170px_1fr]"
+                          }`}
+                        >
+                          <time
+                            dateTime={event.starts_at}
+                            className="font-vcr text-sm text-[#b8c8ff]"
+                          >
+                            {timeFormatter.format(new Date(event.starts_at))} –{" "}
+                            {timeFormatter.format(new Date(event.ends_at))}
+                          </time>
+                          <div>
+                            <h3 className="font-figtree text-xl font-bold text-white">
+                              {event.title}
+                            </h3>
+                            {event.location && (
+                              <p className="mt-1 font-figtree font-semibold text-[#8df2cb]">
+                                {event.location}
+                              </p>
+                            )}
+                            {event.description && (
+                              <p className="mt-2 whitespace-pre-wrap font-figtree leading-7 text-[#d5dced]">
+                                {event.description}
+                              </p>
+                            )}
+                          </div>
+                        </article>
+                      ))}
                     </div>
-                  </article>
+                  </div>
                 </section>
               );
             })}

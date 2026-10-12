@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "check": "npm run lint && npm run typecheck"
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test app/schedule/groupScheduleEvents.test.ts",
+    "check": "npm run lint && npm run typecheck && npm test"
   },
   "dependencies": {
     "next": "^16.3.8",
