@@ -86,15 +86,22 @@ const STATUS_DETAILS: Record<
   rsvped: {
     title: "RSVPed",
     titleColor: "#71e4bc",
-    action: "Applied",
-    disabled: true,
+    action: "Show Schedule",
+    disabled: false,
     potionClass: "",
   },
   "scanned-in": {
     title: "Scanned In",
     titleColor: "#71e4bc",
-    action: "Applied",
-    disabled: true,
+    action: "Show Schedule",
+    disabled: false,
+    potionClass: "",
+  },
+  "walk-in-submitted": {
+    title: "Walk-In Submitted",
+    titleColor: "#71e4bc",
+    action: "Show Schedule",
+    disabled: false,
     potionClass: "",
   },
   rejected: {
@@ -228,6 +235,10 @@ export default function Dashboard() {
   const status = rsvpStatus ?? dashboardData.status;
   const current = STATUS_DETAILS[status];
   const isNotSubmitted = status === "applying" || status === "not-submitted";
+  const canViewSchedule =
+    status === "rsvped" ||
+    status === "scanned-in" ||
+    status === "walk-in-submitted";
 
   async function updateRsvp(choice: RsvpChoice) {
     if (!token || pendingRsvp) return;
@@ -482,7 +493,9 @@ export default function Dashboard() {
               <Button
                 text={current.action}
                 state={current.disabled ? "disabled" : "default"}
-                onClick={() => router.push("/application")}
+                onClick={() =>
+                  router.push(canViewSchedule ? "/schedule" : "/application")
+                }
               />
             )}
           </div>

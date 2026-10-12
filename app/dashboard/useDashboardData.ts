@@ -21,6 +21,7 @@ export type DashboardStatus =
   | "accepted"
   | "rsvped"
   | "scanned-in"
+  | "walk-in-submitted"
   | "rejected"
   | "declined"
   | "loading"
@@ -34,7 +35,6 @@ export type DashboardData = {
   status: DashboardStatus;
 };
 
-const SUBMITTED_STATUSES = new Set(["APPLIED", "WALK_IN_SUBMITTED"]);
 const NO_APPLICATION_STATUSES = new Set(["ACCOUNT_INACTIVE", "NOT_APPLIED"]);
 const RSVP_STATUSES = new Set<DashboardStatus>([
   "accepted",
@@ -53,12 +53,13 @@ function resolveDashboardStatus(
   applicationStatus: string | null,
   registration: RegistrationTimeRange,
 ): DashboardStatus {
-  if (SUBMITTED_STATUSES.has(applicationStatus ?? "")) return "submitted";
+  if (applicationStatus === "APPLIED") return "submitted";
   if (applicationStatus === "UNDER_REVIEW") return "pending";
   if (applicationStatus === "WAITLISTED") return "waitlisted";
   if (applicationStatus === "ACCEPTED") return "accepted";
   if (applicationStatus === "ACCEPTED_INVITE") return "rsvped";
   if (applicationStatus === "SCANNED_IN") return "scanned-in";
+  if (applicationStatus === "WALK_IN_SUBMITTED") return "walk-in-submitted";
   if (applicationStatus === "REJECTED") return "rejected";
   if (applicationStatus === "REJECTED_INVITE") return "declined";
   if (applicationStatus === "WALK_IN") return "apply";
