@@ -7,6 +7,8 @@ const event = (id: string, startsAt: string, endsAt: string): ScheduleEvent => (
   title: id,
   description: null,
   location: null,
+  event_type: "general",
+  is_important: false,
   starts_at: startsAt,
   ends_at: endsAt,
 });
@@ -31,4 +33,13 @@ test("staggered overlapping events use separate timeline columns", () => {
     ],
   );
   assert.equal(day.endAt - day.startAt, 5 * HOUR_MS);
+});
+
+test("deadlines receive visible timeline space", () => {
+  const [day] = layoutSchedule([
+    event("deadline", "2026-10-17T17:00:00-04:00", "2026-10-17T17:00:00-04:00"),
+  ]);
+
+  assert.equal(day.endAt - day.startAt, HOUR_MS);
+  assert.equal(day.events[0].columns, 1);
 });

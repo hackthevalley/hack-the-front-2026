@@ -6,7 +6,12 @@ import { useRouter } from "next/navigation";
 import PortalNavbar from "@/components/layout/PortalNavbar";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { apiJson, isUnauthorizedError } from "@/lib/apiClient";
-import { HOUR_MS, layoutSchedule, type ScheduleEvent } from "./layoutSchedule";
+import {
+  DEADLINE_BLOCK_MS,
+  HOUR_MS,
+  layoutSchedule,
+  type ScheduleEvent,
+} from "./layoutSchedule";
 
 type ScheduleResponse = {
   events: ScheduleEvent[];
@@ -27,6 +32,32 @@ const timeFormatter = new Intl.DateTimeFormat("en-CA", {
 
 const PIXELS_PER_HOUR = 112;
 const TIMELINE_PADDING = 16;
+
+const EVENT_TYPE_STYLES: Record<
+  ScheduleEvent["event_type"],
+  { card: string; label: string }
+> = {
+  general: {
+    card: "border-violet-400/50 bg-[#211b67]/95",
+    label: "text-violet-200",
+  },
+  workshop: {
+    card: "border-blue-400/60 bg-[#172b5b]/95",
+    label: "text-blue-200",
+  },
+  ceremony: {
+    card: "border-pink-400/60 bg-[#4a1742]/95",
+    label: "text-pink-200",
+  },
+  food: {
+    card: "border-amber-400/60 bg-[#493711]/95",
+    label: "text-amber-200",
+  },
+  activity: {
+    card: "border-emerald-400/60 bg-[#123e36]/95",
+    label: "text-emerald-200",
+  },
+};
 
 export default function Schedule() {
   const router = useRouter();
@@ -133,19 +164,27 @@ export default function Schedule() {
                         {day.events.map(({ event, column, columns }) => {
                           const startsAt = new Date(event.starts_at).getTime();
                           const endsAt = new Date(event.ends_at).getTime();
+                          const isDeadline = startsAt === endsAt;
                           const top =
                             TIMELINE_PADDING +
                             ((startsAt - day.startAt) / HOUR_MS) * PIXELS_PER_HOUR;
                           const height =
-                            ((endsAt - startsAt) / HOUR_MS) * PIXELS_PER_HOUR;
+                            (((isDeadline ? DEADLINE_BLOCK_MS : endsAt - startsAt) /
+                              HOUR_MS) *
+                              PIXELS_PER_HOUR);
                           const gap = 8;
                           const left = `calc(${(column / columns) * 100}% + ${(column * gap) / columns}px)`;
                           const width = `calc(${100 / columns}% - ${((columns - 1) * gap) / columns}px)`;
+                          const typeStyle = EVENT_TYPE_STYLES[event.event_type];
 
                           return (
                             <article
                               key={event.id}
-                              className="absolute overflow-hidden rounded-xl border border-[#f6c7fc]/30 bg-[#211b67]/95 p-3 shadow-[0_8px_24px_rgba(3,1,20,.28)] md:p-4"
+                              className={`absolute overflow-hidden rounded-xl border p-3 shadow-[0_8px_24px_rgba(3,1,20,.28)] md:p-4 ${typeStyle.card} ${
+                                event.is_important
+                                  ? "ring-2 ring-amber-300 ring-offset-2 ring-offset-[#0d0a46]"
+                                  : ""
+                              }`}
                               style={{
                                 top,
                                 left,
@@ -153,16 +192,29 @@ export default function Schedule() {
                                 height: Math.max(height - 6, 1),
                               }}
                             >
-                              <time
-                                dateTime={event.starts_at}
-                                className="font-vcr text-xs text-[#b8c8ff]"
-                              >
-                                {timeFormatter.format(new Date(event.starts_at))} –{" "}
-                                {timeFormatter.format(new Date(event.ends_at))}
-                              </time>
+                              <div className="flex flex-wrap items-center justify-between gap-2">
+                                <time
+                                  dateTime={event.starts_at}
+                                  className="font-vcr text-xs text-[#b8c8ff]"
+                                >
+                                  {isDeadline
+                                    ? `Due ${timeFormatter.format(new Date(event.starts_at))}`
+                                    : `${timeFormatter.format(new Date(event.starts_at))} – ${timeFormatter.format(new Date(event.ends_at))}`}
+                                </time>
+                                <span
+                                  className={`font-figtree text-xs font-bold uppercase tracking-wide ${typeStyle.label}`}
+                                >
+                                  {event.event_type}
+                                </span>
+                              </div>
                               <h3 className="mt-1 font-figtree text-lg font-bold leading-tight text-white md:text-xl">
                                 {event.title}
                               </h3>
+                              {event.is_important && (
+                                <p className="mt-1 font-figtree text-xs font-bold uppercase tracking-wide text-amber-200">
+                                  Important
+                                </p>
+                              )}
                               {event.location && (
                                 <p className="mt-1 font-figtree text-sm font-semibold text-[#8df2cb]">
                                   {event.location}

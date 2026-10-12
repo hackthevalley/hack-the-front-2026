@@ -3,6 +3,8 @@ export type ScheduleEvent = {
   title: string;
   description: string | null;
   location: string | null;
+  event_type: "general" | "workshop" | "ceremony" | "food" | "activity";
+  is_important: boolean;
   starts_at: string;
   ends_at: string;
 };
@@ -21,6 +23,7 @@ export type ScheduleDay = {
 };
 
 export const HOUR_MS = 60 * 60 * 1000;
+export const DEADLINE_BLOCK_MS = 45 * 60 * 1000;
 
 const dayFormatter = new Intl.DateTimeFormat("en-CA", {
   year: "numeric",
@@ -29,11 +32,17 @@ const dayFormatter = new Intl.DateTimeFormat("en-CA", {
   timeZone: "America/Toronto",
 });
 
+function layoutEnd(event: ScheduleEvent): number {
+  const startsAt = new Date(event.starts_at).getTime();
+  const endsAt = new Date(event.ends_at).getTime();
+  return startsAt === endsAt ? startsAt + DEADLINE_BLOCK_MS : endsAt;
+}
+
 function layoutOverlaps(events: ScheduleEvent[]): TimelineEvent[] {
   const positioned: TimelineEvent[] = [];
 
   for (let index = 0; index < events.length; ) {
-    let clusterEnd = new Date(events[index].ends_at).getTime();
+    let clusterEnd = layoutEnd(events[index]);
     let clusterLimit = index + 1;
 
     while (
@@ -42,7 +51,7 @@ function layoutOverlaps(events: ScheduleEvent[]): TimelineEvent[] {
     ) {
       clusterEnd = Math.max(
         clusterEnd,
-        new Date(events[clusterLimit].ends_at).getTime(),
+        layoutEnd(events[clusterLimit]),
       );
       clusterLimit += 1;
     }
@@ -50,7 +59,7 @@ function layoutOverlaps(events: ScheduleEvent[]): TimelineEvent[] {
     const columnEnds: number[] = [];
     const cluster = events.slice(index, clusterLimit).map((event) => {
       const startsAt = new Date(event.starts_at).getTime();
-      const endsAt = new Date(event.ends_at).getTime();
+      const endsAt = layoutEnd(event);
       let column = columnEnds.findIndex((end) => end <= startsAt);
       if (column === -1) column = columnEnds.length;
       columnEnds[column] = endsAt;
@@ -85,7 +94,7 @@ export function layoutSchedule(events: ScheduleEvent[]): ScheduleDay[] {
   return [...days.entries()].map(([key, dayEvents]) => {
     const firstStart = new Date(dayEvents[0].starts_at).getTime();
     const lastEnd = Math.max(
-      ...dayEvents.map((event) => new Date(event.ends_at).getTime()),
+      ...dayEvents.map(layoutEnd),
     );
 
     return {
