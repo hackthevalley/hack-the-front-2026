@@ -128,13 +128,6 @@ export const teamMembers: Record<string, TeamMember> = {
     avatarSrc: resolvePhoto("josephine"),
     linkedinUrl: "https://www.linkedin.com/in/josephine-tjhia/",
   },
-  "shelf-2-jar-8": {
-    id: "dorothy",
-    name: "Dorothy Zheng",
-    role: "Sponsorships Coordinator",
-    avatarSrc: resolvePhoto("dorothy"),
-    linkedinUrl: "https://www.linkedin.com/in/dorothy-zheng07/",
-  },
   "shelf-2-jar-9": {
     id: "lawrence",
     name: "Lawrence Ing",
