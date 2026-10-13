@@ -2,10 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import PortalNavbar from "@/components/layout/PortalNavbar";
-import { useAuth } from "@/components/providers/AuthProvider";
-import { apiJson, isUnauthorizedError } from "@/lib/apiClient";
+import { apiJson } from "@/lib/apiClient";
 import {
   DEADLINE_BLOCK_MS,
   HOUR_MS,
@@ -62,8 +60,6 @@ const EVENT_TYPE_STYLES: Record<
 };
 
 export default function Schedule() {
-  const router = useRouter();
-  const { logout, token } = useAuth();
   const [events, setEvents] = useState<ScheduleEvent[] | null>(null);
   const [error, setError] = useState(false);
   const [currentTime, setCurrentTime] = useState<number | null>(null);
@@ -71,30 +67,19 @@ export default function Schedule() {
   const scheduleDays = layoutSchedule(scheduleEvents);
 
   useEffect(() => {
-    if (!token) return;
     const controller = new AbortController();
 
-    apiJson<ScheduleResponse>("/api/schedule/confirmed", {
-      token,
+    apiJson<ScheduleResponse>("/api/schedule", {
       signal: controller.signal,
     })
       .then((schedule) => setEvents(schedule.events))
-      .catch((caught: unknown) => {
+      .catch(() => {
         if (controller.signal.aborted) return;
-        if (isUnauthorizedError(caught)) {
-          if (caught instanceof Error && "status" in caught && caught.status === 401) {
-            logout();
-            router.replace("/login");
-          } else {
-            router.replace("/dashboard");
-          }
-          return;
-        }
         setError(true);
       });
 
     return () => controller.abort();
-  }, [logout, router, token]);
+  }, []);
 
   useEffect(() => {
     const updateCurrentTime = () => setCurrentTime(Date.now());
@@ -114,12 +99,6 @@ export default function Schedule() {
             </p>
             <h1 className="font-vcr text-4xl text-white md:text-6xl">Schedule</h1>
           </div>
-          <Link
-            href="/dashboard"
-            className="font-figtree text-sm font-semibold text-[#f6c7fc] hover:text-white"
-          >
-            Back to dashboard
-          </Link>
         </div>
 
         {events === null && !error ? (
