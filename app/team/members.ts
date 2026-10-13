@@ -128,42 +128,42 @@ export const teamMembers: Record<string, TeamMember> = {
     avatarSrc: resolvePhoto("josephine"),
     linkedinUrl: "https://www.linkedin.com/in/josephine-tjhia/",
   },
-  "shelf-2-jar-9": {
+  "shelf-2-jar-8": {
     id: "lawrence",
     name: "Lawrence Ing",
     role: "Sponsorships Coordinator",
     avatarSrc: resolvePhoto("lawrence"),
     linkedinUrl: "https://www.linkedin.com/in/lawrenceing/",
   },
-  "shelf-2-jar-10": {
+  "shelf-2-jar-9": {
     id: "natasha",
     name: "Natasha Ejercito",
     role: "Sponsorships Coordinator",
     avatarSrc: resolvePhoto("natasha"),
     linkedinUrl: "https://www.linkedin.com/in/natashaejercito/",
   },
-  "shelf-2-jar-11": {
+  "shelf-2-jar-10": {
     id: "ben",
     name: "Ben Zhou",
     role: "Sponsorships Coordinator",
     avatarSrc: resolvePhoto("ben"),
     linkedinUrl: "https://www.linkedin.com/in/-ben-zhou-",
   },
-  "shelf-2-jar-12": {
+  "shelf-2-jar-11": {
     id: "peter",
     name: "Peter Lian",
     role: "Sponsorships Coordinator",
     avatarSrc: resolvePhoto("peter"),
     linkedinUrl: "https://www.linkedin.com/in/yishuolian/",
   },
-  "shelf-2-jar-13": {
+  "shelf-2-jar-12": {
     id: "hibba",
     name: "Hibba Nouman",
     role: "Sponsorship Coordinator",
     avatarSrc: resolvePhoto("hibba"),
     linkedinUrl: "https://www.linkedin.com/in/hibba-nouman/",
   },
-  "shelf-2-jar-14": {
+  "shelf-2-jar-13": {
     id: "danielle",
     name: "Danielle Santos",
     role: "Sponsorship Coordinator",
