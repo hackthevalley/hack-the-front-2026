@@ -35,12 +35,12 @@ const SHELF_2_LAYOUT: readonly ShelfColumn[] = [
   { type: "jar", color: "teal" },
   { type: "jar", color: "pink" },
   { type: "jar", color: "teal" },
-  { type: "jar", color: "teal" },
   { type: "jar", color: "pink" },
   { type: "jar", color: "teal" },
   { type: "jar", color: "pink" },
   { type: "jar", color: "teal" },
   { type: "jar", color: "pink" },
+  { type: "jar", color: "teal" },
   { type: "prop", propId: "smallMushroom" },
 ];
 
