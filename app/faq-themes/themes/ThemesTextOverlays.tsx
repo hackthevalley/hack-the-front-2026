@@ -66,6 +66,7 @@ export const THEMES = [
 const THEME_CARD_PADDING_X = 48;
 const THEME_CARD_PADDING_Y = 32;
 const THEME_CARD_INNER_GAP = 46.8606;
+const THEME_DESKTOP_CENTER_OFFSET_Y = 139.7656;
 const THEME_TEXT_GAP = 7.53;
 const THEME_TITLE_GLOW = "0 0 10px rgba(255,255,255,.5)";
 const THEME_REVEAL_OFFSET = 42;
@@ -147,7 +148,7 @@ function ThemeCard({
       className="pointer-events-auto absolute flex select-text border border-white/10 font-figtree text-[#EAEFFF] duration-700 ease-out"
       style={{
         left: toStageX(355),
-        top: toStageY(theme.top),
+        top: toStageY(theme.top + THEME_DESKTOP_CENTER_OFFSET_Y),
         width: toStageWidth(802),
         height: toStageHeight(theme.height),
         borderRadius: toScale(22),
@@ -244,7 +245,7 @@ export function MobileThemesTextOverlays() {
   return (
     <section
       aria-label="Hackathon themes"
-      className="absolute inset-x-0 top-[52.6%] px-6 md:hidden"
+      className="absolute inset-x-0 top-[56.6%] px-6 md:hidden"
     >
       <div className="mx-auto w-full max-w-[22.75rem]">
         {THEMES.map((theme, index) => {
