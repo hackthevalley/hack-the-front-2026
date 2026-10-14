@@ -61,20 +61,6 @@ export const THEMES = [
     opacity: 0.6,
     iconSide: "right",
   },
-  {
-    title: "Future of Sustainable Cities",
-    description:
-      "Reimagine urban living through smart infrastructure, resilient design, and efficient resource management. Hackers can build solutions around smart mobility, waste reduction, housing, and data-driven urban planning.",
-    iconSrc: "/faq-themes/themes/city.png",
-    iconWidth: 156.9643,
-    iconHeight: 106.6914,
-    textWidth: 502.1759,
-    textHeight: 161.5312,
-    top: 2948.7197,
-    height: 233.5312,
-    opacity: 0.5,
-    iconSide: "left",
-  },
 ] as const;
 
 const THEME_CARD_PADDING_X = 48;
