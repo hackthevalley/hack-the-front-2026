@@ -25,7 +25,7 @@ export default function FaqStaticOverlays() {
       >
         <div className="pointer-events-auto select-text" style={{ width: "43.95%" }}>
           <p
-            className="m-0 font-medium leading-none"
+            className="m-0 font-figtree font-medium leading-none"
             style={{
               fontSize: toScale(36),
               textShadow: "0 0 12px rgba(255,255,255,.75)",

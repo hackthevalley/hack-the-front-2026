@@ -134,7 +134,7 @@ export default function MobileFaqContent({
 
           <div className="mt-59 text-center text-white">
             <p
-              className="m-0 text-[1.65rem] font-medium leading-tight"
+              className="m-0 font-figtree text-[1.65rem] font-medium leading-tight"
               style={{ textShadow: "0 0 12px rgba(255,255,255,.75)" }}
             >
               Have more questions?
