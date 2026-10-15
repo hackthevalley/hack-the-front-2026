@@ -140,7 +140,7 @@ export default function MobileFaqContent({
               Have more questions?
             </p>
             <p
-              className="m-0 mt-3 text-[1rem] italic leading-7 text-white/92"
+              className="m-0 mt-3 font-figtree text-[1rem] italic leading-7 text-white/92"
               style={{ textShadow: "0 0 12px rgba(255,255,255,.75)" }}
             >
               Message us at @hackthevalley.io

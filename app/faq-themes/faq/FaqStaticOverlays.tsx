@@ -34,7 +34,7 @@ export default function FaqStaticOverlays() {
             Have more questions?
           </p>
           <p
-            className="m-0 italic leading-none"
+            className="m-0 font-figtree italic leading-none"
             style={{
               marginTop: toScale(15),
               fontSize: toScale(24),
